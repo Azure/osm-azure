@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: osm-controller
+  labels:
+    app: osm-controller
+    meshName: {{ .Values.OpenServiceMesh.meshName }}
+spec:
+  replicas: {{ .Values.OpenServiceMesh.replicaCount }}
+  selector:
+    matchLabels:
+      app: osm-controller
+  template:
+    metadata:
+      labels:
+        app: osm-controller
+    spec:
+      serviceAccountName: {{ .Release.Name }}
+      containers:
+        - name: osm-controller
+          image: "{{ .Values.OpenServiceMesh.image.registry }}/osm-controller:{{ .Values.OpenServiceMesh.image.tag }}"
+          imagePullPolicy: {{ .Values.OpenServiceMesh.image.pullPolicy }}
+          ports:
+            - name: "admin-port"
+              containerPort: 15000
+            - name: "osm-port"
+              containerPort: 15128
+          command: ['/osm-controller']
+          args: [
+            "--verbosity", "trace",
+            "--osm-namespace", "{{.Release.Namespace}}",
+            "--mesh-name", "{{.Values.OpenServiceMesh.meshName}}",
+            "--init-container-image", "{{.Values.OpenServiceMesh.image.registry}}/init:{{ .Values.OpenServiceMesh.image.tag }}",
+            "--sidecar-image", "{{.Values.OpenServiceMesh.sidecarImage}}",
+            "--webhook-name", "osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
+            "--ca-bundle-secret-name", "{{.Values.OpenServiceMesh.caBundleSecretName}}",
+            "--certificate-manager", "{{.Values.OpenServiceMesh.certificateManager}}",
+            "--vault-host", "{{.Values.OpenServiceMesh.vault.host}}",
+            "--vault-protocol", "{{.Values.OpenServiceMesh.vault.protocol}}",
+            "--vault-token", "{{.Values.OpenServiceMesh.vault.token}}",
+            "--cert-manager-issuer-name", "{{.Values.OpenServiceMesh.certmanager.issuerName}}",
+            "--cert-manager-issuer-kind", "{{.Values.OpenServiceMesh.certmanager.issuerKind}}",
+            "--cert-manager-issuer-group", "{{.Values.OpenServiceMesh.certmanager.issuerGroup}}",
+            "--service-cert-validity-minutes", "{{.Values.OpenServiceMesh.serviceCertValidityMinutes}}",
+            {{- if .Values.OpenServiceMesh.enableDebugServer }}
+            "--enable-debug-server",
+            {{- end }}
+            {{- if .Values.OpenServiceMesh.enableBackpressureExperimental }}
+            "--enable-backpressure-experimental",
+            {{- end }}
+          ]
+          resources:
+            limits:
+              cpu: 1.5
+              memory: 128M
+            requests:
+              cpu: 0.5
+              memory: 32M
+          readinessProbe:
+            initialDelaySeconds: 1
+            timeoutSeconds: 5
+            httpGet:
+              scheme: HTTP
+              path: /health/ready
+              port: 9091
+          livenessProbe:
+            initialDelaySeconds: 1
+            timeoutSeconds: 5
+            httpGet:
+              scheme: HTTP
+              path: /health/alive
+              port: 9091
+    {{- if .Values.OpenServiceMesh.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.OpenServiceMesh.imagePullSecrets | indent 8 }}
+    {{- end }}
