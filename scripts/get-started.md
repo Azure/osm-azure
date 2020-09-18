@@ -16,10 +16,12 @@ export CLUSTERNAME=
 # NOTE: osmstaging.azurecr.io/helm/osm is the staging ACR
 # Create an ICM Ticket with ACR team to enable anonymous access so that artifacts can be pulled from ACR with public access 
 # e.g. https://portal.microsofticm.com/imp/v3/incidents/details/160520779/home
-export CHARTPATH=
 export REGISTRY=osmstaging.azurecr.io
 export REPO=osmstaging.azurecr.io/helm/osm
 export RELEASE=
+export IMAGETAG=
+export IMAGEDIR=
+export CHARTNAME= 
 ```
 
 ### Publish Chart to Azure Container Registry
