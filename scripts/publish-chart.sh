@@ -2,7 +2,7 @@
 
 export HELM_EXPERIMENTAL_OCI=1
 
-helm chart save $CHARTPATH $REPO:$RELEASE
-helm registry login $REGISTRY
-helm chart push $REPO:$RELEASE
+./helm package --version $IMAGETAG --destination $IMAGEDIR $REPO --debug
+oras push $REGISTRY/$CHARTNAME:$IMAGETAG ./$CHARTNAME-$IMAGETAG.tgz:application/tar+gzip --debug
+
 az acr repository show-manifests --name $REGISTRY --repository $REPO
