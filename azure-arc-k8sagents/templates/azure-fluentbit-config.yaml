@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-fluentbit-config
+  namespace: azure-arc
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush         300
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   Off
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+
+    @INCLUDE input-kubernetes.conf
+    @INCLUDE output.conf
+ 
+  input-kubernetes.conf: |
+    [INPUT]
+        Name              tail
+        Tag               azure-arc.*
+        Path              /var/log/con*/${POD_NAME}*azure-arc*.log
+        Multiline         On
+        Parser_Firstline  first_line
+        Mem_Buf_Limit     1MB
+    
+    [FILTER]
+        Name lua
+        Match *
+        script /fluent-bit/bin/helpers.lua
+        call process
+        
+  parsers.conf: |
+    [PARSER]
+        Name        first_line
+        Format      regex
+        Regex       ^{"log":"(?!\\u0009)(?<log>\bpanic([^,"]|\n)*)"
+    
+  output.conf: |
+    [OUTPUT]
+        Name        http_mdm
+        Match       *
+        Id          http_mdm_plugin
+  
