@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: azure-arc
-  labels:
-    control-plane: "true"
-    admission.policy.azure.com/ignore: "true"
