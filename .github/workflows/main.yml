@@ -1,17 +1,25 @@
 name: Go
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      -main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
 jobs:
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-
-    - name: Setup Go 1.15
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.15
-      id: go
-
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+    end-to-end:
+      name: End to end test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Setup Go 1.15
+          uses: actions/setup-go@v1
+          with:
+            go-version: 1.15
+          id: go
