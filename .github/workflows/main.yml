@@ -31,4 +31,6 @@ jobs:
 
     - name: Bootstrap e2e
       run: |
-        make e2e-bootstrap
+          mkdir -p $GITHUB_WORKSPACE/bin
+          echo ::add-path::$GITHUB_WORKSPACE/bin
+          make e2e-bootstrap
