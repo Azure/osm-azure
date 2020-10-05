@@ -1,3 +1,11 @@
+# Image URL to use all building/pushing image targets
+REPOSITORY ?= azure/osm-azure
+
+KIND_VERSION ?= 0.8.1
+# note: k8s version pinned since KIND image availability lags k8s releases
+KUBERNETES_VERSION ?= v1.19.0
+KUSTOMIZE_VERSION ?= 3.7.0
+
 e2e-bootstrap:
 	# Download and install kind
 	curl -L https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64 --output ${GITHUB_WORKSPACE}/bin/kind && chmod +x ${GITHUB_WORKSPACE}/bin/kind
