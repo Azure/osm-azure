@@ -21,3 +21,7 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/bin
           echo ::add-path::$GITHUB_WORKSPACE/bin
           make e2e-bootstrap
+
+    - name: Run e2e
+      run: |
+        make test-e2e

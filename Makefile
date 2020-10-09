@@ -1,10 +1,8 @@
-# Image URL to use all building/pushing image targets
-REPOSITORY ?= azure/osm-azure
-
 KIND_VERSION ?= 0.8.1
 # note: k8s version pinned since KIND image availability lags k8s releases
 KUBERNETES_VERSION ?= v1.19.0
 KUSTOMIZE_VERSION ?= 3.7.0
+HELM_VERSION ?= 3.3.4
 
 e2e-bootstrap:
 	# Download and install kind
@@ -19,3 +17,13 @@ e2e-bootstrap:
 	if [ $$(kind get clusters) ]; then kind delete cluster; fi
 	# Create a new kind cluster
 	TERM=dumb kind create cluster --image kindest/node:${KUBERNETES_VERSION}
+
+e2e-helm-deploy:
+	rm -rf .staging/helm
+	mkdir -p .staging/helm
+	curl https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz > .staging/helm/helmbin.tar.gz
+	cd .staging/helm && tar -xvf helmbin.tar.gz
+	./.staging/helm/linux-amd64/helm install osm ./charts/osm --set OpenServiceMesh.meshName=osm
+
+test-e2e:
+	bats -t test/bats/test.bats
