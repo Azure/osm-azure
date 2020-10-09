@@ -29,6 +29,10 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
 
+    - name: Install helm chart for e2e
+      run: |
+          make e2e-helm-deploy
+          
     - name: Bootstrap e2e
       run: |
           mkdir -p $GITHUB_WORKSPACE/bin
