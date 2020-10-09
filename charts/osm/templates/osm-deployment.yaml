@@ -6,7 +6,7 @@ metadata:
     app: osm-controller
     meshName: {{ .Values.OpenServiceMesh.meshName }}
 spec:
-  replicas: {{ .Values.OpenServiceMesh.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: osm-controller
@@ -14,12 +14,14 @@ spec:
     metadata:
       labels:
         app: osm-controller
+      annotations:
+          checksum/config: {{ print .Values.openServiceMesh | sha256sum }}
     spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
         - name: osm-controller
           image: "{{ .Values.OpenServiceMesh.image.registry }}/osm-controller:{{ .Values.OpenServiceMesh.image.tag }}"
-          imagePullPolicy: {{ .Values.OpenServiceMesh.image.pullPolicy }}
+          imagePullPolicy: IfNotPresent
           ports:
             - name: "admin-port"
               containerPort: 15000
@@ -35,18 +37,12 @@ spec:
             "--webhook-config-name", "osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
             "--ca-bundle-secret-name", "{{.Values.OpenServiceMesh.caBundleSecretName}}",
             "--certificate-manager", "{{.Values.OpenServiceMesh.certificateManager}}",
-            "--vault-host", "{{.Values.OpenServiceMesh.vault.host}}",
-            "--vault-protocol", "{{.Values.OpenServiceMesh.vault.protocol}}",
-            "--vault-token", "{{.Values.OpenServiceMesh.vault.token}}",
             "--cert-manager-issuer-name", "{{.Values.OpenServiceMesh.certmanager.issuerName}}",
             "--cert-manager-issuer-kind", "{{.Values.OpenServiceMesh.certmanager.issuerKind}}",
             "--cert-manager-issuer-group", "{{.Values.OpenServiceMesh.certmanager.issuerGroup}}",
             "--service-cert-validity-minutes", "{{.Values.OpenServiceMesh.serviceCertValidityMinutes}}",
             {{- if .Values.OpenServiceMesh.enableDebugServer }}
             "--enable-debug-server",
-            {{- end }}
-            {{- if .Values.OpenServiceMesh.enableBackpressureExperimental }}
-            "--enable-backpressure-experimental",
             {{- end }}
           ]
           resources:
