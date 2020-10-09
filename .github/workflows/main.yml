@@ -1,5 +1,5 @@
 name: Go
-on: [push, pull_request]
+on: [push, pull_request] # todo: update this to run only on main
 jobs:
 
   build_test:

@@ -1,7 +1,5 @@
 #!/usr/bin/env bats
 load helpers
-# load "lib/detik"
-# load "lib/utils"
 
 BATS_TESTS_DIR=test/bats/tests
 WAIT_TIME=120
