@@ -21,6 +21,8 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/bin
           echo ::add-path::$GITHUB_WORKSPACE/bin
           make e2e-bootstrap
+          kind get kubeconfig --name kind > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
 
     - name: Install helm chart for e2e
       run: |

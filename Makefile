@@ -17,6 +17,9 @@ e2e-bootstrap:
 	if [ $$(kind get clusters) ]; then kind delete cluster; fi
 	# Create a new kind cluster
 	TERM=dumb kind create cluster --image kindest/node:${KUBERNETES_VERSION}
+	# Get and use kind kubeconfig
+	kind get kubeconfig --name kind > kubeconfig
+	export KUBECONFIG=$(pwd)/kubeconfig
 
 e2e-helm-deploy:
 	rm -rf .staging/helm
