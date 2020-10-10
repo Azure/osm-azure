@@ -5,6 +5,7 @@
 
 # Staging dirs
 .staging/
+kubeconfig
 
 # User-specific files
 *.rsuser
