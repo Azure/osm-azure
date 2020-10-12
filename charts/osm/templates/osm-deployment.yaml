@@ -17,10 +17,10 @@ spec:
       annotations:
           checksum/config: {{ print .Values.openServiceMesh | sha256sum }}
     spec:
-      serviceAccountName: {{ .Release.Name }}
+      serviceAccountName: arc-osm-service-account
       containers:
         - name: osm-controller
-          image: "{{ .Values.OpenServiceMesh.image.registry }}/osm-controller:{{ .Values.OpenServiceMesh.image.tag }}"
+          image: "mcr.microsoft.com/oss/openservicemesh/osm-controller:{{ .Values.OpenServiceMesh.osmImageTag }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: "admin-port"
@@ -30,11 +30,11 @@ spec:
           command: ['/osm-controller']
           args: [
             "--verbosity", "trace",
-            "--osm-namespace", "{{.Release.Namespace}}",
+            "--osm-namespace", "arc-osm-system",
             "--mesh-name", "{{.Values.OpenServiceMesh.meshName}}",
-            "--init-container-image", "{{.Values.OpenServiceMesh.image.registry}}/init:{{ .Values.OpenServiceMesh.image.tag }}",
-            "--sidecar-image", "{{.Values.OpenServiceMesh.sidecarImage}}",
-            "--webhook-config-name", "osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
+            "--init-container-image", "mcr.microsoft.com/oss/openservicemesh/init:{{ .Values.OpenServiceMesh.osmImageTag }}",
+            "--sidecar-image", "mcr.microsoft.com/oss/envoyproxy/envoy:{{.Values.OpenServiceMesh.sidecarImageTag}}",
+            "--webhook-config-name", "arc-osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
             "--ca-bundle-secret-name", "{{.Values.OpenServiceMesh.caBundleSecretName}}",
             "--certificate-manager", "{{.Values.OpenServiceMesh.certificateManager}}",
             "--cert-manager-issuer-name", "{{.Values.OpenServiceMesh.certmanager.issuerName}}",
@@ -72,7 +72,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-    {{- if .Values.OpenServiceMesh.imagePullSecrets }}
-      imagePullSecrets:
-{{ toYaml .Values.OpenServiceMesh.imagePullSecrets | indent 8 }}
-    {{- end }}

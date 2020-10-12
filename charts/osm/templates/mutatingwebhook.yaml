@@ -3,13 +3,13 @@ kind: MutatingWebhookConfiguration
 metadata:
   labels:
     app: osm-controller
-  name: osm-webhook-{{.Values.OpenServiceMesh.meshName}}
+  name: arc-osm-webhook-{{.Values.OpenServiceMesh.meshName}}
 webhooks:
 - name: osm-inject.k8s.io
   clientConfig:
     service:
       name: osm-controller
-      namespace: {{.Release.Namespace}}
+      namespace: arc-osm-system
       path: /mutate
       port: 443
   failurePolicy: Fail
@@ -27,4 +27,4 @@ webhooks:
         - key: "name"
           operator: NotIn
           values:
-          - {{.Release.Namespace}}
+          - arc-osm-system

@@ -2,11 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 OpenServiceMesh:
-  image:
-    registry: openservicemesh
-    tag: v0.4.1
-  imagePullSecrets: []
-  sidecarImage: envoyproxy/envoy-alpine:v1.15.0
+  osmImageTag: v0.4.1
+  sidecarImageTag: v1.15.0 
   certificateManager: tresor
   certmanager:
     issuerName: osm-ca
