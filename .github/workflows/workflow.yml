@@ -1,5 +1,15 @@
 name: Go
-on: [push, pull_request] # todo: update this to run only on main
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+  pull-request:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
 jobs:
 
   build_test:
@@ -21,8 +31,6 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/bin
           echo ::add-path::$GITHUB_WORKSPACE/bin
           make e2e-bootstrap
-          kind get kubeconfig --name kind > kubeconfig
-          export KUBECONFIG=$(pwd)/kubeconfig
 
     - name: Install helm chart for e2e
       run: |
