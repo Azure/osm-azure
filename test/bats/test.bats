@@ -4,7 +4,6 @@ load helpers
 BATS_TESTS_DIR=test/bats/tests
 WAIT_TIME=120
 SLEEP_TIME=1
-CLEAN_CMD="echo cleaning..."
 
 @test "osm pod has been deployed and is running." {
     wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get deployment/osm-controller"
