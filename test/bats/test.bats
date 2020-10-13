@@ -6,7 +6,7 @@ WAIT_TIME=120
 SLEEP_TIME=1
 
 @test "osm pod has been deployed and is running." {
-    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get deployment/osm-controller"
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=Ready --timeout=60s pod -l app=osm-controller"
     assert_success
 }
 
