@@ -1,0 +1,9 @@
+{
+  "name": "osm",
+  "namespace": "osmarcext",
+  "revision": "1",
+  "updated": "2020-10-06 02:49:52.33982336 +0000 UTC",
+  "status": "deployed",
+  "chart": "osm-0.5.2",
+  "app_version": "v0.5.2"
+}
