@@ -30,7 +30,7 @@ spec:
           command: ['/osm-controller']
           args: [
             "--verbosity", "trace",
-            "--osm-namespace", "arc-osm-system",
+            "--osm-namespace", "{{.Values.OpenServiceMesh.namespace}}",
             "--mesh-name", "{{.Values.OpenServiceMesh.meshName}}",
             "--init-container-image", "mcr.microsoft.com/oss/openservicemesh/init:{{ .Values.OpenServiceMesh.osmImageTag }}",
             "--sidecar-image", "mcr.microsoft.com/oss/envoyproxy/envoy:{{.Values.OpenServiceMesh.sidecarImageTag}}",

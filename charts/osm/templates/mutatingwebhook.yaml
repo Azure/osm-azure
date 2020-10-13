@@ -9,7 +9,7 @@ webhooks:
   clientConfig:
     service:
       name: osm-controller
-      namespace: arc-osm-system
+      namespace: {{.Values.OpenServiceMesh.namespace}}
       path: /mutate
       port: 443
   failurePolicy: Fail
@@ -27,4 +27,4 @@ webhooks:
         - key: "name"
           operator: NotIn
           values:
-          - arc-osm-system
+          - {{.Values.OpenServiceMesh.namespace}}

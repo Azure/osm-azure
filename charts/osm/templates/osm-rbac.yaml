@@ -66,7 +66,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: arc-osm-service-account
-    namespace: arc-osm-system
+    namespace: {{.Values.OpenServiceMesh.namespace}}
 roleRef:
   kind: ClusterRole
   name: arc-osm-cluster-role

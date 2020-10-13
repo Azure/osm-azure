@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: osm-config
-  namespace: arc-osm-system
+  namespace: {{.Values.OpenServiceMesh.namespace}}
 data:
   permissive_traffic_policy_mode: {{ .Values.OpenServiceMesh.enablePermissiveTrafficPolicy | default "true" | quote }}
   egress: {{ .Values.OpenServiceMesh.enableEgress | quote }}
