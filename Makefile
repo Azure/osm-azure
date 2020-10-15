@@ -14,6 +14,9 @@ e2e-bootstrap:
 	if [ $$(kind get clusters) ]; then kind delete cluster; fi
 	# Create a new kind cluster
 	TERM=dumb kind create cluster --image kindest/node:${KUBERNETES_VERSION}
+	# Create namespaces to test openservicemesh.io/ignore label
+	kubectl create namespace arc-osm-system
+	kubectl create namespace azure-arc
 
 e2e-helm-deploy:
 	rm -rf .staging/helm
