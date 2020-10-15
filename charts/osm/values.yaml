@@ -38,6 +38,7 @@ OpenServiceMesh:
   meshCIDRRanges: 0.0.0.0/0
   useHTTPSIngress: false
   envoyLogLevel: error
+  namespaces: "kube-system azure-arc"
 
   # Set deployJaeger to true to deploy a Jaeger cluster in the
   # namespace where OSM resides.
@@ -61,3 +62,9 @@ OpenServiceMesh:
     # Destination's API or collector endpoint where the spans will
     # be sent to
     endpoint: "/api/v2/spans"
+
+## Alpine image used in the helm hook
+alpine:
+  image:
+    name: "mcr.microsoft.com/azure-policy/alpine"
+    tag: "prod_20200505.1"

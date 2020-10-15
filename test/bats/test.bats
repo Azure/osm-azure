@@ -19,3 +19,8 @@ SLEEP_TIME=1
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get mutatingwebhookconfigurations.admissionregistration.k8s.io osm-webhook-osm"
     assert_success
 }
+
+@test "osm-label job in kube-system has successfully completed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=complete job osm-label --namespace kube-system --timeout=60s"
+    assert_success
+}

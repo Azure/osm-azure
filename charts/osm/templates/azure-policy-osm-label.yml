@@ -9,8 +9,8 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: azure-policy-osm-label-account
-  namespace: kube-system
+  name: osm-label-account
+  namespace: {{ .Values.OpenServiceMesh.namespace }}
   annotations:
     "helm.sh/hook-weight": "20"
     "helm.sh/hook": pre-install
@@ -19,7 +19,7 @@ metadata:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: azure-policy-osm-label-cluster-role
+  name: osm-label-cluster-role
   annotations:
     "helm.sh/hook-weight": "25"
     "helm.sh/hook": pre-install
@@ -32,7 +32,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: azure-policy-osm-label-role-binding
+  name: osm-label-role-binding
   namespace: kube-system
   annotations:
     "helm.sh/hook-weight": "30"
@@ -40,17 +40,17 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 subjects:
 - kind: ServiceAccount
-  name: azure-policy-osm-label-account
+  name: osm-label-account
   namespace: kube-system
 roleRef:
   kind: ClusterRole
-  name: azure-policy-osm-label-cluster-role
+  name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: azure-policy-osm-label-role-binding
+  name: osm-label-role-binding
   namespace: azure-arc
   annotations:
     "helm.sh/hook-weight": "30"
@@ -58,17 +58,17 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 subjects:
 - kind: ServiceAccount
-  name: azure-policy-osm-label-account
+  name: osm-label-account
   namespace: kube-system
 roleRef:
   kind: ClusterRole
-  name: azure-policy-osm-label-cluster-role
+  name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: azure-policy-osm-label
+  name: osm-label
   namespace: kube-system
   annotations:
     "helm.sh/hook-weight": "35"
@@ -78,15 +78,15 @@ spec:
   template:
     metadata:
       labels:
-        app: azure-policy-psm-label
+        app: osm-label
     spec:
-      serviceAccountName: azure-policy-osm-label-account
+      serviceAccountName: osm-label-account
       automountServiceAccountToken: true
       restartPolicy: Never
       terminationGracePeriodSeconds: 0
       containers:
-        - name: azure-policy-osm-label
-          image: {{ .Values.image.registry }}:{{ .Values.image.tag }}
+        - name: osm-label
+          image: {{ .Values.alpine.image.name }}:{{ .Values.alpine.image.tag }}
           imagePullPolicy: IfNotPresent
           command: 
             - "/bin/sh"
@@ -94,7 +94,7 @@ spec:
             - |
               set -o pipefail
               token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-              namespaces="kube-system azure-arc"
+              namespaces={{ .Values.OpenServiceMesh.namespaces }}
               for namespace in ${namespaces}
               do
                 echo "Retrieving namespace ${namespace} details"
