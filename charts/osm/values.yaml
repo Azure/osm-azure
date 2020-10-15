@@ -2,46 +2,22 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 OpenServiceMesh:
-  replicaCount: 1
-  image:
-    registry: openservicemesh
-    pullPolicy: IfNotPresent
-    tag: v0.4.0
-  imagePullSecrets: []
-  sidecarImage: envoyproxy/envoy-alpine:v1.15.0
-  prometheus:
-    port: 7070
-    retention:
-      time: 15d
+  osmImageTag: v0.4.2
+  sidecarImageTag: v1.15.0 
   certificateManager: tresor
-  vault:
-    host:
-    protocol: http
-    token:
-    role: openservicemesh
   certmanager:
     issuerName: osm-ca
     issuerKind: Issuer
     issuerGroup: cert-manager
-  serviceCertValidityMinutes: 1
+  serviceCertValidityDuration: 24h
   caBundleSecretName: osm-ca-bundle
-  grafana:
-    port: 3000
-
-  enableDebugServer: false
-  enablePermissiveTrafficPolicy: false
-  enableBackpressureExperimental: false
+  enableDebugServer: true
+  enablePermissiveTrafficPolicy: true
   enableEgress: false
-  enablePrometheus: true
-  enableGrafana: false
   meshName: osm
-  meshCIDRRanges: 0.0.0.0/0
   useHTTPSIngress: false
   envoyLogLevel: error
-
-  # Set deployJaeger to true to deploy a Jaeger cluster in the
-  # namespace where OSM resides.
-  deployJaeger: true
+  namespace: arc-osm-system
 
   # The following section configures a destination where to send
   # tracing data. Current implementation supports only Zipkin format

@@ -6,7 +6,7 @@ metadata:
     app: osm-controller
     meshName: {{ .Values.OpenServiceMesh.meshName }}
 spec:
-  replicas: {{ .Values.OpenServiceMesh.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: osm-controller
@@ -14,12 +14,14 @@ spec:
     metadata:
       labels:
         app: osm-controller
+      annotations:
+          checksum/config: {{ print .Values.openServiceMesh | sha256sum }}
     spec:
-      serviceAccountName: {{ .Release.Name }}
+      serviceAccountName: arc-osm-service-account
       containers:
         - name: osm-controller
-          image: "{{ .Values.OpenServiceMesh.image.registry }}/osm-controller:{{ .Values.OpenServiceMesh.image.tag }}"
-          imagePullPolicy: {{ .Values.OpenServiceMesh.image.pullPolicy }}
+          image: "mcr.microsoft.com/oss/openservicemesh/osm-controller:{{ .Values.OpenServiceMesh.osmImageTag }}"
+          imagePullPolicy: IfNotPresent
           ports:
             - name: "admin-port"
               containerPort: 15000
@@ -28,26 +30,16 @@ spec:
           command: ['/osm-controller']
           args: [
             "--verbosity", "trace",
-            "--osm-namespace", "{{.Release.Namespace}}",
+            "--osm-namespace", "{{.Values.OpenServiceMesh.namespace}}",
             "--mesh-name", "{{.Values.OpenServiceMesh.meshName}}",
-            "--init-container-image", "{{.Values.OpenServiceMesh.image.registry}}/init:{{ .Values.OpenServiceMesh.image.tag }}",
-            "--sidecar-image", "{{.Values.OpenServiceMesh.sidecarImage}}",
-            "--webhook-config-name", "osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
+            "--init-container-image", "mcr.microsoft.com/oss/openservicemesh/init:{{ .Values.OpenServiceMesh.osmImageTag }}",
+            "--sidecar-image", "mcr.microsoft.com/oss/envoyproxy/envoy:{{.Values.OpenServiceMesh.sidecarImageTag}}",
+            "--webhook-config-name", "arc-osm-webhook-{{.Values.OpenServiceMesh.meshName}}",
             "--ca-bundle-secret-name", "{{.Values.OpenServiceMesh.caBundleSecretName}}",
             "--certificate-manager", "{{.Values.OpenServiceMesh.certificateManager}}",
-            "--vault-host", "{{.Values.OpenServiceMesh.vault.host}}",
-            "--vault-protocol", "{{.Values.OpenServiceMesh.vault.protocol}}",
-            "--vault-token", "{{.Values.OpenServiceMesh.vault.token}}",
             "--cert-manager-issuer-name", "{{.Values.OpenServiceMesh.certmanager.issuerName}}",
             "--cert-manager-issuer-kind", "{{.Values.OpenServiceMesh.certmanager.issuerKind}}",
             "--cert-manager-issuer-group", "{{.Values.OpenServiceMesh.certmanager.issuerGroup}}",
-            "--service-cert-validity-minutes", "{{.Values.OpenServiceMesh.serviceCertValidityMinutes}}",
-            {{- if .Values.OpenServiceMesh.enableDebugServer }}
-            "--enable-debug-server",
-            {{- end }}
-            {{- if .Values.OpenServiceMesh.enableBackpressureExperimental }}
-            "--enable-backpressure-experimental",
-            {{- end }}
           ]
           resources:
             limits:
@@ -76,7 +68,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-    {{- if .Values.OpenServiceMesh.imagePullSecrets }}
-      imagePullSecrets:
-{{ toYaml .Values.OpenServiceMesh.imagePullSecrets | indent 8 }}
-    {{- end }}
