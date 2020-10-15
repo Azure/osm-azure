@@ -2,14 +2,14 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 OpenServiceMesh:
-  osmImageTag: v0.4.1
+  osmImageTag: v0.4.2
   sidecarImageTag: v1.15.0 
   certificateManager: tresor
   certmanager:
     issuerName: osm-ca
     issuerKind: Issuer
     issuerGroup: cert-manager
-  serviceCertValidityMinutes: 1440
+  serviceCertValidityDuration: 24h
   caBundleSecretName: osm-ca-bundle
   enableDebugServer: true
   enablePermissiveTrafficPolicy: true
