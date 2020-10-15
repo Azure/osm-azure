@@ -88,13 +88,16 @@ spec:
         - name: osm-label
           image: {{ .Values.alpine.image.name }}:{{ .Values.alpine.image.tag }}
           imagePullPolicy: IfNotPresent
+          env: 
+            - name: labelnamespaces
+              value: {{ .Values.OpenServiceMesh.namespaces }}
           command: 
             - "/bin/sh"
             - "-ec"
             - |
               set -o pipefail
               token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-              namespaces={{ .Values.OpenServiceMesh.namespaces }}
+              namespaces=${labelnamespaces}
               for namespace in ${namespaces}
               do
                 echo "Retrieving namespace ${namespace} details"
