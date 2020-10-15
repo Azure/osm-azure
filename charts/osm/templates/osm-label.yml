@@ -41,7 +41,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: osm-label-account
-  namespace: kube-system
+  namespace: {{ .Values.OpenServiceMesh.namespace }}
 roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
@@ -59,7 +59,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: osm-label-account
-  namespace: kube-system
+  namespace: {{ .Values.OpenServiceMesh.namespace }}
 roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
@@ -69,7 +69,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: osm-label
-  namespace: kube-system
+  namespace: {{ .Values.OpenServiceMesh.namespace }}
   annotations:
     "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install

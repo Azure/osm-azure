@@ -20,7 +20,17 @@ SLEEP_TIME=1
     assert_success
 }
 
-@test "osm-label job in kube-system has successfully completed" {
-    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=complete job osm-label --namespace kube-system --timeout=60s"
+@test "osm-label job in arc-osm-system has successfully completed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=complete job osm-label --namespace arc-osm-system --timeout=60s"
     assert_success
+}
+
+@test "openservicemesh.io/ignore is true in kube-system" { 
+    run kubectl get namespace kube-system -o json | jq '.metadata.labels["openservicemesh.io/ignore"]'
+    assert_output "true" 
+}
+
+@test "openservicemesh.io/ignore is true in azure-arc" { 
+    run kubectl get namespace azure-arc -o json | jq '.metadata.labels["openservicemesh.io/ignore"]'
+    assert_output "true" 
 }

@@ -38,11 +38,12 @@ OpenServiceMesh:
   meshCIDRRanges: 0.0.0.0/0
   useHTTPSIngress: false
   envoyLogLevel: error
-  namespaces: "kube-system azure-arc"
 
   # Set deployJaeger to true to deploy a Jaeger cluster in the
   # namespace where OSM resides.
   deployJaeger: true
+  namespace: arc-osm-system
+  namespaces: "kube-system azure-arc"
 
   # The following section configures a destination where to send
   # tracing data. Current implementation supports only Zipkin format
