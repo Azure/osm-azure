@@ -17,10 +17,6 @@ OpenServiceMesh:
   meshName: osm
   useHTTPSIngress: false
   envoyLogLevel: error
-
-  # Set deployJaeger to true to deploy a Jaeger cluster in the
-  # namespace where OSM resides.
-  deployJaeger: true
   namespace: arc-osm-system
   namespaces: "kube-system azure-arc"
 
