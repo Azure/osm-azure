@@ -68,3 +68,26 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+        - name: fluentbit-logger
+          image: fluent/fluent-bit:1.5
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: config
+            mountPath: /fluent-bit/etc # https://hub.docker.com/r/fluent/fluent-bit/dockerfile
+            readOnly: true 
+          - name: var-log-containers
+            mountPath: /var/log/containers
+            readOnly: true
+          - name: var-log-pods
+            mountPath: /var/log/pods
+            readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: fluentbit-configmap
+      - name: var-log-containers
+        hostPath:
+          path: /var/log/containers
+      - name: var-log-pods
+        hostPath:
+          path: /var/log/pods
