@@ -123,4 +123,4 @@ spec:
                 else
                   echo "Failed to retrieve ${namespace} details"
                 fi
-              done
+              done 

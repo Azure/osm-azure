@@ -9,6 +9,15 @@ assert_success() {
   fi
 }
 
+assert_output_true() {
+  if [[ $output != \"true\" ]]; then
+    echo "expected: true"
+    echo "actual: $output"
+    echo "status: $status"
+    return 1
+  fi 
+}
+
 wait_for_process() {
   wait_time="$1"
   sleep_time="$2"
