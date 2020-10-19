@@ -18,7 +18,7 @@ OpenServiceMesh:
   useHTTPSIngress: false
   envoyLogLevel: error
   namespace: arc-osm-system
-  namespaces: "kube-system azure-arc"
+  namespaces: "kube-system azure-arc arc-osm-system"
 
   # The following section configures a destination where to send
   # tracing data. Current implementation supports only Zipkin format

@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "extensionType": "Microsoft.openservicemesh",
+    "autoUpgradeMinorVersion": "false",
+    "version": "0.4.2",
+    "releaseTrain": "Staging",
+    "scope": {
+      "cluster": {
+        "releaseNamespace": "arc-osm-system"
+      }
+    }
+  }
+}

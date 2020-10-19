@@ -65,6 +65,24 @@ roleRef:
   name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
 ---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: osm-label-role-binding
+  namespace: arc-osm-system
+  annotations:
+    "helm.sh/hook-weight": "30"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+subjects:
+- kind: ServiceAccount
+  name: osm-label-account
+  namespace: {{ .Values.OpenServiceMesh.namespace }}
+roleRef:
+  kind: ClusterRole
+  name: osm-label-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
