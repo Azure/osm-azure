@@ -31,3 +31,9 @@ SLEEP_TIME=1
     run jq '.metadata.labels["openservicemesh.io/ignore"]' test.json
     assert_output_true
 }
+
+@test "openservicemesh.io/ignore is true in arc-osm-system" { 
+    kubectl get namespace arc-osm-system -o json > test.json
+    run jq '.metadata.labels["openservicemesh.io/ignore"]' test.json
+    assert_output_true
+}
