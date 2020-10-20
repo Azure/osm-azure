@@ -1,10 +1,6 @@
 # 
-# The job in this YAML file tries to add 'openservicemesh.io/ignore' label to 'kube-system' and 'azure-arc' namespaces.
-# The job is executed in helm pre-install phase of helm life cycle.
-#
-# For namespaces with 'openserviemesh.io/ignore' label...
-#     1. Kubernetes admission requests with violations are not denied by Gatekeeper.
-#     2. Auditing results are still available.
+# The job in this YAML file tries to add 'openservicemesh.io/ignore' label to 'kube-system', 'azure-arc', and 'arc-osm-system' namespaces.
+# The job is executed in helm pre-install phase of OSM release lifecycle. 
 #
 apiVersion: v1
 kind: ServiceAccount
