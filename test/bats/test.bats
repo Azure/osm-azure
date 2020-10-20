@@ -21,19 +21,16 @@ SLEEP_TIME=1
 }
 
 @test "openservicemesh.io/ignore is true in kube-system" { 
-    kubectl get namespace kube-system -o json > test.json
-    run jq '.metadata.labels["openservicemesh.io/ignore"]' test.json
-    assert_output_true
+    test_label=$(kubectl get namespace kube-system -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
+    [[ $test_label == "true" ]]
 }
 
 @test "openservicemesh.io/ignore is true in azure-arc" { 
-    kubectl get namespace azure-arc -o json > test.json
-    run jq '.metadata.labels["openservicemesh.io/ignore"]' test.json
-    assert_output_true
+    test_label=$(kubectl get namespace azure-arc -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
+    [[ $test_label == "true" ]]
 }
 
 @test "openservicemesh.io/ignore is true in arc-osm-system" { 
-    kubectl get namespace arc-osm-system -o json > test.json
-    run jq '.metadata.labels["openservicemesh.io/ignore"]' test.json
-    assert_output_true
+    test_label=$(kubectl get namespace arc-osm-system -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
+    [[ $test_label == "true" ]]
 }
