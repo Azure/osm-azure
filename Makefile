@@ -29,5 +29,4 @@ test-e2e:
 	bats -t test/bats/test.bats
 
 e2e-cleanup:
-	rm test.json
 	kind delete cluster
