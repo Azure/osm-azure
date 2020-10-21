@@ -18,6 +18,7 @@ OpenServiceMesh:
   useHTTPSIngress: false
   envoyLogLevel: error
   namespace: arc-osm-system
+  ignoreNamespaces: "kube-system azure-arc arc-osm-system"
 
   # The following section configures a destination where to send
   # tracing data. Current implementation supports only Zipkin format
@@ -37,3 +38,9 @@ OpenServiceMesh:
     # Destination's API or collector endpoint where the spans will
     # be sent to
     endpoint: "/api/v2/spans"
+
+## Alpine image used in the helm hook
+alpine:
+  image:
+    name: "mcr.microsoft.com/azure-policy/alpine"
+    tag: "prod_20200505.1"
