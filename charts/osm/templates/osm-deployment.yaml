@@ -68,12 +68,13 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-        - name: fluentbit-logger
-          image: fluent/fluent-bit:1.5
-          imagePullPolicy: Always
+      {{- if .Values.OpenServiceMesh.enableFluentbit }}
+        - name: {{ .Values.OpenServiceMesh.fluentBitImage.name }}
+          image: {{ .Values.OpenServiceMesh.fluentBitImage.registry }}/fluent-bit:{{ .Values.OpenServiceMesh.fluentBitImage.tag }}
+          imagePullPolicy: {{ .Values.OpenServiceMesh.fluentBitImage.pullPolicy }}
           volumeMounts:
           - name: config
-            mountPath: /fluent-bit/etc # https://hub.docker.com/r/fluent/fluent-bit/dockerfile
+            mountPath: /fluent-bit/etc
             readOnly: true 
           - name: var-log-containers
             mountPath: /var/log/containers
@@ -81,6 +82,8 @@ spec:
           - name: var-log-pods
             mountPath: /var/log/pods
             readOnly: true
+        {{- end }}
+    {{- if .Values.OpenServiceMesh.enableFluentbit }}
       volumes:
       - name: config
         configMap:
@@ -91,3 +94,5 @@ spec:
       - name: var-log-pods
         hostPath:
           path: /var/log/pods
+     {{- end }}
+     

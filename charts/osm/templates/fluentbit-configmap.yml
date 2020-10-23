@@ -1,8 +1,9 @@
+{{- if .Values.OpenServiceMesh.enableFluentbit }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fluentbit-configmap
-  namespace: arc-osm-system
+  namespace: {{.Values.OpenServiceMesh.namespace}}
 data:
   fluent-bit.conf: |-
     [SERVICE]
@@ -13,12 +14,12 @@ data:
     [INPUT]
       Name    tail
       Tag     kube.*
-      Path    /var/log/containers/osm-controller-*_arc-osm-system_osm-controller-*.log
+      Path    /var/log/containers/osm-controller-*_{{.Values.OpenServiceMesh.namespace}}_osm-controller-*.log
       Parser  cri
     [FILTER]
       name       grep
       match      *
-      regex       $message['level'] error
+      regex      $message['level'] error
     [OUTPUT]
       Name        azure
       Match       *
@@ -26,14 +27,10 @@ data:
       Shared_Key  5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
   parser.conf: |-
     [PARSER]
-      Name   json
-      Format json
-      Time_Key time
-      Time_Format %Y-%m-%dT%H:%M:%S.%L
-    [PARSER]
       # http://rubular.com/r/tjUt3Awgg4
       Name    cri
       Format  regex
       Regex   ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
       Time_Key    time
       Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+{{- end }}
