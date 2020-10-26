@@ -1,11 +1,9 @@
-# Logs
-Open Service Mesh (OSM) collects logs that are sent to stdout by default. When enabled, Fluent Bit process these logs and sends them to Azure Monitor.
+# Observability
 
+## Log Forwarding with Fluent Bit
+Open Service Mesh (OSM) generates logs and uses Fluent Bit to process and forward them to Azure Monitor. 
 
-## Fluent Bit
-[Fluent Bit](https://fluentbit.io/) is an open source log processor and forwarder which allows you to collect data/logs and send them to multiple destinations. 
-
-OSM provides log forwarding by optionally deploying a Fluent Bit sidecar to the OSM controller. This can be disabled by changing `enableFluentbit` to false in `values.yaml` or by using a `--set OpenServiceMesh.enableFluentbit=false` flag with the `helm install` command. Logs are sent to a Log Analytics workspace that is consumed by an instance of Aplication Insights. 
+[Fluent Bit](https://fluentbit.io/) is an open source log processor and forwarder which allows you to collect data/logs and send them to multiple destinations. OSM provides log forwarding by optionally deploying a Fluent Bit sidecar to the OSM controller. This can be disabled by changing `enableFluentbit` to false in `values.yaml` or by using a `--set OpenServiceMesh.enableFluentbit=false` flag with the `helm install` command. Logs are sent to a Log Analytics workspace that is consumed by an instance of Application Insights. 
 
 ### Customizing the Fluent Bit Configuration
 You may configure log forwarding to a different output by following these steps _before_ you install OSM.
@@ -22,36 +20,5 @@ You may configure log forwarding to a different output by following these steps 
          regex      $message['level'] error
    ```
 
-4. Once you have updated the Fluent Bit configmap, deploy the sidecar during OSM installation as described above.
-
-### Sending Logs to your own instance of Azure Monitor
-If you would like to use your own instance of Log Analytics for logging:
-1. [Create a Log Analytics workspace](https://docs.microsoft.com/en-us/azure/azure-monitor/learn/quick-create-workspace)
-
-2. Navigate to your new workspace in Azure Portal. Find your Workspace ID and Primary key in your workspace under Advanced settings > Agents management. Locally, in `fluentbit-configmap.yaml`, update the `[OUTPUT]` section with those values as follows:
-   ```
-   [OUTPUT]
-         Name        azure
-         Match       *
-         Customer_ID <Log Analytics Workspace ID>
-         Shared_Key  <Log Analytics Primary key> 
-   ```
-
-3. Run through steps 3 and 4 above. 
-
-4. Once you run OSM with Fluent Bit enabled, logs will populate under the Logs > Custom Logs section in your Log Analytics workspace. There, you may run the following query to view most recent logs first:
-    ```
-    fluentbit_CL
-    | order by TimeGenerated desc
-    ```
-
-Once logs have been sent to Log Analytics, that can also be consumed by Application Insights as follows:
-1. [Create a Workspace-based Application Insights instance](https://docs.microsoft.com/en-us/azure/azure-monitor/app/create-workspace-resource).
-
-2. Navigate to your instance in Azure Portal. Go to the Logs section. Run this query to ensure that logs are being picked up from Log Analytics:
-    ```
-    workspace("<your-log-analytics-workspace-name>").fluentbit_CL
-    ```
-
-You can now interact with your logs in either of these instances.
+4. Once you have updated the Fluent Bit configmap, you must install OSM again for it to be deployed.
 
