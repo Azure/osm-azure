@@ -17,7 +17,7 @@ You may configure log forwarding to a different output by following these steps 
    [FILTER]
          name       grep
          match      *
-         regex      $message['level'] error
+         regex      message /"level":"error"/
    ```
 
 4. Once you have updated the Fluent Bit configmap, you must install OSM again for it to be deployed.
