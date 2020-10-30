@@ -20,6 +20,11 @@ SLEEP_TIME=1
     assert_success
 }
 
+@test "fluentbit has been deployed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-controller -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep fluent-bit"
+    assert_success
+}
+
 @test "openservicemesh.io/ignore is true in kube-system" { 
     test_label=$(kubectl get namespace kube-system -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
     [[ $test_label == "true" ]]
