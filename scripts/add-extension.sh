@@ -1,11 +1,15 @@
 #!/bin/bash
 
+source .env
+
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 export HELM_EXPERIMENTAL_OCI=1
 
 jq -n \
   --arg tag "$CHECKOUT_TAG" \
   '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: "arc-osm-system" } } } }' > osm_extension.json
+
+az account set --subscription=$SUBSCRIPTION
 
 az extension remove --name connectedk8s
 
