@@ -23,6 +23,7 @@ OpenServiceMesh:
   meshName: osm
   useHTTPSIngress: false
   envoyLogLevel: error
+  enforceSingleMesh: false
   namespace: arc-osm-system
   ignoreNamespaces: "kube-system azure-arc arc-osm-system"
 

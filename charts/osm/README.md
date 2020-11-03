@@ -1,6 +1,6 @@
 # osm
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.3.0](https://img.shields.io/badge/AppVersion-v0.3.0-informational?style=flat-square)
+![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.4.2](https://img.shields.io/badge/AppVersion-v0.4.2-informational?style=flat-square)
 
 A Helm chart to install the OSM control plane on Kubernetes
 
@@ -9,18 +9,19 @@ A Helm chart to install the OSM control plane on Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | OpenServiceMesh.caBundleSecretName | string | `"osm-ca-bundle"` |  |
-| OpenServiceMesh.certficateManager | string | `"tresor"` |  |
+| OpenServiceMesh.certificateManager | string | `"tresor"` |  |
 | OpenServiceMesh.certmanager.issuerGroup | string | `"cert-manager"` |  |
 | OpenServiceMesh.certmanager.issuerKind | string | `"Issuer"` |  |
 | OpenServiceMesh.certmanager.issuerName | string | `"osm-ca"` |  |
-| OpenServiceMesh.deployJaeger | bool | `true` |  |
+| OpenServiceMesh.deployJaeger | bool | `false` |  |
 | OpenServiceMesh.enableBackpressureExperimental | bool | `false` |  |
 | OpenServiceMesh.enableDebugServer | bool | `false` |  |
 | OpenServiceMesh.enableEgress | bool | `false` |  |
 | OpenServiceMesh.enableGrafana | bool | `false` |  |
-| OpenServiceMesh.enablePrometheus | bool | `true` |  |
+| OpenServiceMesh.enablePrometheus | bool | `false` |  |
 | OpenServiceMesh.enablePermissiveTrafficPolicy | bool | `false` |  |
 | OpenServiceMesh.envoyLogLevel | string | `"error"` |  |
+| OpenServiceMesh.enableFluentbit | bool | `true` |  |
 | OpenServiceMesh.grafana.port | int | `3000` |  |
 | OpenServiceMesh.image.pullPolicy | string | `"IfNotPresent"` |  |
 | OpenServiceMesh.image.registry | string | `"openservicemesh"` |  |
