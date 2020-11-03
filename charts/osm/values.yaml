@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 OpenServiceMesh:
-  osmImageTag: v0.4.2
+  osmImageTag: v0.5.0-rc.1
   sidecarImageTag: v1.15.0 
   certificateManager: tresor
   certmanager:
