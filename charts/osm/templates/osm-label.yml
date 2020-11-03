@@ -108,6 +108,8 @@ spec:
           env: 
             - name: labelnamespaces
               value: {{ .Values.OpenServiceMesh.ignoreNamespaces }}
+            - name: osmnamespace
+              value: {{ .Values.OpenServiceMesh.namespace }}
           securityContext:
             allowPrivilegeEscalation: false
           command: 
@@ -143,6 +145,29 @@ spec:
                   echo "Failed to retrieve ${namespace} details"
                 fi
               done
+              echo "Retrieving namespace ${osmnamespace} details"
+              namespaceDetails=$(curl -s -X GET -k https://kubernetes.default.svc/api/v1/namespaces/${osmnamespace} \
+              -H "Authorization: Bearer ${token}" \
+              -H "Content-Type: application/json" \
+              -H "Accept: application/json")
+              kind=$(echo $namespaceDetails | jq .kind)
+              if [ "$kind" = "\"Namespace\"" ]
+              then
+                cplabel=$(echo $namespaceDetails | jq .metadata.labels.\"admission.policy.azure.com/ignore\")
+                if [ "$cplabel" = "null" ]
+                then
+                  echo "Adding admission.policy.azure.com/ignore label to ${osmnamespace}"
+                  patchstatus=$(curl -s -X PATCH -k https://kubernetes.default.svc/api/v1/namespaces/${osmnamespace} \
+                  -d '{ "metadata": { "labels": { "admission.policy.azure.com/ignore": "true" } } }' \
+                  -H "Authorization: Bearer ${token}" \
+                  -H "Content-Type: application/strategic-merge-patch+json" \
+                  -H "Accept: application/json")
+                else
+                  echo "admission.policy.azure.com/ignore label already exists on namespace ${osmnamespace}"
+                fi
+              else
+                echo "Failed to retrieve ${osmnamespace} details"
+              fi  
       securityContext:
         runAsUser: 1000
         runAsGroup: 3000

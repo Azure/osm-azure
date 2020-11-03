@@ -12,10 +12,10 @@ Adding OSM to an arc-enabled AKS cluster that has the Azure Policy addon install
 	- Allowed profiles: ["runtime/default", "docker/default"]
 - NoPrivilegeEscalation
 
-Modifying the osm-controller and osm-label containers to meet these security requirements will allow the OSM installation to proceed without being interrupted. However, if you examine the events in the arc-osm-system namespace by doing "kubectl get events --namespace arc-osm-system," you will see that there are still policy violations caused by the fluentbit-logger container mounting host volumes. The only way to circumvent this is by whitelisting the arc-osm-system namespace in the azure-policy. 
+Modifying the osm-controller and osm-label containers to meet these security requirements, and adding the "admission.policy.azure.com/ignore" label to the arc-osm-system namespace, will allow the OSM installation to proceed without being interrupted.
 
 ### Envoy Sidecar Injection
 
-One of the features offered by the OSM extension is service to service communication via sidecar proxy injection. After a namespace is added to the mesh and is annotated to enable sideacr injection, OSM will add the Envoy container to new pods created in that namespace. However, the osm-init and envoy containers used in the sidecar injection violate some of the built-in azure policies, such as the "no privilege escalation" policy. Thus, the new namespace must also be whitelisted from the azure policy in order for sidecar injection to work within that namespace. 
+You may need to add the "admission.policy.azure.com/ignore" label to your workload namespace if you have AZ policy running to ensure that envoy proxy container can be injected. 
 
 
