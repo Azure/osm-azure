@@ -17,7 +17,7 @@ webhooks:
   namespaceSelector:
     matchLabels:
       openservicemesh.io/monitored-by: {{.Values.OpenServiceMesh.meshName}}
-     matchExpressions:
+    matchExpressions:
       # This label is explicitly set to ignore a namespace
       - key: "openservicemesh.io/ignore"
         operator: DoesNotExist
