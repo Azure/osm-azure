@@ -1,6 +1,6 @@
 ## OSM with Azure Policy
 
-This document describes the steps you may need to take if you are enabling both the Azure Policy and OSM extensions in your arc-enabled cluster. 
+This document describes the steps you may need to take if you are enabling both the Azure Policy and the OSM extension in your arc-enabled cluster. 
 
 
 
