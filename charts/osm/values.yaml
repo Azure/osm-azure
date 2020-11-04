@@ -15,10 +15,10 @@ OpenServiceMesh:
   enablePermissiveTrafficPolicy: true
   enableEgress: false
   enableFluentbit: true
-  fluentBitImage: # TODO: Update to MCR image
+  fluentBit:
     name: fluentbit-logger
-    registry: fluent
-    tag: 1.5
+    image: "mcr.microsoft.com/oss/fluent/fluent-bit"
+    tag: "v1.6.2"
     pullPolicy: IfNotPresent
   meshName: osm
   useHTTPSIngress: false
