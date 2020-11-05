@@ -16,8 +16,14 @@ spec:
         app: osm-controller
       annotations:
           checksum/config: {{ print .Values.openServiceMesh | sha256sum }}
+          seccomp.security.alpha.kubernetes.io/pod: runtime/default
     spec:
       serviceAccountName: arc-osm-service-account
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+        supplementalGroups: [5555]
       containers:
         - name: osm-controller
           image: "mcr.microsoft.com/oss/openservicemesh/osm-controller:{{ .Values.OpenServiceMesh.osmImageTag }}"
@@ -68,6 +74,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+          securityContext:
+            allowPrivilegeEscalation: false
       {{- if .Values.OpenServiceMesh.enableFluentbit }}
         - name: {{ .Values.OpenServiceMesh.fluentBit.name }}
           image: {{ .Values.OpenServiceMesh.fluentBit.image }}:{{ .Values.OpenServiceMesh.fluentBit.tag }}
