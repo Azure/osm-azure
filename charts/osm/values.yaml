@@ -2,29 +2,56 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 OpenServiceMesh:
-  osmImageTag: v0.4.2
-  sidecarImageTag: v1.15.0 
+  replicaCount: 1
+  image:
+    registry: openservicemesh
+    pullPolicy: IfNotPresent
+    tag: v0.5.0-rc.1
+  imagePullSecrets: []
+  sidecarImage: envoyproxy/envoy-alpine:v1.15.0
+  prometheus:
+    port: 7070
+    retention:
+      time: 15d
   certificateManager: tresor
+  vault:
+    host:
+    protocol: http
+    token:
+    role: openservicemesh
+  connectVault: true
   certmanager:
     issuerName: osm-ca
     issuerKind: Issuer
     issuerGroup: cert-manager
   serviceCertValidityDuration: 24h
   caBundleSecretName: osm-ca-bundle
-  enableDebugServer: true
-  enablePermissiveTrafficPolicy: true
+  grafana:
+    port: 3000
+
+  enableDebugServer: false
+  enablePermissiveTrafficPolicy: false
+  enableBackpressureExperimental: false
   enableEgress: false
-  enableFluentbit: true
-  fluentBit:
+  enablePrometheus: true
+  enableGrafana: false
+  enableFluentbit: false
+  fluentBitImage:
     name: fluentbit-logger
-    image: "mcr.microsoft.com/oss/fluent/fluent-bit"
-    tag: "v1.6.2"
+    registry: fluent
+    tag: 1.5
     pullPolicy: IfNotPresent
   meshName: osm
   useHTTPSIngress: false
   envoyLogLevel: error
-  namespace: arc-osm-system
-  ignoreNamespaces: "kube-system azure-arc arc-osm-system"
+  enforceSingleMesh: false
+  customLogAnalyticsWorkspace: true
+  fluentbitOutput: stdout
+  webhookConfigNamePrefix: osm-webhook
+
+  # Set deployJaeger to true to deploy a Jaeger cluster in the
+  # namespace where OSM resides.
+  deployJaeger: true
 
   # The following section configures a destination where to send
   # tracing data. Current implementation supports only Zipkin format
@@ -44,9 +71,3 @@ OpenServiceMesh:
     # Destination's API or collector endpoint where the spans will
     # be sent to
     endpoint: "/api/v2/spans"
-
-## Alpine image used in the helm hook
-alpine:
-  image:
-    name: "mcr.microsoft.com/azure-policy/alpine"
-    tag: "prod_20200505.1"

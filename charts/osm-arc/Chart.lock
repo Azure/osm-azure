@@ -1,0 +1,6 @@
+dependencies:
+- name: osm
+  repository: file://../../charts/osm
+  version: 0.5.0-rc.1
+digest: sha256:d1226533d04b95e18f2f0763a5c8a0bef8378917c5c7dbca83a84194cdf6eebb
+generated: "2020-11-11T19:27:13.3389966-05:00"

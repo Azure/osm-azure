@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fluentbit-configmap
-  namespace: {{.Values.OpenServiceMesh.namespace}}
+  namespace: {{ .Release.Namespace }}
 data:
   fluent-bit.conf: |-
     [SERVICE]
@@ -14,17 +14,20 @@ data:
     [INPUT]
       Name    tail
       Tag     kube.*
-      Path    /var/log/containers/osm-controller-*_{{.Values.OpenServiceMesh.namespace}}_osm-controller-*.log
+      Path    /var/log/containers/osm-controller-*_{{ .Release.Namespace }}_osm-controller-*.log
       Parser  cri
     [FILTER]
       name       grep
       match      *
-      regex      message /"level":"error"/
+      regex       message /"level":"error"/
     [OUTPUT]
-      Name        azure
-      Match       *
-      Customer_ID 49a4d43a-81ef-4607-83f6-a13872c6ae60
-      Shared_Key  5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
+      Name    {{ .Values.OpenServiceMesh.fluentbitOutput }}
+      Match   *
+      {{- if not .Values.OpenServiceMesh.customerLogAnalyticsWorkspace }}
+      Customer_ID {{ .Values.OpenServiceMesh.customerID }}
+      Shared_Key {{ .Values.OpenServiceMesh.sharedKey }}
+      {{- end }}
+
   parser.conf: |-
     [PARSER]
       # http://rubular.com/r/tjUt3Awgg4

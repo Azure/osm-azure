@@ -1,0 +1,24 @@
+# Default values for osm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+OpenServiceMesh:
+  enableDebugServer: true
+  enablePermissiveTrafficPolicy: true
+  enableFluentbit: true
+  fluentBitImage:
+    name: fluentbit-logger
+    registry: "mcr.microsoft.com/oss/fluent"
+    tag: "v1.6.2"
+    pullPolicy: IfNotPresent
+  enforceSingleMesh: true
+  enablePrometheus: false
+  deployJaeger: false
+  customLogAnalyticsWorkspace: false
+  customerID: 49a4d43a-81ef-4607-83f6-a13872c6ae60
+  sharedKey: 5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
+  fluentbitOutput: azure
+  webhookConfigNamePrefix: arc-osm-webhook
+
+
+
+

@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: arc-osm-cluster-role
+  name: {{ .Release.Name }}
 rules:
   - apiGroups: ["apps"]
     resources: ["daemonsets", "deployments", "replicasets", "statefulsets"]
@@ -57,17 +57,17 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: arc-osm-service-account
+  name: {{ .Release.Name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: arc-osm-cluster-role-binding
+  name: {{ .Release.Name }}
 subjects:
   - kind: ServiceAccount
-    name: arc-osm-service-account
-    namespace: {{.Values.OpenServiceMesh.namespace}}
+    name: {{ .Release.Name }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: arc-osm-cluster-role
+  name: {{ .Release.Name }}
   apiGroup: rbac.authorization.k8s.io

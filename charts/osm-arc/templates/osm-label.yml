@@ -6,7 +6,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: osm-label-account
-  namespace: {{ .Values.OpenServiceMesh.namespace }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook-weight": "20"
     "helm.sh/hook": pre-install
@@ -37,7 +37,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: osm-label-account
-  namespace: {{ .Values.OpenServiceMesh.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
@@ -55,7 +55,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: osm-label-account
-  namespace: {{ .Values.OpenServiceMesh.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
@@ -73,7 +73,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: osm-label-account
-  namespace: {{ .Values.OpenServiceMesh.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
@@ -83,7 +83,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: osm-label
-  namespace: {{ .Values.OpenServiceMesh.namespace }}
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
@@ -109,7 +109,7 @@ spec:
             - name: labelnamespaces
               value: {{ .Values.OpenServiceMesh.ignoreNamespaces }}
             - name: osmnamespace
-              value: {{ .Values.OpenServiceMesh.namespace }}
+              value: {{ .Release.Namespace }}
           securityContext:
             allowPrivilegeEscalation: false
           command: 
