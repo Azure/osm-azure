@@ -9,6 +9,8 @@ osm:
     enableDebugServer: true
     enablePermissiveTrafficPolicy: true
     enableFluentbit: true
+    image:
+      registry: mcr.microsoft.com/oss/openservicemesh
     fluentBitImage:
       name: fluentbit-logger
       registry: "mcr.microsoft.com/oss/fluent"
@@ -22,6 +24,7 @@ osm:
     sharedKey: 5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
     fluentbitOutput: azure
     webhookConfigNamePrefix: arc-osm-webhook
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.15.0
   
 alpine:
   image:

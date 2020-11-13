@@ -3,6 +3,9 @@ KIND_VERSION ?= 0.8.1
 KUBERNETES_VERSION ?= v1.19.0
 HELM_VERSION ?= 3.3.4
 
+package-osm-chart:
+	helm dependency update osm-arc
+	
 e2e-bootstrap:
 	# Download and install kind
 	curl -L https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64 --output ${GITHUB_WORKSPACE}/bin/kind && chmod +x ${GITHUB_WORKSPACE}/bin/kind
@@ -23,8 +26,7 @@ e2e-helm-deploy:
 	mkdir -p .staging/helm
 	curl https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz > .staging/helm/helmbin.tar.gz
 	cd .staging/helm && tar -xvf helmbin.tar.gz
-	./.staging/helm/linux-amd64/helm dependency update ./charts/osm-arc
-	./.staging/helm/linux-amd64/helm install osm ./charts/osm-arc --namespace arc-osm-system
+	./.staging/helm/linux-amd64/helm install osm ./charts/osm-arc --namespace arc-osm-system --dependency-update
 
 test-e2e:
 	bats -t test/bats/test.bats

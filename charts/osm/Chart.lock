@@ -1,6 +1,0 @@
-dependencies:
-- name: osm-arc
-  repository: file://../../charts/osm-arc
-  version: 0.1.0
-digest: sha256:d86a5f1460388d13ef009984e1a2bc78a35035ac7a2e1805f1de1ea510532647
-generated: "2020-11-09T19:21:38.9345356-05:00"
