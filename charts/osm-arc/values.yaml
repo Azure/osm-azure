@@ -19,11 +19,6 @@ osm:
     enforceSingleMesh: true
     enablePrometheus: false
     deployJaeger: false
-    customLogAnalyticsWorkspace: false
-    customerID: 49a4d43a-81ef-4607-83f6-a13872c6ae60
-    sharedKey: 5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
-    fluentbitOutput: azure
-    #webhookConfigNamePrefix: arc-osm-webhook
     sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.15.0
   
 alpine:
