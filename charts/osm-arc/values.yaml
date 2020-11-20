@@ -1,0 +1,27 @@
+# Default values for osm-arc.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+OpenServiceMesh:
+    ignoreNamespaces: "kube-system azure-arc arc-osm-system"
+
+osm:
+  OpenServiceMesh:
+    enableDebugServer: true
+    enablePermissiveTrafficPolicy: true
+    enableFluentbit: true
+    image:
+      registry: mcr.microsoft.com/oss/openservicemesh
+    fluentBitImage:
+      name: fluentbit-logger
+      registry: "mcr.microsoft.com/oss/fluent"
+      tag: "v1.6.2"
+      pullPolicy: IfNotPresent
+    enforceSingleMesh: true
+    enablePrometheus: false
+    deployJaeger: false
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.15.0
+  
+alpine:
+  image:
+    name: "mcr.microsoft.com/azure-policy/alpine"
+    tag: "prod_20200505.1"
