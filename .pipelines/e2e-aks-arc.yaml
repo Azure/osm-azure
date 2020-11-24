@@ -1,0 +1,33 @@
+variables:
+  repo.path: $(System.DefaultWorkingDirectory)/osm
+  repo.chart.path: $(repo.path)/charts/$(chart.name)
+  image.dir: $(Build.ArtifactStagingDirectory)
+  image.artifact.name: drop
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+
+stages: 
+- stage: build
+  jobs: 
+  - job: test_osm_chart_arc_cluster
+    pool: Upstream Pool
+    workspace: 
+      clean: all
+    steps: 
+    - template: templates/install-helm3.yaml
+    - template: templates/install-oras.yaml
+    - template: templates/package-helm-chart.yaml
+    - template: templates/deploy-helm-chart.yaml
+
+- stage: validate
+  jobs:
+  - job: validate
+    pool: Upstream Pool
+    steps: 
+    - template: templates/install-helm3.yaml
+    - template: templates/aks-setup.yaml
+    - tempalte: templates/add-arc-extension.yaml
+    - template: templates/validate-deployments.yaml
+    - template: templates/validate-version.yaml
+    - template: templates/validate-osm-resources.yaml
+    - template: templates/validate-labels.yaml
+    - template: templates/aks-cleanup.yaml

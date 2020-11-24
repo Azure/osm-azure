@@ -1,0 +1,15 @@
+trigger:
+  branches:
+    include:
+    - master
+
+pr:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+      - docs/*
+
+jobs:
+  - template: e2e-aks-arc.yaml

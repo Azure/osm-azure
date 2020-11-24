@@ -1,0 +1,6 @@
+steps:
+  - script: |
+      az login --identity
+      az group delete -n ${AZURE_CLUSTER_NAME} --yes --no-wait
+    displayName: Delete cluster and resource group
+    condition: always()

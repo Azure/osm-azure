@@ -1,0 +1,12 @@
+parameters:
+  version: 0.8.1
+
+steps:
+  - bash: |
+      mkdir -p oras/
+      curl -LO https://github.com/deislabs/oras/releases/download/v${{ parameters.version }}/oras_${{ parameters.version }}_linux_amd64.tar.gz
+      tar xvzf oras_${{ parameters.version }}_linux_amd64.tar.gz -C oras/
+    displayName: Install ORAS
+    workingDirectory: $(Pipeline.Workspace)
+  - bash: ./oras version
+    displayName: Print oras version
