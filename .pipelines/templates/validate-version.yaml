@@ -1,0 +1,8 @@
+steps: 
+- bash: |
+    helm ls -o json --namespace $(release.namespace) | jq .[] > get_json.json
+
+    if [[ $(jq -r .chart get_json.json) != osm-$(checkout.tag) ]]; then
+    echo "Chart version on cluster does not match checkout tag" && exit 1
+    fi
+  displayName: Verify that chart version on cluster matches checkout tag.
