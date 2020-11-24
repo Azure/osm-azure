@@ -1,0 +1,9 @@
+steps: 
+- template: templates/wait-for-resources.yaml
+  parameters:
+    namespace: azure-arc
+- template: templates/wait-for-resources.yaml
+  parameters: 
+    namespace: $(release.namespace)
+
+
