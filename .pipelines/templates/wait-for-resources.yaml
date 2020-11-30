@@ -1,9 +1,0 @@
-parameters:
-  resource: deployment
-
-steps:
-  - script: 'scripts/k8s/wait-for-resources.sh'
-    env: 
-      RESOURCE: ${{ parameters.resource }}
-      NAMESPACE: ${{ parameters.namespace }}
-    displayName: Ensure that all the ${{ parameters.namespace }} deployments have succeeded
