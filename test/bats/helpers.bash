@@ -1,4 +1,4 @@
-  #!/bin/bash
+#!/bin/bash
 
 assert_success() {
   if [[ "$status" != 0 ]]; then
