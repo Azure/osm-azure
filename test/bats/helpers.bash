@@ -1,3 +1,5 @@
+  #!/bin/bash
+
 assert_success() {
   if [[ "$status" != 0 ]]; then
     echo "expected: 0"
