@@ -5,6 +5,10 @@ variables:
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Moved Tests
 jobs: 
   - job: test_osm_chart_arc_cluster
     pool: Upstream Pool
