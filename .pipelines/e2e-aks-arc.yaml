@@ -5,12 +5,12 @@ variables:
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
 
-
 jobs: 
   - job: test_osm_chart_arc_cluster
     pool: Upstream Pool
     workspace: 
       clean: all
+
     steps: 
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
