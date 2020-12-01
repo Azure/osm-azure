@@ -18,11 +18,7 @@ SLEEP_TIME_DEPLOYMENTS=10
 }
 
 @test "chart version on cluster matches checkout tag" {
-    helm ls -o json --namespace arc-osm-system | jq .[] > get_json.json
-    verify_tag=$(jq -r .chart get_json.json)
-    
-    [[ $verify_tag == "osm-arc-$(image.tag)" ]]
-    rm get_json.json
+    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" != "osm-arc-$(image.tag)" ]]
 }
 
 @test "osm pod is ready" {
