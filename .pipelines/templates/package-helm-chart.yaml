@@ -4,4 +4,3 @@ steps:
     helm package --version $(image.tag) --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart
   workingDirectory: $(repo.path)
-  
