@@ -18,7 +18,7 @@ az extension add --source https://shasbextensions.blob.core.windows.net/extensio
 az -v 
 
 # enable connected cluster
-az connectedK8s connect -n  $CLUSTERNAME -g $RESOURCEGROUP -l eastus2euap
+az connectedK8s connect -n  $CLUSTERNAME -g $RESOURCEGROUP -l $REGION
 
 # confirm
 helm ls --all --all-namespaces
