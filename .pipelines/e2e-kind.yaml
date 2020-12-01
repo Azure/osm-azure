@@ -1,9 +1,0 @@
-stages: 
-- stage: test_kind
-  jobs: 
-    - job: test
-      steps: 
-      - template: templates/install-helm3.yaml
-      - template: templates/kind-setup.yaml
-      - template: templates/install-osm-chart.yaml
-          

@@ -28,5 +28,5 @@ steps:
 
       # enable the osm extension
       az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/osm?api-Version=2020-07-01-preview" --body @osm_extension.json --debug
-      
     displayName: Add Arc extension to AKS cluster
+    

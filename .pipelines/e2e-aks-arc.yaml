@@ -16,6 +16,8 @@ jobs:
     - template: templates/install-oras.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/deploy-helm-chart.yaml
+    - template: templates/aks-setup.yaml
+    - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
     - template: templates/aks-cleanup.yaml
