@@ -15,4 +15,6 @@ steps:
           --no-ssh-key
 
       az aks get-credentials -n ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -f $(System.DefaultWorkingDirectory)/kubeconfig.json
+
+      kubectl wait --for=condition=ready nodes --all --timeout=5m 
     displayName: Create AKS cluster

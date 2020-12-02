@@ -13,7 +13,7 @@ jobs:
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/package-helm-chart.yaml
-    - template: templates/deploy-helm-chart.yaml
+    - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
     - template: templates/add-arc-extension.yaml
     - script: |

@@ -1,31 +1,12 @@
 steps:  
-  - script: |
-      kubectl wait --for=condition=ready nodes --all --timeout=5m 
-      export RESOURCEID=subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${AZURE_CLUSTER_NAME}/providers/Microsoft.Kubernetes/connectedClusters/${AZURE_CLUSTER_NAME}
-      export HELM_EXPERIMENTAL_OCI=1
-
-      jq -n \
-        --arg tag "$(checkout.tag)" \
-        --arg namespace "$(release.namespace)" \
-        '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } } } }' > osm_extension.json
-
-      az extension remove --name connectedk8s
-
-      az extension add --source https://shasbextensions.blob.core.windows.net/extensions/connectedk8s-$(connectedk8s.version)-py2.py3-none-any.whl -y
-
-      az -v 
-
-      # enable connected cluster
-      az connectedK8s connect -n  ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -l ${AZURE_LOCATION}
-
-      # confirm
-      helm ls --all --all-namespaces
-
-      az resource tag --tags logAnalyticsWorkspaceResourceId=/$RESOURCEID --ids /$RESOURCEID
-
-      # get extensions enabled on this cluster
-      az rest --method GET --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions?api-Version=2020-07-01-preview"
-
-      # enable the osm extension
-      az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/osm?api-Version=2020-07-01-preview" --body @osm_extension.json --debug
+  - bash: |
+      ../../scripts/add-extension.sh
     displayName: Add Arc extension to AKS cluster
+    env:
+        SUBSCRIPTION: $(SUBSCRIPTION_ID)
+        RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
+        CLUSTERNAME: $(AZURE_CLUSTER_NAME)
+        CHECKOUT_TAG: $(checkout.tag)
+        REGION: $(AZURE_LOCATION)
+        RELEASE_NAMESPACE: $(release.namespace)
+    workingDirectory: $(repo.path)
