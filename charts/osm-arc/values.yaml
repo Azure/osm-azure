@@ -12,11 +12,12 @@ osm:
     enableFluentbit: true
     image:
       registry: mcr.microsoft.com/oss/openservicemesh
-    fluentBitImage:
-      name: fluentbit-logger
+    fluentBit:
       registry: "mcr.microsoft.com/oss/fluent"
-      tag: "v1.6.2"
-      pullPolicy: IfNotPresent
+      tag: "v1.6.4"
+      outputPlugin: azure
+      workspaceId: 49a4d43a-81ef-4607-83f6-a13872c6ae60
+      primaryKey: 5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
     enforceSingleMesh: true
     enablePrometheus: false
     deployJaeger: false
