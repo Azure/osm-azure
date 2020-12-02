@@ -10,4 +10,3 @@ steps:
     workingDirectory: $(Pipeline.Workspace)
   - bash: ./oras version
     displayName: Print oras version
-    

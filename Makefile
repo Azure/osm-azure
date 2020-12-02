@@ -33,4 +33,3 @@ test-e2e:
 
 e2e-cleanup:
 	kind delete cluster
-	

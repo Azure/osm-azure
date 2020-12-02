@@ -16,4 +16,3 @@ steps:
 
       az aks get-credentials -n ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -f $(System.DefaultWorkingDirectory)/kubeconfig.json
     displayName: Create AKS cluster
-    
