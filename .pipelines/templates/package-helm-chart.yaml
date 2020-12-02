@@ -3,9 +3,4 @@ steps:
     helm dependency update osm-arc
     helm package --version $(image.tag) --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart
-<<<<<<< HEAD
   workingDirectory: $(repo.path)
-=======
-  workingDirectory: $(repo.path)
-  
->>>>>>> 46d0400be44098f2373db010b48f271232daf268
