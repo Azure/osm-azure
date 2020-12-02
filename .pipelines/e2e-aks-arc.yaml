@@ -10,7 +10,6 @@ jobs:
     pool: Upstream Pool
     workspace: 
       clean: all
-
     steps: 
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
