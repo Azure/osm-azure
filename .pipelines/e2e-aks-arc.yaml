@@ -1,11 +1,3 @@
-variables:
-  repo.path: $(System.DefaultWorkingDirectory)/osm
-  repo.chart.path: $(repo.path)/charts/$(chart.name)
-  image.dir: $(Build.ArtifactStagingDirectory)
-  image.artifact.name: drop
-  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  image.tag: 0.1.0
-
 jobs: 
   - job: test_osm_chart_arc_cluster
     pool: Upstream Pool
