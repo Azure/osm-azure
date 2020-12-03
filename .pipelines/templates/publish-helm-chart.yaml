@@ -12,7 +12,7 @@ steps:
     env:
       HELM_EXPERIMENTAL_OCI: 1
   - task: PublishBuildArtifacts@1
-      displayName: Publish artifacts
-      inputs:
-        artifactName: $(image.artifact.name)
-        pathToPublish: $(image.dir)
+    displayName: Publish artifacts
+    inputs:
+      artifactName: $(image.artifact.name)
+      pathToPublish: $(image.dir)
