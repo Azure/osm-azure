@@ -1,6 +1,6 @@
 steps:  
   - bash: |
-      ../../scripts/add-extension.sh
+      ./scripts/add-extension.sh
     displayName: Add Arc extension to AKS cluster
     env:
         SUBSCRIPTION: $(SUBSCRIPTION_ID)
