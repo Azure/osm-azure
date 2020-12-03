@@ -6,7 +6,7 @@ steps:
   - bash: |
       cp $(image.dir)/$(chart.name)-$(image.tag).tgz .
       echo 'pushing chart'
-      oras push $(staging.registry):$(image.tag) ./$(chart.name)-$(image.tag).tgz:application/tar+gzip --debug
+      oras push $(staging.registry):$(image.tag)-${UNIQUE_TAG} ./$(chart.name)-$(image.tag)-${UNIQUE_TAG}.tgz:application/tar+gzip --debug
     displayName: Push helm chart to staging ACR
     workingDirectory: $(repo.path)
     env:
