@@ -12,5 +12,4 @@ pr:
       - docs/*
 
 jobs:
-  pool: Upstream Pool
   - template: e2e-aks-arc.yaml

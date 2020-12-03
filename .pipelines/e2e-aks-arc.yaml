@@ -4,9 +4,11 @@ variables:
   image.dir: $(Build.ArtifactStagingDirectory)
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+  image.tag: 0.1.0
 
 jobs: 
   - job: test_osm_chart_arc_cluster
+    pool: Upstream Pool
     workspace: 
       clean: all
     steps: 
