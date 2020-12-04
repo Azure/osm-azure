@@ -1,6 +1,6 @@
 steps:
   - script: |
       az login --identity
-      az acr helm delete -n $(staging.registry) $(chart.name) --version $(image.tag)-${UNIQUE_TAG}
+      az acr helm delete -n $(staging.registry) $(chart.name) --version $(image.tag)-${UNIQUE_TAG} --yes
     displayName: Delete helm chart from staging registry
     condition: always()
