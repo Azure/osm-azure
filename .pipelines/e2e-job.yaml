@@ -21,7 +21,7 @@ variables:
   image.tag: 0.1.0
 
 stages: 
-- stage: run-e2e
+- stage: run_e2e
   variables: 
   - group: osm-azure-PR-gate-e2e
   jobs:
