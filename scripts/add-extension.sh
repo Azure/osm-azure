@@ -6,6 +6,7 @@ RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 export HELM_EXPERIMENTAL_OCI=1
 
+echo $CHECKOUT_TAG
 jq -n \
     --arg tag "$CHECKOUT_TAG" \
     --arg namespace "$RELEASE_NAMESPACE" \
