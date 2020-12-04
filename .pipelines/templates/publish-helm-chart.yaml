@@ -8,7 +8,7 @@ steps:
       echo 'pushing chart'
       oras push $(staging.registry):$(image.tag)-${UNIQUE_TAG} ./$(chart.name)-$(image.tag)-${UNIQUE_TAG}.tgz:application/tar+gzip --debug
     displayName: Push helm chart to staging ACR
-    workingDirectory: $(Pipeline.Workspace)
+    workingDirectory: $(repo.path)
     env:
       HELM_EXPERIMENTAL_OCI: 1
   - task: PublishBuildArtifacts@1

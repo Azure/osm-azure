@@ -9,4 +9,4 @@ steps:
         CHECKOUT_TAG: $(checkout.tag)-${UNIQUE_TAG}
         REGION: $(AZURE_LOCATION)
         RELEASE_NAMESPACE: $(release.namespace)
-    workingDirectory: $(Pipeline.Workspace)
+    workingDirectory: $(repo.path)

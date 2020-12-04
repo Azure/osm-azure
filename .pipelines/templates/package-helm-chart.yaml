@@ -8,4 +8,4 @@ steps:
     helm dependency update osm-arc
     helm package --version $(image.tag)-${UNIQUE-TAG} --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart
-  workingDirectory: $(Pipeline.Workspace)
+  workingDirectory: $(repo.path)
