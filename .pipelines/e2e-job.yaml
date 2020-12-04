@@ -20,6 +20,7 @@ variables:
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   image.tag: 0.1.0
 
+stages: 
 - stage: run-e2e
   variables: 
   - group: osm-azure-PR-gate-e2e
