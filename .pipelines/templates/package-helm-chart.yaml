@@ -5,7 +5,7 @@ steps:
   displayName: Create Unique Tag
 - bash: | 
     cd linux-amd64
-    helm dependency update osm-arc
+    helm dependency update $(repo.chart.path)
     helm package --version $(image.tag)-${UNIQUE-TAG} --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart
   workingDirectory: $(repo.path)
