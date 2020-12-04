@@ -2,8 +2,9 @@ steps:
 - script: |
     echo "##vso[task.setvariable variable=UNIQUE_TAG]$(git rev-parse HEAD | cut -c1-13)"
     echo ${UNIQUE_TAG}
-  displayName:
+  displayName: Create Unique Tag
 - bash: | 
+    cd linux-amd64
     helm dependency update osm-arc
     helm package --version $(image.tag)-${UNIQUE-TAG} --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart

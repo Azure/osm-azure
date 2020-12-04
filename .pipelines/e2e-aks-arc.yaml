@@ -12,4 +12,6 @@ jobs:
     - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
+    - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
+

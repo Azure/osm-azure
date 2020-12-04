@@ -6,7 +6,7 @@ steps:
         SUBSCRIPTION: $(SUBSCRIPTION_ID)
         RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
         CLUSTERNAME: $(AZURE_CLUSTER_NAME)
-        CHECKOUT_TAG: $(checkout.tag)
+        CHECKOUT_TAG: $(checkout.tag)-${UNIQUE_TAG}
         REGION: $(AZURE_LOCATION)
         RELEASE_NAMESPACE: $(release.namespace)
     workingDirectory: $(repo.path)

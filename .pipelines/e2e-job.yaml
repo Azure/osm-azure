@@ -12,6 +12,7 @@ pr:
       - docs/*
 
 variables:
+  chart.name: osm-arc
   repo.path: $(System.DefaultWorkingDirectory)/osm
   repo.chart.path: $(repo.path)/charts/$(chart.name)
   image.dir: $(Build.ArtifactStagingDirectory)
