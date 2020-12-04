@@ -22,7 +22,5 @@ variables:
 
 stages: 
 - stage: run_e2e
-  variables: 
-  - group: osm-azure-PR-gate-e2e
   jobs:
     - template: e2e-aks-arc.yaml
