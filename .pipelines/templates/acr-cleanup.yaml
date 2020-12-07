@@ -2,6 +2,7 @@ steps:
   - bash: |
       az login --identity
       echo $(image.tag)-${UNIQUE_TAG}
+      az acr helm show -n $(staging.registry) osm-arc
       az acr helm delete -n $(staging.registry) osm-arc --version $(image.tag)-${UNIQUE_TAG} --yes
     displayName: Delete helm chart from staging registry
     workingDirectory: $(repo.path)
