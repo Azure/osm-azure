@@ -12,6 +12,9 @@ jobs:
     - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
+      displayName: "Run e2e tests"
+      env: 
+        CHECKOUT_TAG: $(image.tag)-$(UNIQUE_TAG)
     - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
 

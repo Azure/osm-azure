@@ -6,7 +6,6 @@ WAIT_TIME=120
 SLEEP_TIME=1
 WAIT_TIME_DEPLOYMENTS=600
 SLEEP_TIME_DEPLOYMENTS=10
-IMAGE_TAG=0.1.0
 
 @test "azure-arc deployments have succeeded" {
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
@@ -19,7 +18,7 @@ IMAGE_TAG=0.1.0
 }
 
 @test "chart version on cluster matches checkout tag" {
-    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$IMAGE_TAG" ]]
+    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
 }
 
 @test "osm pod is ready" {
