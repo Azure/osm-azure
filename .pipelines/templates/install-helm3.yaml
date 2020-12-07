@@ -12,4 +12,3 @@ steps:
     displayName: Add Helm to PATH
   - bash: helm version
     displayName: Print helm version
-    
