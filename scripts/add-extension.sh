@@ -31,4 +31,8 @@ az resource tag --tags logAnalyticsWorkspaceResourceId=/$RESOURCEID --ids /$RESO
 az rest --method GET --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions?api-Version=2020-07-01-preview"
 
 # enable the osm extension
-az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/osm?api-Version=2020-07-01-preview" --body @osm_extension.json --debug                                                                  
+az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/osm?api-Version=2020-07-01-preview" --body @osm_extension.json --debug
+
+# confirm chart has been successfully added
+helm ls --all --all-namespaces
+
