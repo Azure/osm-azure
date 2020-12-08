@@ -14,7 +14,7 @@ jobs:
         make test-e2e
       displayName: "Run e2e tests"
       env: 
-        CHECKOUT_TAG: $(image.tag)-$(UNIQUE_TAG)
+        CHECKOUT_TAG: $(checkout.tag)-$(UNIQUE_TAG)
     - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
 

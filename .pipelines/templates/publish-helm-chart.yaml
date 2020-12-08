@@ -4,9 +4,9 @@ steps:
       az acr login --name $(registry.name)
     displayName: Login to acr
   - bash: |
-      cp $(image.dir)/$(chart.name)-$(image.tag)-${UNIQUE_TAG}.tgz .
+      cp $(image.dir)/$(chart.name)-$(checkout.tag)-${UNIQUE_TAG}.tgz .
       echo 'pushing chart'
-      oras push $(staging.registry):$(image.tag)-${UNIQUE_TAG} ./$(chart.name)-$(image.tag)-${UNIQUE_TAG}.tgz:application/tar+gzip --debug
+      oras push $(staging.registry):$(checkout.tag)-${UNIQUE_TAG} ./$(chart.name)-$(checkout.tag)-${UNIQUE_TAG}.tgz:application/tar+gzip --debug
     displayName: Push helm chart to staging ACR
     workingDirectory: $(repo.path)
     env:
