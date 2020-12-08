@@ -1,7 +1,7 @@
 steps:
   - bash: |
       az login --identity
-      echo $(image.tag)-${UNIQUE_TAG}
+      echo ${CHECKOUT_TAG}
       az acr repository delete -n $(registry.name) --image oss/openservicemesh/osm-chart:${CHECKOUT_TAG} --yes
     displayName: Delete helm chart from staging registry
     workingDirectory: $(repo.path)
