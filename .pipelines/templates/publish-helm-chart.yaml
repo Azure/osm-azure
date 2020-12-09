@@ -4,15 +4,15 @@ steps:
       az acr login --name $(registry.name)
     displayName: Login to acr
   - bash: |
-      cp $(image.dir)/$(chart.name)-$(image.tag).tgz .
+      cp $(image.dir)/$(chart.name)-${CHECKOUT_TAG}.tgz .
       echo 'pushing chart'
-      oras push $(staging.registry):$(image.tag) ./$(chart.name)-$(image.tag).tgz:application/tar+gzip --debug
+      oras push $(staging.registry):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
     displayName: Push helm chart to staging ACR
     workingDirectory: $(repo.path)
     env:
       HELM_EXPERIMENTAL_OCI: 1
   - task: PublishBuildArtifacts@1
-      displayName: Publish artifacts
-      inputs:
-        artifactName: $(image.artifact.name)
-        pathToPublish: $(image.dir)
+    displayName: Publish artifacts
+    inputs:
+      artifactName: $(image.artifact.name)
+      pathToPublish: $(image.dir)

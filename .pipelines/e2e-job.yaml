@@ -1,16 +1,26 @@
 trigger:
   branches:
     include:
-    - master
+    - main
 
 pr:
   branches:
     include:
-    - master
+    - main
   paths:
     exclude:
       - docs/*
 
-jobs:
-  pool: Upstream Pool
-  - template: e2e-aks-arc.yaml
+variables:
+  chart.name: osm-arc
+  repo.path: $(System.DefaultWorkingDirectory)
+  repo.chart.path: $(repo.path)/charts/$(chart.name)
+  image.dir: $(Build.ArtifactStagingDirectory)
+  image.artifact.name: drop
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+  image.tag: 0.1.0
+
+stages: 
+- stage: run_e2e
+  jobs:
+    - template: e2e-aks-arc.yaml

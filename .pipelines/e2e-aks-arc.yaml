@@ -1,12 +1,6 @@
-variables:
-  repo.path: $(System.DefaultWorkingDirectory)/osm
-  repo.chart.path: $(repo.path)/charts/$(chart.name)
-  image.dir: $(Build.ArtifactStagingDirectory)
-  image.artifact.name: drop
-  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-
 jobs: 
   - job: test_osm_chart_arc_cluster
+    pool: Upstream Pool
     workspace: 
       clean: all
     steps: 
@@ -18,4 +12,9 @@ jobs:
     - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
+      displayName: "Run e2e tests"
+      env: 
+        CHECKOUT_TAG: $(CHECKOUT_TAG)
+    - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
+

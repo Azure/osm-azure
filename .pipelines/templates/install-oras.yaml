@@ -8,5 +8,9 @@ steps:
       tar xvzf oras_${{ parameters.version }}_linux_amd64.tar.gz -C oras/
     displayName: Install ORAS
     workingDirectory: $(Pipeline.Workspace)
-  - bash: ./oras version
+  - bash: |
+        tree $(Pipeline.Workspace)
+        echo "##vso[task.setvariable variable=PATH]${PATH}:$(Pipeline.Workspace)/oras"
+    displayName: Add oras to PATH
+  - bash: oras version
     displayName: Print oras version
