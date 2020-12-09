@@ -20,6 +20,14 @@ This step needs to be run for each cluster that needs the Arc OSM extension.
 ./scripts/add-extension.sh
 ```
 
+### Remove Arc Extension from Cluster
+This step needs to be run for each cluster when you want to remove the OSM Arc extension. Note that this script does not remove Arc connectivity.
+
+This script also does not delete the `arc-osm-system` and `azure-arc` namespaces.
+```sh
+./scripts/delete-extension.sh
+```
+
 ### Publish Chart to Azure Container Registry
 This step only needs to be run when publishing a new OSM Arc Helm chart.
 ```sh
