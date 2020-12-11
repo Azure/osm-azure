@@ -1,0 +1,10 @@
+steps:
+  - bash: |
+      git clone https://github.com/bats-core/bats-core.git
+    displayName: Clone bats repo
+    workingDirectory: $(Pipeline.Workspace)
+  - bash: |
+        echo "##vso[task.setvariable variable=PATH]${PATH}:$(Pipeline.Workspace)/bats-core"
+    displayName: Add bats to PATH
+  - bash: bats --version
+    displayName: Print bats version

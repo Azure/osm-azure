@@ -6,6 +6,7 @@ jobs:
     steps: 
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
+    - template: templates/install-bats.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
