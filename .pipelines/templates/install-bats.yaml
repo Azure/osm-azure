@@ -1,10 +1,9 @@
 steps:
   - bash: |
-      git clone https://github.com/bats-core/bats-core.git
-    displayName: Clone bats repo
+      curl -L https://github.com/bats-core/bats-core/archive/v$(bats.version).tar.gz | tar xz
+      pushd bats-core-$(bats.version)
+      sudo ./install.sh /usr/local
+    displayName: Install bats and add to path
     workingDirectory: $(Pipeline.Workspace)
-  - bash: |
-        echo "##vso[task.setvariable variable=PATH]${PATH}:$(Pipeline.Workspace)/bats-core"
-    displayName: Add bats to PATH
   - bash: bats --version
     displayName: Print bats version
