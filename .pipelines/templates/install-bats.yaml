@@ -1,7 +1,10 @@
+parameters:
+  version: v1.2.1
+
 steps:
   - bash: |
-      curl -L https://github.com/bats-core/bats-core/archive/v$(bats.version).tar.gz | tar xz
-      pushd bats-core-$(bats.version)
+      curl -L https://github.com/bats-core/bats-core/archive/v${{ parameters.version }}.tar.gz | tar xz
+      pushd bats-core-${{ parameters.version }}
       sudo ./install.sh /usr/local
     displayName: Install bats and add to path
     workingDirectory: $(Pipeline.Workspace)
