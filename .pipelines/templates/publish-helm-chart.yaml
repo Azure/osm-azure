@@ -4,9 +4,13 @@ steps:
       az acr login --name $(registry.name)
     displayName: Login to acr
   - bash: |
-      cp $(image.dir)/$(chart.name)-${CHECKOUT_TAG}.tgz .
-      echo 'pushing chart'
-      oras push $(staging.registry):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
+      if [[ -n "${CHECKOUT_TAG}" ]]; then
+        cp $(image.dir)/$(chart.name)-${CHECKOUT_TAG}.tgz .
+        echo 'pushing chart'
+        oras push $(staging.registry):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
+      else 
+        echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
+      fi
     displayName: Push helm chart to staging ACR
     workingDirectory: $(repo.path)
     env:

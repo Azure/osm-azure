@@ -6,6 +6,7 @@ jobs:
     steps: 
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
+    - template: templates/install-bats.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
@@ -15,6 +16,7 @@ jobs:
       displayName: "Run e2e tests"
       env: 
         CHECKOUT_TAG: $(CHECKOUT_TAG)
+        KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
 

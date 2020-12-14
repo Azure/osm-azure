@@ -1,8 +1,12 @@
 steps:
   - bash: |
-      az login --identity
-      echo ${CHECKOUT_TAG}
-      az acr repository delete -n $(registry.name) --image oss/openservicemesh/osm-chart:${CHECKOUT_TAG} --yes
+      if [[ -n "${CHECKOUT_TAG}" ]]; then
+        az login --identity
+        echo ${CHECKOUT_TAG}
+        az acr repository delete -n $(registry.name) --image oss/openservicemesh/osm-chart:${CHECKOUT_TAG} --yes
+      else
+        echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
+      fi
     displayName: Delete helm chart from staging registry
     workingDirectory: $(repo.path)
     condition: always()

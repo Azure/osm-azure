@@ -1,6 +1,7 @@
 # Default values for osm-arc.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+
 OpenServiceMesh:
     ignoreNamespaces: "kube-system azure-arc arc-osm-system"
 
