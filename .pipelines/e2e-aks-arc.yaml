@@ -19,4 +19,3 @@ jobs:
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
-
