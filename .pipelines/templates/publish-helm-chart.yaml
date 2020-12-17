@@ -1,13 +1,15 @@
 steps: 
   - bash: |
-      az login --identity
-      az acr login --name $(registry.name)
+      az login --identity > /dev/null 2>&1
+      az acr login --name $(REGISTRY_NAME) > /dev/null 2>&1
     displayName: Login to acr
+    env: 
+      REGISTRY_NAME: $(REGISTRY_NAME)
   - bash: |
       if [[ -n "${CHECKOUT_TAG}" ]]; then
         cp $(image.dir)/$(chart.name)-${CHECKOUT_TAG}.tgz .
         echo 'pushing chart'
-        oras push $(staging.registry):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
+        oras push $(REPOSITORY_NAME):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
       else 
         echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
       fi
@@ -15,6 +17,7 @@ steps:
     workingDirectory: $(repo.path)
     env:
       HELM_EXPERIMENTAL_OCI: 1
+      REPOSITORY_NAME: $(REPOSITORY_NAME)
   - task: PublishBuildArtifacts@1
     displayName: Publish artifacts
     inputs:
