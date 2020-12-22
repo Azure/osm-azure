@@ -6,19 +6,11 @@ WAIT_TIME=120
 SLEEP_TIME=1
 WAIT_TIME_DEPLOYMENTS=600
 SLEEP_TIME_DEPLOYMENTS=10
-
-@test "azure-arc deployments have succeeded" {
-    run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
-    assert_success
-}
+ARC_CLUSTER=${ARC_CLUSTER:-false}
 
 @test "arc-osm-system deployments have succeeded" {
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace arc-osm-system"
     assert_success
-}
-
-@test "chart version on cluster matches checkout tag" {
-    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
 }
 
 @test "osm pod is ready" {
@@ -46,12 +38,23 @@ SLEEP_TIME_DEPLOYMENTS=10
     [[ $test_label == "true" ]]
 }
 
-@test "openservicemesh.io/ignore is true in azure-arc" { 
-    test_label=$(kubectl get namespace azure-arc -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
-    [[ $test_label == "true" ]]
-}
-
 @test "openservicemesh.io/ignore is true in arc-osm-system" { 
     test_label=$(kubectl get namespace arc-osm-system -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
     [[ $test_label == "true" ]]
 }
+
+if [ $ARC_CLUSTER ]; then
+    @test "azure-arc deployments have succeeded" {
+        run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
+        assert_success
+    }
+    
+    @test "chart version on cluster matches checkout tag" {
+        [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
+    }
+
+    @test "openservicemesh.io/ignore is true in azure-arc" { 
+        test_label=$(kubectl get namespace azure-arc -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
+        [[ $test_label == "true" ]]
+    }
+fi
