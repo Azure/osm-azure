@@ -2,6 +2,8 @@
 
 source .env
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
+EXTENSION_NAME="${EXTENSION_NAME:-osm}"
+API_VERSION="${API_VERSION:-2020-07-01-preview}"
 
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 export HELM_EXPERIMENTAL_OCI=1
@@ -30,7 +32,7 @@ helm ls --all --all-namespaces
 az resource tag --tags logAnalyticsWorkspaceResourceId=/$RESOURCEID --ids /$RESOURCEID > /dev/null 2>&1
 
 # get extensions enabled on this cluster
-az rest --method GET --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions?api-Version=2020-07-01-preview"
+az rest --method GET --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions?api-Version=$API_VERSION"
 
 # enable the osm extension
-az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/osm?api-Version=2020-07-01-preview" --body @osm_extension.json --debug
+az rest --method PUT --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/$EXTENSION_NAME?api-Version=$API_VERSION" --body @osm_extension.json --debug
