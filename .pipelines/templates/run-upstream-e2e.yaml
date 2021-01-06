@@ -1,0 +1,8 @@
+steps: 
+  - template: templates/checkout-upstream.yaml
+  - bash: |
+      make build-osm 
+      go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -installType=NoInstall
+
+      
+      

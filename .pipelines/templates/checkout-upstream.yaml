@@ -1,0 +1,34 @@
+parameters:
+  - name: subdirectories
+    type: object
+    default: {}
+
+steps:
+- ${{ if eq(length(parameters.subdirectories), 0) }}:
+  - bash: |
+      git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(repo.path)
+    displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
+
+- ${{ if ne(length(parameters.subdirectories), 0) }}:
+  - bash: |
+      mkdir -p $(repo.path)
+      cd $(repo.path)
+      git init
+      git remote add origin $(upstream.repo)
+      git config core.sparseCheckout true
+    displayName: Create $(repo.path) for $(upstream.repo)
+
+- ${{ each subdirectory in parameters.subdirectories }}:
+  - bash: |
+      echo "${{ subdirectory }}" >> .git/info/sparse-checkout
+    workingDirectory: $(repo.path)
+    displayName: Add ${{ subdirectory }} to sparse-checkout list
+
+- bash: |
+    git pull origin ${UPSTREAM_BRANCH}
+  workingDirectory: $(repo.path)
+  displayName: git pull origin ${UPSTREAM_BRANCH}
+
+- bash: mkdir -p $(image.output.dir) || true
+  failOnStderr: false
+  displayName: Create $(image.output.dir) if set
