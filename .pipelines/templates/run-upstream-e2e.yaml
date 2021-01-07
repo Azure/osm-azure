@@ -1,12 +1,13 @@
 steps: 
   - bash: |
-      git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(repo.path)
+      git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(repo.path)/osm
     displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
   - bash: |
       cd osm
       make build-osm 
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -installType=NoInstall
     displayName: "Run upstream e2e tests"
+    workingDirectory: $(repo.path)/osm
 
       
       
