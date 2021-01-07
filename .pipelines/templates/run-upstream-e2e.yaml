@@ -1,8 +1,12 @@
 steps: 
-  - template: ./checkout-upstream.yaml
   - bash: |
+      git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(repo.path)
+    displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
+  - bash: |
+      cd osm
       make build-osm 
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -installType=NoInstall
+    displayName: "Run upstream e2e tests"
 
       
       
