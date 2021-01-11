@@ -11,7 +11,6 @@ steps:
       az aks create \
           -g ${AZURE_CLUSTER_NAME} \
           -n ${AZURE_CLUSTER_NAME} \
-          -l ${AZURE_LOCATION} \
           --enable-managed-identity \
           --no-ssh-key \
           > /dev/null 2>&1
