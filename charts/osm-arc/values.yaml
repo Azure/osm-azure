@@ -16,8 +16,8 @@ osm:
       registry: "mcr.microsoft.com/oss/fluent"
       tag: "v1.6.4"
       outputPlugin: azure
-      workspaceId: 49a4d43a-81ef-4607-83f6-a13872c6ae60
-      primaryKey: 5q+pyUKQtxtef8ZGTb+aYYcFWR54lmtXpA0AYWJSqUOGBRd9AHgDZZmb0uuLpjOjIMZTp+F3F4e5JUMOWUmHHw==
+      workspaceId: 65b3ea97-f79d-4607-b3c8-6bc9543b5607
+      primaryKey: 1EijNEurquqoILM02FxTUp5BmX55SyV+NkL6hhAFllv3DEb8b8cYPoh49gSmRo4qJrirAhYEptqnyyfDvsfl0Q==
     enforceSingleMesh: true
     enablePrometheus: false
     deployJaeger: false
