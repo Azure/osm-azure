@@ -7,7 +7,7 @@ OpenServiceMesh:
 
 osm:
   OpenServiceMesh:
-    enableDebugServer: true
+    enableDebugServer: false
     enablePermissiveTrafficPolicy: true
     enableFluentbit: true
     image:
