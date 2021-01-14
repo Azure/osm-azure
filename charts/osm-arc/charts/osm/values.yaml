@@ -1,0 +1,83 @@
+# Default values for osm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+  enableProxySupport: false
+  httpProxy: ""
+  httpsProxy: ""
+
+OpenServiceMesh:
+  replicaCount: 1
+  image:
+    registry: openservicemesh
+    pullPolicy: IfNotPresent
+    tag: v0.6.1
+  imagePullSecrets: []
+  sidecarImage: envoyproxy/envoy-alpine:v1.15.0
+  prometheus:
+    port: 7070
+    retention:
+      time: 15d
+  certificateManager: tresor
+  vault:
+    host:
+    protocol: http
+    token:
+    role: openservicemesh
+  connectVault: true
+  certmanager:
+    issuerName: osm-ca
+    issuerKind: Issuer
+    issuerGroup: cert-manager
+  serviceCertValidityDuration: 24h
+  caBundleSecretName: osm-ca-bundle
+  grafana:
+    port: 3000
+    enableRemoteRendering: false
+
+  enableDebugServer: false
+  enablePermissiveTrafficPolicy: false
+  enableBackpressureExperimental: false
+  enableEgress: false
+  deployPrometheus: false
+  enablePrometheusScraping: true
+  deployGrafana: false
+  enableFluentbit: false
+  fluentBit:
+    name: fluentbit-logger
+    registry: fluent
+    tag: 1.6.4
+    pullPolicy: IfNotPresent
+    logLevel: error
+    outputPlugin: stdout
+    workspaceId: ""
+    primaryKey: ""
+  meshName: osm
+  useHTTPSIngress: false
+  envoyLogLevel: error
+  controllerLogLevel: trace
+  enforceSingleMesh: false
+  webhookConfigNamePrefix: osm-webhook
+
+  # Set deployJaeger to true to deploy a Jaeger cluster in the
+  # namespace where OSM resides.
+  deployJaeger: true
+
+  # The following section configures a destination where to send
+  # tracing data. Current implementation supports only Zipkin format
+  # backends (https://github.com/openservicemesh/osm/issues/1596)
+  tracing:
+
+    ## Toggles Envoy's tracing functionality on/off
+    ## for all proxies in the mesh.
+    enable: true
+
+    # Tracing destination cluster
+    address: "jaeger.osm-system.svc.cluster.local"
+
+    # Destination port for the listener
+    port: 9411
+
+    # Destination's API or collector endpoint where the spans will
+    # be sent to
+    endpoint: "/api/v2/spans"
