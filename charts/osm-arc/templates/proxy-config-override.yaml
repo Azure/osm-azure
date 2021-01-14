@@ -1,0 +1,9 @@
+{{- if and .Values.azureHTTPProxy .Values.azureHTTPSProxy }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: proxy-config
+stringData:
+  HTTP_PROXY: {{ .Values.azureHTTPProxy | quote }}
+  HTTPS_PROXY: {{ .Values.azureHTTPSProxy | quote }}
+{{- end }}
