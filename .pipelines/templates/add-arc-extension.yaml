@@ -9,4 +9,5 @@ steps:
         CHECKOUT_TAG: $(CHECKOUT_TAG)
         REGION: $(AZURE_LOCATION)
         RELEASE_NAMESPACE: $(release.namespace)
+        CONNECTEDK8S_VERSION: $(connectedk8s.version)
     workingDirectory: $(repo.path)
