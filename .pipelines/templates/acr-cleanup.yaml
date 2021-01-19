@@ -3,7 +3,7 @@ steps:
       if [[ -n "${CHECKOUT_TAG}" ]]; then
         az login --identity > /dev/null 2>&1
         echo ${CHECKOUT_TAG}
-        az acr repository delete -n $(REGISTRY_NAME) --image oss/openservicemesh/osm-chart:${CHECKOUT_TAG} --yes > /dev/null 2>&1
+        az acr repository delete -n $(REGISTRY_NAME) --image oss/openservicemesh/osm-arc:${CHECKOUT_TAG} --yes > /dev/null 2>&1
       else
         echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
       fi
