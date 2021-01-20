@@ -4,6 +4,7 @@ source .env
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
 EXTENSION_NAME="${EXTENSION_NAME:-osm}"
 API_VERSION="${API_VERSION:-2020-07-01-preview}"
+CONNECTEDK8S_VERSION="${CONNECTEDK8S_VERSION:-0.3.5}"
 
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 export HELM_EXPERIMENTAL_OCI=1
@@ -19,7 +20,7 @@ az account set --subscription=$SUBSCRIPTION > /dev/null 2>&1
 
 az extension remove --name connectedk8s
 
-az extension add --source https://shasbextensions.blob.core.windows.net/extensions/connectedk8s-0.3.1-py2.py3-none-any.whl -y
+az extension add --source https://shasbextensions.blob.core.windows.net/extensions/connectedk8s-$CONNECTEDK8S_VERSION-py2.py3-none-any.whl -y
 
 az -v 
 
