@@ -8,6 +8,3 @@ steps:
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -installType=NoInstall -OsmNamespace=arc-osm-system
     displayName: "Run upstream e2e tests"
     workingDirectory: $(repo.path)/osm
-
-      
-      
