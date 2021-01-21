@@ -43,18 +43,25 @@ ARC_CLUSTER=${ARC_CLUSTER:-false}
     [[ $test_label == "true" ]]
 }
 
-if [ $ARC_CLUSTER ]; then
-    @test "azure-arc deployments have succeeded" {
-        run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
-        assert_success
-    }
-    
-    @test "chart version on cluster matches checkout tag" {
-        [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
-    }
+@test "azure-arc deployments have succeeded" {
+    if [ $ARC_CLUSTER == false ]; then
+        skip "arc cluster-specific test"
+    fi
+    run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
+    assert_success
+}
 
-    @test "openservicemesh.io/ignore is true in azure-arc" { 
-        test_label=$(kubectl get namespace azure-arc -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
-        [[ $test_label == "true" ]]
-    }
-fi
+@test "chart version on cluster matches checkout tag" {
+    if [ $ARC_CLUSTER == false ]; then
+        skip "arc cluster-specific test"
+    fi
+    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
+}
+
+@test "openservicemesh.io/ignore is true in azure-arc" { 
+    if [ $ARC_CLUSTER == false ]; then
+        skip "arc cluster-specific test"
+    fi
+    test_label=$(kubectl get namespace azure-arc -o jsonpath="{.metadata.labels.openservicemesh\.io\/ignore}")
+    [[ $test_label == "true" ]]
+}
