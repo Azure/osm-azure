@@ -6,7 +6,7 @@ WAIT_TIME=120
 SLEEP_TIME=1
 WAIT_TIME_DEPLOYMENTS=600
 SLEEP_TIME_DEPLOYMENTS=10
-ARC_CLUSTER=${ARC_CLUSTER:-false}
+ARC_CLUSTER=${ARC_CLUSTER:-true}
 
 @test "arc-osm-system deployments have succeeded" {
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace arc-osm-system"
