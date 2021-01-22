@@ -23,7 +23,6 @@ osm:
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
     sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.15.0
-    connectVault: false
   
 alpine:
   image:
