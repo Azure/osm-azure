@@ -18,5 +18,6 @@ jobs:
       env: 
         CHECKOUT_TAG: $(CHECKOUT_TAG)
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+    - template: templates/run-upstream-e2e-.yaml
     - template: templates/acr-cleanup.yaml
     - template: templates/aks-cleanup.yaml
