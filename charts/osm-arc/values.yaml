@@ -11,7 +11,7 @@ osm:
     enablePermissiveTrafficPolicy: true
     enableFluentbit: true
     image:
-      registry: mcr.microsoft.com/oss/openservicemesh
+      registry: docker.io/nshankar13
     fluentBit:
       registry: "mcr.microsoft.com/oss/fluent"
       tag: "v1.6.4"
