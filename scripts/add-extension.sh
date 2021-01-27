@@ -6,7 +6,6 @@ EXTENSION_NAME="${EXTENSION_NAME:-osm}"
 API_VERSION="${API_VERSION:-2020-07-01-preview}"
 
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
-export HELM_EXPERIMENTAL_OCI=1
 
 echo $RESOURCEID
 
