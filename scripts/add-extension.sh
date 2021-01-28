@@ -7,7 +7,6 @@ API_VERSION="${API_VERSION:-2020-07-01-preview}"
 CONNECTEDK8S_VERSION="${CONNECTEDK8S_VERSION:-0.3.5}"
 
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
-export HELM_EXPERIMENTAL_OCI=1
 
 echo $RESOURCEID
 
