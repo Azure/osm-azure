@@ -8,7 +8,6 @@ OpenServiceMesh:
 osm:
   OpenServiceMesh:
     enableDebugServer: false
-    enablePermissiveTrafficPolicy: true
     enableFluentbit: true
     image:
       registry: docker.io/nshankar13
@@ -22,7 +21,7 @@ osm:
     enablePrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.15.0
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.17.0
   
 alpine:
   image:
