@@ -8,6 +8,7 @@ OpenServiceMesh:
 osm:
   OpenServiceMesh:
     enableDebugServer: false
+    enablePermissiveTrafficPolicy: true
     enableFluentbit: true
     image:
       registry: docker.io/nshankar13

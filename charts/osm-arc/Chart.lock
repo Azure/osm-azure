@@ -1,0 +1,6 @@
+dependencies:
+- name: osm
+  repository: file://../osm
+  version: 0.6.1
+digest: sha256:e2cd6f8dee127a319c8d293a896484506886ec99e37065bfbf86fdbd7a9ec5a1
+generated: "2021-01-28T17:52:09.7806292-05:00"
