@@ -13,6 +13,7 @@ steps:
           -n ${AZURE_CLUSTER_NAME} \
           --enable-managed-identity \
           --no-ssh-key \
+          --kubernetes-version 1.19.6 \
           > /dev/null 2>&1
 
       az aks get-credentials -n ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -f $(System.DefaultWorkingDirectory)/kubeconfig.json
