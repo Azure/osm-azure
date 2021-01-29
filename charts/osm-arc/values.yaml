@@ -12,6 +12,7 @@ osm:
     enableFluentbit: true
     image:
       registry: docker.io/nshankar13
+      tag: e1667098bc93db276d5c359de06f24f9d4ba95a2
     fluentBit:
       registry: "mcr.microsoft.com/oss/fluent"
       tag: "v1.6.4"
