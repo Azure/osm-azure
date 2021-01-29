@@ -1,140 +1,117 @@
-# Open Service Mesh (OSM)
+# Open Service Mesh Helm Chart
 
-[![build](https://github.com/openservicemesh/osm/workflows/Go/badge.svg)](https://github.com/openservicemesh/osm/actions?query=workflow%3AGo)
-[![report](https://goreportcard.com/badge/github.com/openservicemesh/osm)](https://goreportcard.com/report/github.com/openservicemesh/osm)
-[![codecov](https://codecov.io/gh/openservicemesh/osm/branch/main/graph/badge.svg)](https://codecov.io/gh/openservicemesh/osm)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/openservicemesh/osm/blob/main/LICENSE)
-[![release](https://img.shields.io/github/release/openservicemesh/osm/all.svg)](https://github.com/openservicemesh/osm/releases)
+![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.1](https://img.shields.io/badge/AppVersion-v0.6.1-informational?style=flat-square)
 
-Open Service Mesh (OSM) is a lightweight, extensible, Cloud Native [service mesh][1] that allows users to uniformly manage, secure, and get out-of-the-box observability features for highly dynamic microservice environments.
+A Helm chart to install the [OSM](https://github.com/openservicemesh/osm) control plane on Kubernetes.
 
-The OSM project builds on the ideas and implementations of many cloud native ecosystem projects including [Linkerd](https://github.com/linkerd/linkerd), [Istio](https://github.com/istio/istio), [Consul](https://github.com/hashicorp/consul), [Envoy](https://github.com/envoyproxy/envoy), [Kuma](https://github.com/kumahq/kuma), [Helm](https://github.com/helm/helm), and the [SMI](https://github.com/servicemeshinterface/smi-spec) specification.
+## Prerequisites
 
-## Table of Contents
-- [Overview](#overview)
-  - [Core Principles](#core-principles)
-  - [Features](#features)
-  - [Project Status](#project-status)
-  - [Support](#support)
-  - [SMI Specification Support](#smi-specification-support)
-- [OSM Design](#osm-design)
-- [Install](#install)
-    - [Prerequisites](#prerequisites)
-    - [Get the OSM CLI](#get-the-osm-cli)
-    - [Install OSM](#install-osm)
-- [Demos](#demos)
-- [Using OSM](#using-osm)
-    - [OSM Usage Patterns](#osm-usage-patterns)
-- [Community](#community)
-- [Development Guide](#development-guide)
-- [Code of Conduct](#code-of-conduct)
-- [License](#license)
+- Kubernetes v1.15+
 
+## Get Repo Info
 
-## Overview
-
-OSM runs an Envoy based control plane on Kubernetes, can be configured with SMI APIs, and works by injecting an Envoy proxy as a sidecar container next to each instance of your application. The proxy contains and executes rules around access control policies, implements routing configuration, and captures metrics. The control plane continually configures proxies to ensure policies and routing rules are up to date and ensures proxies are healthy.
-
-### Core Principles
-1. Simple to understand and contribute to
-1. Effortless to install, maintain, and operate
-1. Painless to troubleshoot
-1. Easy to configure via [Service Mesh Interface (SMI)][2]
-
-### Features
-
-1. Easily and transparently configure [traffic shifting][3] for deployments
-1. Secure service to service communication by [enabling mTLS](docs/patterns/certificates.md)
-1. Define and execute fine grained [access control][4] policies for services
-1. [Observability](docs/patterns/observability/README.md) and insights into application metrics for debugging and monitoring services
-1. Integrate with [external certificate management](docs/patterns/certificates.md) services/solutions with a pluggable interface
-1. Onboard applications onto the mesh by enabling [automatic sidecar injection](docs/patterns/sidecar_injection.md) of Envoy proxy
-
-### Project status
-
-OSM is under active development and is **NOT** ready for production workloads.
-
-### Support
-
-OSM is an open source project that is [**not** covered by the Microsoft Azure support policy](https://support.microsoft.com/en-us/help/2941892/support-for-linux-and-open-source-technology-in-azure). [Please search open issues here](https://github.com/openservicemesh/osm/issues), and if your issue isn't already represented please [open a new one](https://github.com/openservicemesh/osm/issues/new/choose). The OSM project maintainers will respond to the best of their abilities.
-
-### SMI Specification support
-
-|   Specification Component    |         Supported Release          |          Comments          |
-| :---------------------------- | :--------------------------------: |  :--------------------------------: |
-| Traffic Access Control  |  [v1alpha3](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-access/v1alpha3/traffic-access.md)  | |
-| Traffic Specs  |  [v1alpha4](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-specs/v1alpha4/traffic-specs.md)  | |
-| Traffic Split  |  [v1alpha2](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-split/v1alpha2/traffic-split.md) | |
-| Traffic Metrics  | [v1alpha1](https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-metrics/v1alpha1/traffic-metrics.md) | 🚧 **In Progress** [#379](https://github.com/openservicemesh/osm/issues/379) 🚧 |
-
-## OSM Design
-
-Read more about [OSM's high level goals, design, and architecture](DESIGN.md).
-
-## Install
-
-### Prerequisites
-- Kubernetes cluster running Kubernetes v1.15.0 or greater
-- kubectl current context is configured for the target cluster install
-  - ```kubectl config current-context```
-
-### Get the OSM CLI
-
-The simplest way of installing Open Service Mesh on a Kubernetes cluster is by using the `osm` CLI.
-
-Download the `osm` binary from the [Releases page](https://github.com/openservicemesh/osm/releases). Unpack the `osm` binary and add it to `$PATH` to get started.
-```shell
-sudo mv ./osm /usr/local/bin/osm
+```console
+helm repo add osm https://openservicemesh.github.io/osm
+helm repo update
 ```
 
-### Install OSM
-```shell
-$ osm install
+## Install Chart
+
+```console
+helm install [RELEASE_NAME] osm/osm
 ```
-![OSM Install Demo](img/osm-install-demo-v0.2.0.gif "OSM Install Demo")
 
-See the [installation guide](docs/installation_guide.md) for more detailed options.
+The command deploys `osm-controller` on the Kubernetes cluster in the default configuration.
 
-## Demos
-We have provided two demos for you to experience OSM.
+_See [configuration](#configuration) below._
 
-- The [automated demo](demo/README.md) is a set of scripts anyone can run and shows how OSM can manage, secure and provide observability for microservice environments.
-- The [manual demo](docs/example/README.md) is a step-by-step walkthrough set of instruction of the automated demo.
+_See [helm install](https://helm.sh/docs/helm/helm_install/) for command documentation._
 
-## Using OSM
+## Uninstall Chart
 
-After installing OSM, [onboard a microservice application](docs/onboard_services.md) to the service mesh.
+```console
+helm uninstall [RELEASE_NAME]
+```
 
-### OSM Usage Patterns
+This removes all the Kubernetes components associated with the chart and deletes the release.
 
-1. [Ingress](docs/patterns/ingress.md) and [Egress](docs/patterns/egress.md)
-1. [Observability](docs/patterns/observability/README.md)
-1. [Certificates](docs/patterns/certificates.md)
-1. [Sidecar Injection](docs/patterns/sidecar_injection.md)
+_See [helm uninstall](https://helm.sh/docs/helm/helm_uninstall/) for command documentation._
 
-## Community
+## Upgrading Chart
 
-Connect with the Open Service Mesh community:
+```console
+helm upgrade [RELEASE_NAME] [CHART] --install
+```
 
-- GitHub [issues](https://github.com/openservicemesh/osm/issues) and [pull requests](https://github.com/openservicemesh/osm/pulls) in this repo
-- OSM Slack: <a href="https://slack.cncf.io/">Join</a> the CNCF Slack for related discussions in <a href="https://cloud-native.slack.com/archives/C018794NV1C">#openservicemesh</a>
-- Public Community Call: OSM Community calls take place on the [second Tuesday of each month, 10:30am-11am Pacific](https://calendar.google.com/calendar?cid=Y181dXJwY3F0NWd2OW5ldXE2c2IxM2hvcnN2Z0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t) in the [CNCF OSM Zoom room](https://zoom.us/my/cncfosm?pwd=aXdkaGU3OWRjUllyaHZEZkh0ZjFwUT09) - notes available in [Open Service Mesh (OSM) Community Meeting Notes](https://docs.google.com/document/d/1da-XIqthmyG7zQyFAV1Kt-Qvq4NoNNBX7hZ_sM_kM98/edit?usp=sharing)
-- [Mailing list](https://groups.google.com/g/openservicemesh)
+_See [helm upgrade](https://helm.sh/docs/helm/helm_upgrade/) for command documentation._
 
-## Development Guide
+## Configuration
 
-If you would like to contribute to OSM, check out the [development guide](docs/development_guide.md).
+See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments, visit the chart's [values.yaml](./values.yaml), or run these configuration commands:
 
-## Code of Conduct
+```console
+helm show values osm/osm
+```
 
-This project has adopted the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md). See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for further details.
+The following table lists the configurable parameters of the osm chart and their default values.
 
-## License
+## Values
 
-This software is covered under the MIT license. You can read the license [here](LICENSE).
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| OpenServiceMesh.caBundleSecretName | string | `"osm-ca-bundle"` | The Kubernetes secret to store `ca.crt` |
+| OpenServiceMesh.certificateManager | string | `"tresor"` | The Certificate manager type: `tresor`, `vault` or `cert-manager` |
+| OpenServiceMesh.certmanager.issuerGroup | string | `"cert-manager"` | cert-manager issuer group |
+| OpenServiceMesh.certmanager.issuerKind | string | `"Issuer"` | cert-manager issuer kind |
+| OpenServiceMesh.certmanager.issuerName | string | `"osm-ca"` | cert-manager issuer namecert-manager issuer name |
+| OpenServiceMesh.controllerLogLevel | string | `"trace"` | Controller log verbosity |
+| OpenServiceMesh.deployGrafana | bool | `false` | Deploy Grafana |
+| OpenServiceMesh.deployJaeger | bool | `false` | Deploy Jaeger in the OSM namespace |
+| OpenServiceMesh.deployPrometheus | bool | `false` | Deploy Prometheus |
+| OpenServiceMesh.enableBackpressureExperimental | bool | `false` | Enable experimental backpressure feature |
+| OpenServiceMesh.enableDebugServer | bool | `false` | Enable the debug HTTP server |
+| OpenServiceMesh.enableEgress | bool | `false` | Enable egress in the mesh |
+| OpenServiceMesh.enableFluentbit | bool | `false` | Enable Fluentbit sidecar deployment |
+| OpenServiceMesh.enablePermissiveTrafficPolicy | bool | `false` | Enable permissive traffic policy mode |
+| OpenServiceMesh.enablePrometheusScraping | bool | `true` | Enable Prometheus metrics scraping on sidecar proxies |
+| OpenServiceMesh.enableRoutesV2Experimental | bool | `false` | Enable experimental routes feature |
+| OpenServiceMesh.enforceSingleMesh | bool | `false` | Enforce only deploying one mesh in the cluster |
+| OpenServiceMesh.envoyLogLevel | string | `"error"` | Envoy log level is used to specify the level of logs collected from envoy |
+| OpenServiceMesh.fluentBit.enableProxySupport | bool | `false` | Enable proxy support for FluentBit |
+| OpenServiceMesh.fluentBit.httpProxy | string | `""` | HTTP Proxy url for FluentBit |
+| OpenServiceMesh.fluentBit.httpsProxy | string | `""` | HTTPS Proxy url for FluentBit |
+| OpenServiceMesh.fluentBit.logLevel | string | `"error"` | Log level for FluentBit |
+| OpenServiceMesh.fluentBit.name | string | `"fluentbit-logger"` | luentBit Sidecar container name |
+| OpenServiceMesh.fluentBit.outputPlugin | string | `"stdout"` | FluentBit Output Plugin, can be `stdout` or `azure` |
+| OpenServiceMesh.fluentBit.primaryKey | string | `""` | PrimaryKey for FluentBit output plugin to Azure LogAnalytics |
+| OpenServiceMesh.fluentBit.pullPolicy | string | `"IfNotPresent"` | PullPolicy for FluentBit sidecar container |
+| OpenServiceMesh.fluentBit.registry | string | `"fluent"` | Registry for FluentBit sidecar container |
+| OpenServiceMesh.fluentBit.tag | string | `"1.6.4"` | FluentBit sidecar image tag |
+| OpenServiceMesh.fluentBit.workspaceId | string | `""` | WorkspaceId for FluentBit output plugin to Azure LogAnalytics |
+| OpenServiceMesh.grafana.enableRemoteRendering | bool | `false` | Enable Remote Rendering in Grafana |
+| OpenServiceMesh.grafana.port | int | `3000` | Grafana port |
+| OpenServiceMesh.image.pullPolicy | string | `"IfNotPresent"` | `osm-controller` pod PullPolicy |
+| OpenServiceMesh.image.registry | string | `"openservicemesh"` | `osm-controller` image registry |
+| OpenServiceMesh.image.tag | string | `"v0.6.1"` | `osm-controller` image tag |
+| OpenServiceMesh.imagePullSecrets | list | `[]` | `osm-controller` image pull secret |
+| OpenServiceMesh.meshName | string | `"osm"` | Name for the new control plane instance |
+| OpenServiceMesh.osmNamespace | string | `""` | Optional parameter. If not specified, the release namespace is used to deploy the osm components. |
+| OpenServiceMesh.outboundIPRangeExclusionList | list | `[]` | Optional parameter to specify a global list of IP ranges to exclude from outbound traffic interception by the sidecar proxy. If specified, must be a list of IP ranges of the form a.b.c.d/x. |
+| OpenServiceMesh.prometheus.port | int | `7070` | Prometheus port |
+| OpenServiceMesh.prometheus.retention.time | string | `"15d"` | Prometheus retention time |
+| OpenServiceMesh.replicaCount | int | `1` | `osm-controller` replicas |
+| OpenServiceMesh.serviceCertValidityDuration | string | `"24h"` | Sets the service certificatevalidity duration |
+| OpenServiceMesh.sidecarImage | string | `"envoyproxy/envoy-alpine:v1.17.0"` | Envoy sidecar image |
+| OpenServiceMesh.tracing.address | string | `"jaeger.osm-system.svc.cluster.local"` | Tracing destination cluster (must contain the namespace) |
+| OpenServiceMesh.tracing.enable | bool | `true` | Toggles Envoy's tracing functionality on/off for all sidecar proxies in the cluster |
+| OpenServiceMesh.tracing.endpoint | string | `"/api/v2/spans"` | Destination's API or collector endpoint where the spans will be sent to |
+| OpenServiceMesh.tracing.port | int | `9411` | Destination port for the listener |
+| OpenServiceMesh.useHTTPSIngress | bool | `false` | Enables HTTPS ingress on the mesh |
+| OpenServiceMesh.vault.host | string | `nil` | Hashicorp Vault host/service - where Vault is installed |
+| OpenServiceMesh.vault.protocol | string | `"http"` | protocol to use to connect to Vault |
+| OpenServiceMesh.vault.role | string | `"openservicemesh"` | Vault role to be used by Open Service Mesh |
+| OpenServiceMesh.vault.token | string | `nil` | token that should be used to connect to Vault |
+| OpenServiceMesh.webhookConfigNamePrefix | string | `"osm-webhook"` | Validating- and MutatingWebhookConfiguration name |
 
-
-[1]: https://en.wikipedia.org/wiki/Service_mesh
-[2]: https://github.com/servicemeshinterface/smi-spec/blob/master/SPEC_LATEST_STABLE.md
-[3]: https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-split/v1alpha2/traffic-split.md
-[4]: https://github.com/servicemeshinterface/smi-spec/blob/v0.6.0/apis/traffic-access/v1alpha3/traffic-access.md
+<!-- markdownlint-enable MD013 MD034 -->
+<!-- markdownlint-restore -->
