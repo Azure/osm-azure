@@ -11,4 +11,4 @@ az extension add --source https://shasbextensions.blob.core.windows.net/extensio
 az -v 
 
 # enable connected cluster
-az connectedK8s connect -n  $CLUSTERNAME -g $RESOURCEGROUP -l $REGION > /dev/null 2>&1
+az connectedk8s connect -n  $CLUSTERNAME -g $RESOURCEGROUP -l $REGION > /dev/null 2>&1
