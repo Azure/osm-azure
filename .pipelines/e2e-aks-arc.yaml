@@ -10,6 +10,7 @@ jobs:
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
+    - template: templates/enable-arc.yaml
     - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e

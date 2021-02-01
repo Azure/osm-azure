@@ -4,7 +4,6 @@ source .env
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
 EXTENSION_NAME="${EXTENSION_NAME:-osm}"
 API_VERSION="${API_VERSION:-2020-07-01-preview}"
-CONNECTEDK8S_VERSION="${CONNECTEDK8S_VERSION:-0.3.5}"
 
 export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 
@@ -16,15 +15,6 @@ jq -n \
     '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } } } }' > osm_extension.json
 
 az account set --subscription=$SUBSCRIPTION > /dev/null 2>&1
-
-az extension remove --name connectedk8s
-
-az extension add --source https://shasbextensions.blob.core.windows.net/extensions/connectedk8s-$CONNECTEDK8S_VERSION-py2.py3-none-any.whl -y
-
-az -v 
-
-# enable connected cluster
-az connectedK8s connect -n  $CLUSTERNAME -g $RESOURCEGROUP -l $REGION > /dev/null 2>&1
 
 # confirm
 helm ls --all --all-namespaces
