@@ -1,7 +1,7 @@
 steps:  
   - bash: |
       ./scripts/connect-to-arc.sh
-    displayName: Connect cluster to Azure Arc
+    displayName: Connect AKS cluster to Azure Arc
     env:
         SUBSCRIPTION: $(SUBSCRIPTION_ID)
         RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
