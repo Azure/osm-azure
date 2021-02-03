@@ -14,6 +14,7 @@ steps:
         echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
       fi
     displayName: Push helm chart to staging ACR
+    workingDirectory: $(repo.path)
     env:
       HELM_EXPERIMENTAL_OCI: 1
       REPOSITORY_NAME: $(REPOSITORY_NAME)
