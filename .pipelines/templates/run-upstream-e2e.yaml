@@ -4,7 +4,7 @@ steps:
     displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
   - bash: |
       make build-osm 
-      go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60 -installType=NoInstall -OsmNamespace=arc-osm-system
+      go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60m -installType=NoInstall -OsmNamespace=arc-osm-system
     displayName: "Run upstream e2e tests"
     env: 
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)
