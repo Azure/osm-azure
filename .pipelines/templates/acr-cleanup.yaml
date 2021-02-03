@@ -8,7 +8,6 @@ steps:
         echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
       fi
     displayName: Delete helm chart from staging registry
-    workingDirectory: $(repo.path)
     condition: always()
     env: 
       REGISTRY_NAME: $(REGISTRY_NAME)
