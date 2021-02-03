@@ -8,4 +8,3 @@ steps:
         CLUSTERNAME: $(AZURE_CLUSTER_NAME)
         REGION: $(AZURE_LOCATION)
         CONNECTEDK8S_VERSION: $(connectedk8s.version)
-    workingDirectory: $(repo.path)

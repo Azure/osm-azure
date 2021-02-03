@@ -9,4 +9,4 @@ steps:
     env: 
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)
       CTR_TAG: $(UPSTREAM_BRANCH)
-    workingDirectory: $(repo.path)/osm
+    workingDirectory: $(System.DefaultWorkingDirectory)/osm
