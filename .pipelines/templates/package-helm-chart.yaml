@@ -12,4 +12,3 @@ steps:
     helm dependency update $(repo.chart.path)
     helm package --version ${CHECKOUT_TAG} --destination $(image.dir) $(repo.chart.path) --debug
   displayName: Package the helm chart
-  workingDirectory: $(repo.path)
