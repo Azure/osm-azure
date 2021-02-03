@@ -13,7 +13,7 @@ pr:
 
 variables:
   chart.name: osm-arc
-  repo.chart.path: $(System.DefaultWorkingDirectory)/charts/$(chart.name)
+  chart.path: $(System.DefaultWorkingDirectory)/charts/$(chart.name)
   image.dir: $(Build.ArtifactStagingDirectory)
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
