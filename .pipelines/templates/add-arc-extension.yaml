@@ -9,4 +9,3 @@ steps:
         CHECKOUT_TAG: $(CHECKOUT_TAG)
         REGION: $(AZURE_LOCATION)
         RELEASE_NAMESPACE: $(release.namespace)
-    workingDirectory: $(repo.path)

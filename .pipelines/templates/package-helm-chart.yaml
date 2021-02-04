@@ -8,8 +8,6 @@ steps:
     echo ${CHECKOUT_TAG}
   displayName: Create Checkout Tag 
 - bash: | 
-    cd linux-amd64
-    helm dependency update $(repo.chart.path)
-    helm package --version ${CHECKOUT_TAG} --destination $(image.dir) $(repo.chart.path) --debug
+    helm dependency update $(chart.path)
+    helm package --version ${CHECKOUT_TAG} --destination $(image.dir) $(chart.path) --debug
   displayName: Package the helm chart
-  workingDirectory: $(repo.path)
