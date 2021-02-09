@@ -9,6 +9,7 @@ jobs:
     workspace: 
       clean: all
     steps: 
+    - template: templates/login-az.yaml
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
