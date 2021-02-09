@@ -4,8 +4,9 @@ source .env
 
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
 EXTENSION_NAME="${EXTENSION_NAME:-osm}"
-API_VERSION="${API_VERSION:-2020-07-01-preview}"
+EXTENSION_TYPE="${EXTENSION_TYPE:-Microsoft.openservicemesh}"
 EXTENSION_SETTINGS=$1
+K8S_EXTENSION_VERSION="${K8S_EXTENSION_VERSION:-0.1PP.12}"
 
 export RESOURCEID="subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME"
 

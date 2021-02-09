@@ -1,16 +1,11 @@
-parameters: 
-  - name: imageTag
-    type: string
-    default: ${CHECKOUT_TAG}
-
 steps:  
   - bash: |
-      ./scripts/add-extension.sh
+      ./scripts/update-extension.sh
     displayName: Add Arc extension to AKS cluster
     env:
         SUBSCRIPTION: $(SUBSCRIPTION_ID)
         RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
         CLUSTERNAME: $(AZURE_CLUSTER_NAME)
-        CHECKOUT_TAG: ${{ parameters.imageTag }}
-        REGION: $(AZURE_LOCATION)
+        CHECKOUT_TAG: $(CHECKOUT_TAG)
         RELEASE_NAMESPACE: $(release.namespace)
+        K8S_EXTENSION_VERSION: $(k8s_extension.version)

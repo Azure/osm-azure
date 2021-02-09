@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+    - main
+  tags: 
+    include:
+    - v*
+
+pr:
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+      - docs/*
+
+variables:
+  chart.name: osm-arc
+  chart.path: $(System.DefaultWorkingDirectory)/charts/$(chart.name)
+  image.dir: $(Build.ArtifactStagingDirectory)
+  image.artifact.name: drop
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+  image.tag: 0.1.0
+  upstream.repo: https://github.com/openservicemesh/osm
+
+stages: 
+- stage: run_e2e
+  jobs:
+    - template: e2e-aks-arc.yaml
+      parameters: 
+        releaseE2E: true
+
