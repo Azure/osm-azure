@@ -8,4 +8,4 @@ steps:
         CLUSTERNAME: $(AZURE_CLUSTER_NAME)
         CHECKOUT_TAG: $(CHECKOUT_TAG)
         RELEASE_NAMESPACE: $(release.namespace)
-        K8S_EXTENSION_VERSION: $(k8s_extension.version)
+        
