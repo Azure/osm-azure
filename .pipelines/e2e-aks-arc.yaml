@@ -12,11 +12,11 @@ jobs:
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
+    - template: templates/install-k8s-extension.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
-    - template: templates/install-k8s-extension.yaml
     - ${{ if eq(parameters.releaseE2E, true) }}:
       - template: templates/get-latest-tag.yaml
       - template: templates/add-arc-extension.yaml
