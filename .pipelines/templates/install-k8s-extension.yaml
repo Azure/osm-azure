@@ -1,7 +1,9 @@
 steps: 
   - bash: |
+      az login --identity > /dev/null 2>&1
       az extension remove --name k8s-extension
-      git clone https://github.com/Azure/azure-arc-kubernetes-preview
+
+      git clone git@github.com:Azure/azure-arc-kubernetes-preview.git $(System.DefaultWorkingDirectory)/azure-arc-kubernetes-preview
+      cd azure-arc-kubernetes-preview
       az extension add --source ./extensions/k8s_extension-${k8s_extension.version}-py2.py3-none-any.whl --yes
     displayName: Install k8s-extension
-    

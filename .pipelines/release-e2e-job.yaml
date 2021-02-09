@@ -29,4 +29,3 @@ stages:
     - template: e2e-aks-arc.yaml
       parameters: 
         releaseE2E: true
-

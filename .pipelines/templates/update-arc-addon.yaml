@@ -8,4 +8,3 @@ steps:
         CLUSTERNAME: $(AZURE_CLUSTER_NAME)
         CHECKOUT_TAG: $(CHECKOUT_TAG)
         RELEASE_NAMESPACE: $(release.namespace)
-        
