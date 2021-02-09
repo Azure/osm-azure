@@ -16,13 +16,13 @@ jobs:
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
-    - ${{ if eq(parameters.releaseE2E, true }}
+    - ${{ if eq(parameters.releaseE2E, true }}:
       - template: templates/get-latest-tag.yaml
       - template: templates/add-arc-extension.yaml
         parameters: 
           imageTag: $(LATEST_TAG)
       - template: templates/update-to-current-version.yaml
-    - ${{ if eq(parameters.releaseE2E, false }}
+    - ${{ if eq(parameters.releaseE2E, false }}:
       - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
