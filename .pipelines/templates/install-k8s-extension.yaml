@@ -1,6 +1,6 @@
 steps: 
   - bash: |
-      sudo apt install python3-pip
+      sudo apt-get -y install python3-pip
       sudo -H pip3 install --upgrade pip
     displayName: Install and upgrade pip3
   - bash: |
