@@ -1,16 +1,8 @@
 steps: 
   - bash: |
-      sudo apt-get -y install python3-pip
-      sudo -H pip3 install --upgrade pip
-    displayName: Install and upgrade pip3
-  - bash: |
-      pip3 install azure-cli==2.18.0
-      ~/.local/bin/az -v 
-    displayName: Install specific version of AZ cli with pip3
-  - bash: |
-      ~/.local/bin/az extension remove --name k8s-extension
+      az extension remove --name k8s-extension
       git config --global core.sshCommand 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
       git clone git@github.com:Azure/azure-arc-kubernetes-preview.git $(System.DefaultWorkingDirectory)/azure-arc-kubernetes-preview
       cd azure-arc-kubernetes-preview
-      ~/.local/bin/az extension add --source ./extensions/k8s_extension-$(k8sextension.version)-py2.py3-none-any.whl --yes --debug
+      az extension add --source ./extensions/k8s_extension-$(k8sextension.version)-py2.py3-none-any.whl --yes --debug
     displayName: Install k8s-extension

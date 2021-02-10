@@ -1,0 +1,16 @@
+steps: 
+  - bash: |
+      sudo apt-get remove -y azure-cli
+    displayName: Uninstall az cli
+  - bash: |
+      sudo apt-get -y install python3-pip
+      sudo -H pip3 install --upgrade pip
+    displayName: Install and upgrade pip3
+  - bash: |
+      pip3 install azure-cli==2.18.0
+      ~/.local/bin/az -v 
+    displayName: Install specific version of AZ cli with pip3
+    bash: |
+      echo "##vso[task.setvariable variable=PATH]${PATH}:~/.local/bin/"
+      az -v 
+    displayName: Add az to path
