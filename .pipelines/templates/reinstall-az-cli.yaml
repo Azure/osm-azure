@@ -11,6 +11,6 @@ steps:
       ~/.local/bin/az -v 
     displayName: Install specific version of AZ cli with pip3
   - bash: |
-      echo "##vso[task.setvariable variable=PATH]${PATH}:~/.local/bin/"
+      sudo mv ~/.local/bin/az ./usr/bin
       az -v 
     displayName: Add az to path
