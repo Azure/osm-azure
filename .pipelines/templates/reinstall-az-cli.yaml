@@ -8,6 +8,7 @@ steps:
     displayName: Install and upgrade pip3
   - bash: |
       pip3 install azure-cli==2.18.0
+      pip3 install pycryptodome==3.4.3
     displayName: Install specific version of AZ cli with pip3
   - bash: |
       sudo cp -r ~/.local/bin/az ~/../../usr/bin
