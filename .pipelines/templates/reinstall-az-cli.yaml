@@ -8,9 +8,8 @@ steps:
     displayName: Install and upgrade pip3
   - bash: |
       pip3 install azure-cli==2.18.0
-      ~/.local/bin/az -v 
     displayName: Install specific version of AZ cli with pip3
   - bash: |
-      sudo mv ~/.local/bin/az ~/../../usr/bin
+      sudo cp -r ~/.local/bin/az ~/../../usr/bin
       az -v 
     displayName: Add az to path
