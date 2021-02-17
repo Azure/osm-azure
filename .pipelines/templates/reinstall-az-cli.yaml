@@ -1,7 +1,7 @@
 steps: 
   - bash: |
       sudo apt-get remove -y azure-cli
-      sudo rm ~./home/azureuser/.local/lib/python3.6/site-packages/azure*
+      sudo rm ./home/azureuser/.local/lib/python3.6/site-packages/azure*
       sudo rm -r ~/.local/bin/az
       sudo rm -r ~/../../usr/bin/az
     displayName: Uninstall az cli
