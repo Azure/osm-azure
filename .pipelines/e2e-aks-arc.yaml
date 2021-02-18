@@ -9,12 +9,11 @@ jobs:
     workspace: 
       clean: all
     steps: 
-    - template: templates/reinstall-az-cli.yaml
     - template: templates/login-az.yaml
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
-    - template: templates/install-k8s-extension.yaml
+    #- template: templates/install-k8s-extension.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml

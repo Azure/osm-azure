@@ -28,3 +28,11 @@ az rest \
    --uri "https://management.azure.com/$RESOURCEID/providers/Microsoft.KubernetesConfiguration/extensions/$EXTENSION_NAME?api-Version=$API_VERSION" \
    --body @$EXTENSION_SETTINGS \
    --debug
+
+
+#if [[ -z "$EXTENSION_SETTINGS" ]]; then
+#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $CHECKOUT_TAG
+#else 
+#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $CHECKOUT_TAG --configuration-protected-settings-file $EXTENSION_SETTINGS
+#fi
+
