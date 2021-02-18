@@ -17,4 +17,3 @@ steps:
 
       kubectl wait --for=condition=ready nodes --all --timeout=5m 
     displayName: Create AKS cluster
-
