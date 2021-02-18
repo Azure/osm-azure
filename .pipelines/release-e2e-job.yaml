@@ -11,8 +11,8 @@ pr:
     include:
     - main
   paths:
-    include:
-      - charts/osm-arc/Chart.yaml
+    exclude:
+      - docs/*
 
 variables:
   chart.name: osm-arc
