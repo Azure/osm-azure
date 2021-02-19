@@ -29,7 +29,7 @@ wait_for_condition() {
   sleep_time="$2"
   condition="$3"
   while [ "$wait_time" -gt 0 ]; do
-    if eval "$condition"; then
+    if "$condition"; then
       return 0
     else
       sleep "$sleep_time"
