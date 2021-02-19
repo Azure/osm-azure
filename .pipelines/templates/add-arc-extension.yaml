@@ -12,6 +12,6 @@ steps:
       SUBSCRIPTION: $(SUBSCRIPTION_ID)
       RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
       CLUSTERNAME: $(AZURE_CLUSTER_NAME)
-      CHECKOUT_TAG: ${{ parameters.imageTag }}
+      EXTENSION_TAG: ${{ parameters.imageTag }}
       REGION: $(AZURE_LOCATION)
       RELEASE_NAMESPACE: $(release.namespace)
