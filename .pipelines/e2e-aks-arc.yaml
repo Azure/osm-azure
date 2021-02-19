@@ -30,7 +30,7 @@ jobs:
           imageTag: $(LATEST_TAG)
       - script: |
           make test-e2e
-        displayName: "Run osm-azure e2e tests on previous release chart"
+        displayName: "Run osm-azure e2e tests on latest release chart"
       - template: templates/update-arc-addon.yaml
     - ${{ if eq(parameters.releaseE2E, false) }}:
       - template: templates/add-arc-extension.yaml
