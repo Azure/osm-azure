@@ -1,10 +1,10 @@
 steps:  
   - bash: |
       ./scripts/update-extension.sh
-    displayName: Add Arc extension to AKS cluster
+    displayName: Update arc extension
     env:
-        SUBSCRIPTION: $(SUBSCRIPTION_ID)
-        RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
-        CLUSTERNAME: $(AZURE_CLUSTER_NAME)
-        CHECKOUT_TAG: $(CHECKOUT_TAG)
-        RELEASE_NAMESPACE: $(release.namespace)
+      SUBSCRIPTION: $(SUBSCRIPTION_ID)
+      RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
+      CLUSTERNAME: $(AZURE_CLUSTER_NAME)
+      CHECKOUT_TAG: $(CHECKOUT_TAG)
+      RELEASE_NAMESPACE: $(release.namespace)
