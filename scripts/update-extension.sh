@@ -8,6 +8,8 @@ EXTENSION_TYPE="${EXTENSION_TYPE:-Microsoft.openservicemesh}"
 EXTENSION_SETTINGS=$1
 API_VERSION="${API_VERSION:-2020-07-01-preview}"
 
+export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
+
 echo "Azure Resource ID: $RESOURCEID"
 
 if [[ -z "$EXTENSION_SETTINGS" ]]; then
@@ -33,4 +35,3 @@ az rest \
 #else 
 #    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $CHECKOUT_TAG --configuration-protected-settings-file $EXTENSION_SETTINGS
 #fi
-
