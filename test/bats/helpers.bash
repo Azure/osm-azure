@@ -23,3 +23,18 @@ wait_for_process() {
   done
   return 1
 }
+
+wait_for_condition() {
+  wait_time="$1"
+  sleep_time="$2"
+  condition="$3"
+  while [ "$wait_time" -gt 0 ]; do
+    if eval "$condition"; then
+      return 0
+    else
+      sleep "$sleep_time"
+      wait_time=$((wait_time - sleep_time))
+    fi
+  done
+  return 1
+}

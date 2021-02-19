@@ -12,7 +12,8 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     if [ $ARC_CLUSTER == false ]; then
         skip "arc cluster-specific test"
     fi
-    run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "\"$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$EXTENSION_TAG"\"
+
+    run wait_for_condition $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "\"$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')\" == \"osm-arc-$EXTENSION_TAG\""
     assert_success
 }
 
@@ -58,7 +59,6 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
     assert_success
 }
-
 
 @test "openservicemesh.io/ignore is true in azure-arc" { 
     if [ $ARC_CLUSTER == false ]; then
