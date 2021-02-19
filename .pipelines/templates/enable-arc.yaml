@@ -1,12 +1,5 @@
 steps:  
   - bash: |
-      az extension remove --name connectedk8s
-      az extension add --source $(AZ_EXTENSION_LOCATION)/connectedk8s-${CONNECTEDK8S_VERSION}-py2.py3-none-any.whl -y
-      az -v
-    displayName: Install connectedk8s
-    env: 
-      AZ_EXTENSION_LOCATION: $(AZ_EXTENSION_LOCATION)
-  - bash: |
       ./scripts/connect-to-arc.sh
     displayName: Connect AKS cluster to Azure Arc
     env:
@@ -14,3 +7,4 @@ steps:
       RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
       CLUSTERNAME: $(AZURE_CLUSTER_NAME)
       REGION: $(AZURE_LOCATION)
+      AZ_EXTENSION_LOCATION: $(AZ_EXTENSION_LOCATION)
