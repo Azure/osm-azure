@@ -31,6 +31,9 @@ jobs:
       - script: |
           make test-e2e
         displayName: "Run osm-azure e2e tests on latest release chart"
+        env: 
+          EXTENSION_TAG: $(LATEST_TAG)
+          KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
       - template: templates/update-arc-addon.yaml
     - ${{ if eq(parameters.releaseE2E, false) }}:
       - template: templates/add-arc-extension.yaml
