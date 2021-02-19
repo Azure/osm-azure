@@ -5,7 +5,7 @@ parameters:
 
 steps:  
   - bash: |
-      echo ${{ parametesr.useLatest }}
+      echo ${{ parameters.useLatest }}
       echo $(LATEST_TAG)
       ./scripts/add-extension.sh
     displayName: Add Arc extension to AKS cluster
