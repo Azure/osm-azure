@@ -1,5 +1,5 @@
 parameters: 
-  - name: releaseE2E
+  - name: releaseE2E #runs update tests specific to cutting new releases
     type: boolean
     default: false
 
@@ -17,7 +17,7 @@ jobs:
     - ${{ if eq(parameters.releaseE2E, true) }}:
       - template: templates/package-helm-chart.yaml
         parameters:
-          releaseTag: true 
+          releaseTag: true
     - ${{ if eq(parameters.releaseE2E, false) }}:
       - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
