@@ -1,6 +1,6 @@
 steps: 
   - bash: |
       DESCRIBE_TAG=$(git describe)
-      echo "##vso[task.setvariable variable=LATEST_TAG]${LATEST_TAG:1}"
+      echo "##vso[task.setvariable variable=LATEST_TAG]${DESCRIBE_TAG:1:5}"
       echo ${LATEST_TAG}
     displayName: Get most recent osm-arc tag
