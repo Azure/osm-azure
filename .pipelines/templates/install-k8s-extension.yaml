@@ -1,5 +1,6 @@
 steps: 
   - bash: |
+      az login --identity > /dev/null 2>&1
       az extension remove --name k8s-extension
       git config --global core.sshCommand 'ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
       git clone git@github.com:Azure/azure-arc-kubernetes-preview.git $(System.DefaultWorkingDirectory)/azure-arc-kubernetes-preview

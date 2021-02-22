@@ -1,4 +1,0 @@
-steps: 
-  - bash: |
-      az login --identity > /dev/null 2>&1
-    displayName: Login to Azure
