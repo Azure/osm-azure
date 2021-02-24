@@ -1,4 +1,7 @@
+#!make
+
 KIND_VERSION ?= 0.8.1
+
 # note: k8s version pinned since KIND image availability lags k8s releases
 KUBERNETES_VERSION ?= v1.19.0
 BATS_VERSION ?= 1.2.1
