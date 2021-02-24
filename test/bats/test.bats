@@ -22,6 +22,11 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
+@test "only one osm-controller pod" {
+    run wait_for_condition $WAIT_TIME $SLEEP_TIME "$(kubectl get pods -n arc-osm-system -l app=osm-controller | wc -l) == 2"
+    assert_success
+}
+
 @test "osm pod is ready" {
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=Ready --timeout=60s pod -l app=osm-controller -n arc-osm-system"
     assert_success
