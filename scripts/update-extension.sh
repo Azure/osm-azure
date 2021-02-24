@@ -15,7 +15,7 @@ echo "Azure Resource ID: $RESOURCEID"
 if [[ -z "$EXTENSION_SETTINGS" ]]; then
     EXTENSION_SETTINGS="osm_extension.json"
     jq -n \
-        --arg tag "$CHECKOUT_TAG" \
+        --arg tag "$EXTENSION_TAG" \
         --arg namespace "$RELEASE_NAMESPACE" \
         '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } }, "configurationProtectedSettings": { "osm.OpenServiceMesh.controllerLogLevel": "debug", } } }' > osm_extension.json
 fi
@@ -31,7 +31,7 @@ az rest \
 
 
 #if [[ -z "$EXTENSION_SETTINGS" ]]; then
-#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $CHECKOUT_TAG
+#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $EXTENSION_TAG
 #else 
-#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $CHECKOUT_TAG --configuration-protected-settings-file $EXTENSION_SETTINGS
+#    az k8s-extension create --cluster-name $CLUSTERNAME --resource-group $RESOURCEGROUP --cluster-type connectedClusters --extension-type $EXTENSION_TYPE --scope cluster --release-train staging --name $EXTENSION_NAME --release-namespace $RELEASE_NAMESPACE --version $EXTENSION_TAG --configuration-protected-settings-file $EXTENSION_SETTINGS
 #fi

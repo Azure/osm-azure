@@ -1,10 +1,11 @@
 steps:  
   - bash: |
       ./scripts/update-extension.sh
+      kubectl rollout restart deployment osm-controller -n $(release.namespace)
     displayName: Update arc extension
     env:
       SUBSCRIPTION: $(SUBSCRIPTION_ID)
       RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
       CLUSTERNAME: $(AZURE_CLUSTER_NAME)
-      CHECKOUT_TAG: $(CHECKOUT_TAG)
+      EXTENSION_TAG: $(CHECKOUT_TAG)
       RELEASE_NAMESPACE: $(release.namespace)
