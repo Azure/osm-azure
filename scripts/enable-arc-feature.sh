@@ -4,7 +4,7 @@ source .env
 
 # enable Arc feature for subscription
 
-az account set --subscription=$SUBSCRIPTION
+az account set --subscription="$SUBSCRIPTION"
 
 az feature register --namespace Microsoft.Kubernetes --name previewAccess
 
