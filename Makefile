@@ -5,7 +5,7 @@ BATS_VERSION ?= 1.2.1
 
 package-osm-chart:
 	helm dependency update osm-arc
-	
+
 install-prerequisites:
 	# Setup kind if TEST_KIND is set to true
 	if [ $(TEST_KIND) ]; then make setup-kind ; fi
@@ -41,3 +41,8 @@ e2e-cleanup:
 	helm uninstall osm -n arc-osm-system
 	kubectl delete namespace arc-osm-system
 	if [ $(TEST_KIND) ]; then kind delete cluster; fi
+
+# Install shellcheck with: "sudo apt install shellcheck"
+.PHONY: shellcheck
+shellcheck:
+	shellcheck -x $(shell find . -name '*.sh')
