@@ -16,7 +16,7 @@ if [[ -z "$EXTENSION_SETTINGS" ]]; then
     jq -n \
         --arg tag "$CHECKOUT_TAG" \
         --arg namespace "$RELEASE_NAMESPACE" \
-        '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } }, "configurationProtectedSettings": { "osm.OpenServiceMesh.fluentBit.logLevel": "trace", } } }' > osm_extension.json
+        '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } }, "configurationProtectedSettings": { "osm.OpenServiceMesh.fluentBit.logLevel": "debug", } } }' > osm_extension.json
 fi
 
 az account set --subscription="$SUBSCRIPTION" > /dev/null 2>&1
