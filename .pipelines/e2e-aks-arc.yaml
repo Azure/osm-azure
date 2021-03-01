@@ -12,7 +12,6 @@ jobs:
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
-    #- template: templates/install-k8s-extension.yaml
     - ${{ if eq(parameters.releaseE2E, true) }}:
       - template: templates/package-helm-chart.yaml
         parameters:
