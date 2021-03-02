@@ -4,7 +4,7 @@ steps:
     displayName: Get pods to debug
     condition: always()
   - script: |
-      kubectl logs -l app=osm-controller -c osm-controller -n $(release.namespace)
+      kubectl logs -l app=osm-controller -c osm-controller -n $(release.namespace) --since=25m
     displayName: Get logs from osm-controller container
     condition: always()
   - script: |
