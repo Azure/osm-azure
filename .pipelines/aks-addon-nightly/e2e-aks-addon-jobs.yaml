@@ -7,6 +7,8 @@ jobs:
     - template: ../templates/install-helm3.yaml
     - template: ../templates/checkout-upstream-repo.yaml
     - template: ../templates/aks-setup.yaml
+      parameters:
+        aksAddonRun: true
     - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml
     - template: ../templates/run-upstream-e2e.yaml
       parameters:
