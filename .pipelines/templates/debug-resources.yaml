@@ -19,10 +19,13 @@ steps:
       export DNS_POD_1=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '1 p')
       export temp="${DNS_POD_1%\"}"
       export DNS_POD_1="${temp#\"}"
+      kubectl logs $DNS_POD_1 -n kube-system
+    displayName: Get logs from kube-dns pod 1
+    condition: always()
+  - script: |
       export DNS_POD_2=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '2 p')
       export temp="${DNS_POD_2%\"}"
       export DNS_POD_2="${temp#\"}"
-      kubectl logs $DNS_POD_1 -n kube-system
       kubectl logs $DNS_POD_2 -n kube-system
-    displayName: Get logs from kube-dns pods
+    displayName: Get logs from kube-dns pod 2
     condition: always()
