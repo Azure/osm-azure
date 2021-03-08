@@ -1,13 +1,23 @@
 steps:
   - script: |
       kubectl get pods -A
-    displayName: Get pods to debug
+    displayName: Get all pods to debug
     condition: always()
   - script: |
-      kubectl logs -l app=osm-controller -c osm-controller -n $(release.namespace) --since=25m
+      #Using kubectl logs with "-l" doesn't give entire output
+      export OSM_CONTROLLER_NAME=$(kubectl get pod -l app=osm-controller -n $(release.namespace) -o json | jq '.items[].metadata.name')
+      kubectl logs $OSM_CONTROLLER_NAME osm-controller -n $(release.namespace)
     displayName: Get logs from osm-controller container
     condition: always()
   - script: |
       kubectl describe pod -l app=osm-controller -n $(release.namespace)
     displayName: Describe osm-controller pod 
     condition: always()
+  - script: |
+      export DNS_POD_1=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '1 p')
+      export DNS_POD_2=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '2 p')
+      kubectl logs $DNS_POD_1 -n kube-system
+      kubectl logs $DNS_POD_2 -n kube-system
+    displayName: Get logs from kube-dns pods
+    condition: always()
+
