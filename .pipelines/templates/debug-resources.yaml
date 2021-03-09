@@ -5,7 +5,9 @@ steps:
     condition: always()
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
-      export OSM_CONTROLLER_NAME=$(kubectl get pods -n $(release.namespace) --selector app=osm-controller --no-headers | awk '{print $1}' | head -n1)
+      export OSM_CONTROLLER_NAME=$(kubectl get pod -l app=osm-controller -n $(release.namespace) -o json | jq '.items[].metadata.name')
+      export temp="${OSM_CONTROLLER_NAME%\"}"
+      export OSM_CONTROLLER_NAME="${temp#\"}"
       kubectl logs $OSM_CONTROLLER_NAME osm-controller -n $(release.namespace)
     displayName: Get logs from osm-controller container
     condition: always()
@@ -14,12 +16,16 @@ steps:
     displayName: Describe osm-controller pod 
     condition: always()
   - script: |
-      export DNS_POD_1=$(kubectl get pods -n kube-system --selector k8s-app=kube-dns --no-headers | awk '{print $1}' | sed -n '1 p')
+      export DNS_POD_1=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '1 p')
+      export temp="${DNS_POD_1%\"}"
+      export DNS_POD_1="${temp#\"}"
       kubectl logs $DNS_POD_1 -n kube-system
     displayName: Get logs from kube-dns pod 1
     condition: always()
   - script: |
-      export DNS_POD_2=$(kubectl get pods -n kube-system --selector k8s-app=kube-dns --no-headers | awk '{print $1}' | sed -n '2 p')
+      export DNS_POD_2=$(kubectl get pod -l k8s-app=kube-dns -n kube-system -o json | jq '.items[].metadata.name' | sed -n '2 p')
+      export temp="${DNS_POD_2%\"}"
+      export DNS_POD_2="${temp#\"}"
       kubectl logs $DNS_POD_2 -n kube-system
     displayName: Get logs from kube-dns pod 2
     condition: always()
