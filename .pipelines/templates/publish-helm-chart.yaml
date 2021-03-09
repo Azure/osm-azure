@@ -1,3 +1,8 @@
+parameters: 
+  - name: releaseTag
+    type: boolean
+    default: false
+
 steps: 
   - bash: |
       az login --identity > /dev/null 2>&1
@@ -16,8 +21,15 @@ steps:
       echo "##vso[task.setvariable variable=UNIQUE_TAG]$(git rev-parse --short HEAD)"
       echo ${UNIQUE_TAG}
     displayName: Create Unique Tag
-  - script: | 
-      echo "##vso[task.setvariable variable=CHECKOUT_TAG]${CHART_TAG}-${UNIQUE_TAG}-pr"
+-   script: |
+      echo ${{ parameters.releaseTag }}
+      if [[ "${{ parameters.releaseTag }}" == "True" ]]; then
+        # Add "-release" for chart created by release job.  
+        echo "##vso[task.setvariable variable=CHECKOUT_TAG]$(image.tag)-${UNIQUE_TAG}-release"
+      else
+        # Add "-pr" for chart created by pr job.  
+        echo "##vso[task.setvariable variable=CHECKOUT_TAG]$(image.tag)-${UNIQUE_TAG}-pr"
+      fi
       echo ${CHECKOUT_TAG}
     displayName: Create Checkout Tag 
   - bash: |
