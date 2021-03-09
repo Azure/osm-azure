@@ -12,13 +12,13 @@ jobs:
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
+    - template: templates/package-helm-chart.yaml
     - ${{ if eq(parameters.releaseE2E, true) }}:
-      - template: templates/package-helm-chart.yaml
+      - template: templates/publish-helm-chart.yaml
         parameters:
           releaseTag: true
     - ${{ if eq(parameters.releaseE2E, false) }}:
-      - template: templates/package-helm-chart.yaml
-    - template: templates/publish-helm-chart.yaml
+      - template: templates/publish-helm-chart.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
     - ${{ if eq(parameters.releaseE2E, true) }}:
