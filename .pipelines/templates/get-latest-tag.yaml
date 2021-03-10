@@ -1,6 +1,10 @@
 steps: 
   - bash: |
-      DESCRIBE_TAG=$(git describe)
-      echo "##vso[task.setvariable variable=LATEST_TAG]${DESCRIBE_TAG:1:5}"
+      tags=$(git -c 'versionsort.suffix=-alpha,-beta,-rc' tag -l --sort=version:refname | sed "/^$tag$/q" )
+      ! [[ "$tag" =~ -(alpha|beta|rc) ]] && tags=$(grep -Eve '-(alpha|beta|rc)' <<< "$tags")
+      prev=$(tail -2 <<< "$tags" | head -1)
+      echo "##vso[task.setvariable variable=LATEST_TAG]${prev:1:5}"
       echo ${LATEST_TAG}
     displayName: Get most recent osm-arc tag
+    env: 
+      tag: $(CHART_TAG)

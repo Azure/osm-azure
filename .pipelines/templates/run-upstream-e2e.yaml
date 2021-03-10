@@ -1,9 +1,5 @@
 steps: 
   - bash: |
-      git clone -b v${CHART_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
-      kubectl get pods -A
-    displayName: Checkout $(upstream.repo) @ ${CHART_TAG}
-  - bash: |
       sleep 180
     displayName: "Add delay before running upstream e2es"
   - bash: |
