@@ -8,7 +8,7 @@ WAIT_TIME_DEPLOYMENTS=600
 SLEEP_TIME_DEPLOYMENTS=10
 ARC_CLUSTER=${ARC_CLUSTER:-true}
 
-@test "chart version on cluster matches extension tag" {
+@test "chart version on cluster matches extension tag $EXTENSION_TAG" {
     if [ $ARC_CLUSTER == false ]; then
         skip "arc cluster-specific test"
     fi
