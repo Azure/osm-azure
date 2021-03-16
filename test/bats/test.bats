@@ -13,7 +13,7 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
         skip "arc cluster-specific test"
     fi
 
-    run wait_for_condition $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "\"$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')\" == \"osm-arc-$EXTENSION_TAG\""
+    run wait_for_condition $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "helm ls -o json --namespace arc-osm-system | jq -r '.[].chart'" "osm-arc-$EXTENSION_TAG"
     assert_success
 }
 
@@ -23,7 +23,7 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
 }
 
 @test "only one osm-controller pod" {
-    run wait_for_condition $WAIT_TIME $SLEEP_TIME "$(kubectl get pods -n arc-osm-system -l app=osm-controller | wc -l) == 2"
+    run wait_for_condition $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-controller | wc -l" "2"
     assert_success
 }
 

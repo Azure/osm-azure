@@ -27,9 +27,11 @@ wait_for_process() {
 wait_for_condition() {
   wait_time="$1"
   sleep_time="$2"
-  condition="$3"
+  cmd="$3"
+  condition="$4"
   while [ "$wait_time" -gt 0 ]; do
-    if [[ "$condition" == "true" ]]; then
+    result="$(eval $cmd)"
+    if [[ "$condition" == "$result" ]]; then
       return 0
     else
       sleep "$sleep_time"
