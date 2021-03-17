@@ -1,3 +1,8 @@
+parameters: 
+  - name: releaseTag
+    type: boolean
+    default: false
+
 steps: 
   - bash: |
       az login --identity > /dev/null 2>&1
@@ -5,11 +10,32 @@ steps:
     displayName: Login to acr
     env: 
       REGISTRY_NAME: $(REGISTRY_NAME)
+  - script: |
+      cp $(image.dir)/$(chart.name)-*.tgz .
+      FILENAME=$(ls $(chart.name)-*.tgz)
+      TRIM=${FILENAME##$(chart.name)-}
+      echo "##vso[task.setvariable variable=CHART_TAG]${TRIM%%.tgz}"
+      echo ${CHART_TAG}
+    displayName: Get osm-arc chart version
+  - script: |
+      echo "##vso[task.setvariable variable=UNIQUE_TAG]$(git rev-parse --short HEAD)"
+      echo ${UNIQUE_TAG}
+    displayName: Create Unique Tag
+  - script: |
+      echo ${{ parameters.releaseTag }}
+      if [[ "${{ parameters.releaseTag }}" == "True" ]]; then
+        # Add "-release" for chart created by release job.  
+        echo "##vso[task.setvariable variable=CHECKOUT_TAG]${CHART_TAG}-${UNIQUE_TAG}-release"
+      else
+        # Add "-pr" for chart created by pr job.  
+        echo "##vso[task.setvariable variable=CHECKOUT_TAG]${CHART_TAG}-${UNIQUE_TAG}-pr"
+      fi
+      echo ${CHECKOUT_TAG}
+    displayName: Create Checkout Tag 
   - bash: |
       if [[ -n "${CHECKOUT_TAG}" ]]; then
-        cp $(image.dir)/$(chart.name)-${CHECKOUT_TAG}.tgz .
         echo 'pushing chart'
-        oras push $(REPOSITORY_NAME):${CHECKOUT_TAG} ./$(chart.name)-${CHECKOUT_TAG}.tgz:application/tar+gzip --debug
+        oras push $(REPOSITORY_NAME):${CHECKOUT_TAG} ./$(chart.name)-${CHART_TAG}.tgz:application/tar+gzip --debug
       else 
         echo "Helm chart was not published to staging ACR because $CHECKOUT_TAG was not set by the pipeline" && exit 1
       fi

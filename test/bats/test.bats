@@ -51,11 +51,11 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
-@test "chart version on cluster matches checkout tag" {
+@test "chart version on cluster matches extension tag" {
     if [ $ARC_CLUSTER == false ]; then
         skip "arc cluster-specific test"
     fi
-    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$CHECKOUT_TAG" ]]
+    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$EXTENSION_TAG" ]]
 }
 
 @test "openservicemesh.io/ignore is true in azure-arc" { 
