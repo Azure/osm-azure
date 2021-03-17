@@ -1,8 +1,12 @@
 steps: 
   - bash: |
-      tags=$(git -c 'versionsort.suffix=-alpha,-beta,-rc' tag -l --sort=version:refname | sed "/^$tag$/q" )
-      ! [[ "$tag" =~ -(alpha|beta|rc) ]] && tags=$(grep -Eve '-(alpha|beta|rc)' <<< "$tags")
-      prev=$(tail -2 <<< "$tags" | head -1)
+      tags=$(git tag | tr - \~ | sort -V | tr \~ - | sed "/^$tag$/q")
+      tags=$(grep -Eve '-(alpha|beta|rc)' <<< "$tags")
+
+      if [[ "$tag" =~ -(alpha|beta|rc) ]]; then
+        prev=$(tail -1 <<< "$tags" | head -1)
+      else
+        prev=$(tail -2 <<< "$tags" | head -1)
       echo "##vso[task.setvariable variable=LATEST_TAG]${prev:1}"
       echo ${LATEST_TAG}
     displayName: Get most recent osm-arc tag
