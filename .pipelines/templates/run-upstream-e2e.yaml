@@ -1,6 +1,7 @@
 steps: 
   - bash: |
       git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+      kubectl get pods -A
     displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
   - bash: |
       make build-osm 
