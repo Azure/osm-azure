@@ -1,8 +1,8 @@
 steps: 
   - bash: |
-      git clone -b ${UPSTREAM_BRANCH} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+      git clone -b v${CHART_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
       kubectl get pods -A
-    displayName: Checkout $(upstream.repo) @ ${UPSTREAM_BRANCH}
+    displayName: Checkout $(upstream.repo) @ ${CHART_TAG}
   - bash: |
       make build-osm 
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60m -installType=NoInstall -OsmNamespace=arc-osm-system

@@ -17,7 +17,6 @@ variables:
   image.dir: $(Build.ArtifactStagingDirectory)
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  image.tag: 0.1.0
   upstream.repo: https://github.com/openservicemesh/osm
 
 stages: 
