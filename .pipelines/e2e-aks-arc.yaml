@@ -15,7 +15,7 @@ jobs:
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
       parameters:
-        releaseTag: parameters.releaseE2E
+        releaseTag: ${{ parameters.releaseE2E }}
     - template: templates/checkout-upstream-repo.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
