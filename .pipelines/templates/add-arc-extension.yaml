@@ -5,7 +5,7 @@ parameters:
 
 steps:  
   - bash: |
-      echo ${{ parameters.imageTag }}
+      echo "Image tag: ${{ parameters.imageTag }}"
       ./scripts/add-extension.sh
     displayName: Add Arc extension to AKS cluster
     env:

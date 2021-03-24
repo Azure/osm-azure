@@ -16,7 +16,7 @@ steps:
       TRIM=${FILENAME##$(chart.name)-}
       echo "##vso[task.setvariable variable=CHART_TAG]${TRIM%%.tgz}"
       echo ${CHART_TAG}
-    displayName: Get osm-arc chart version
+    displayName: Get osm-arc chart version from packaged chart file
   - script: |
       echo "##vso[task.setvariable variable=UNIQUE_TAG]$(git rev-parse --short HEAD)"
       echo ${UNIQUE_TAG}
