@@ -1,12 +1,10 @@
-This PR requires approval from 3 maintainers.
-
 <!--
 
 Use the checklist below to ensure your release PR is complete before marking it ready for review.
 
 -->
 
-- [] I have ensured that required images are available in MCR:
+- [ ] I have ensured that required images are available in MCR:
 	1. osm-controller, osm-injector and init images of the corresponding chart version
 	2. fluent-bit and envoy images of versions listed in osm-arc/oss values.yaml
 
@@ -18,3 +16,4 @@ Use the checklist below to ensure your release PR is complete before marking it 
     In upstream, compare between the latest release and the previous release to check if anything has changed in the OSS values.yaml e.g: https://github.com/openservicemesh/osm/compare/v0.6.1...v0.7.0-rc.1
     Check for variable name changes, removed variables, variables that need to be overridden, etc. and make applicable changes in the osm-arc chart.    
     -->   
+- [ ] I have received 3 approvals from maintainers. 
