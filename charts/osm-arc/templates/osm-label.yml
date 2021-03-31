@@ -88,14 +88,11 @@ metadata:
     "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
-    seccomp.security.alpha.kubernetes.io/pod: runtime/default
 spec:
   template:
     metadata:
       labels:
         app: osm-label
-      annotations:
-        seccomp.security.alpha.kubernetes.io/pod: runtime/default
     spec:
       serviceAccountName: osm-label-account
       automountServiceAccountToken: true
@@ -168,10 +165,3 @@ spec:
               else
                 echo "Failed to retrieve ${osmnamespace} details"
               fi  
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 3000
-        fsGroup: 2000
-        supplementalGroups: [5555]
-
-
