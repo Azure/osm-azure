@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+## Values populated by Azure Arc K8s RP during the installation of the extension
+Azure:
+  Cluster:
+    Distribution: <cluster_distribution>
+
 OpenServiceMesh:
     ignoreNamespaces: "kube-system azure-arc arc-osm-system"
 
