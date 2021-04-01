@@ -24,6 +24,16 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces"]
   verbs: ["get", "patch"]
+{{- if eq .Values.Azure.Cluster.Distribution "openshift" }}
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+    - anyuid
+  resources:
+    - securitycontextconstraints
+  verbs:
+    - use
+{{- end }}
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -88,14 +98,18 @@ metadata:
     "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
+    {{- end }}
 spec:
   template:
     metadata:
       labels:
         app: osm-label
+      {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
       annotations:
         seccomp.security.alpha.kubernetes.io/pod: runtime/default
+      {{- end }}
     spec:
       serviceAccountName: osm-label-account
       automountServiceAccountToken: true
