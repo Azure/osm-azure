@@ -4,17 +4,18 @@ source .env
 
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
 EXTENSION_NAME="${EXTENSION_NAME:-osm}"
-API_VERSION="${API_VERSION:-2020-07-01-preview}"
+EXTENSION_TYPE="${EXTENSION_TYPE:-Microsoft.openservicemesh}"
 EXTENSION_SETTINGS=$1
+API_VERSION="${API_VERSION:-2020-07-01-preview}"
 
-export RESOURCEID="subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME"
+export RESOURCEID=subscriptions/$SUBSCRIPTION/resourceGroups/$RESOURCEGROUP/providers/Microsoft.Kubernetes/connectedClusters/$CLUSTERNAME
 
 echo "Azure Resource ID: $RESOURCEID"
 
 if [[ -z "$EXTENSION_SETTINGS" ]]; then
     EXTENSION_SETTINGS="osm_extension.json"
     jq -n \
-        --arg tag "$CHECKOUT_TAG" \
+        --arg tag "$EXTENSION_TAG" \
         --arg namespace "$RELEASE_NAMESPACE" \
         '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } }, "configurationProtectedSettings": { "osm.OpenServiceMesh.controllerLogLevel": "debug", } } }' > osm_extension.json
 fi

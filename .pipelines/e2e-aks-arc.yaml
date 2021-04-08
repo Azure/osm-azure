@@ -1,3 +1,8 @@
+parameters: 
+  - name: releaseE2E #runs update tests specific to cutting new releases
+    type: boolean
+    default: false
+
 jobs: 
   - job: test_osm_chart_arc_cluster
     pool: Upstream Pool
@@ -9,9 +14,15 @@ jobs:
     - template: templates/install-bats.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
+      parameters:
+        releaseTag: ${{ parameters.releaseE2E }}
+    - template: templates/checkout-upstream-repo.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
-    - template: templates/add-arc-extension.yaml
+    - ${{ if eq(parameters.releaseE2E, true) }}:
+      - template: upgrade-templates.yaml
+    - ${{ if eq(parameters.releaseE2E, false) }}:
+      - template: templates/add-arc-extension.yaml
     - script: |
         make test-e2e
       displayName: "Run osm-azure e2e tests"

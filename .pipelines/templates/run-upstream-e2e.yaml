@@ -1,13 +1,12 @@
 steps: 
   - bash: |
-      git clone -b v${CHART_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
-      kubectl get pods -A
-    displayName: Checkout $(upstream.repo) @ ${CHART_TAG}
+      sleep 180
+    displayName: "Add delay before running upstream e2es"
   - bash: |
       make build-osm 
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60m -installType=NoInstall -OsmNamespace=arc-osm-system
     displayName: "Run upstream e2e tests"
     env: 
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)
-      CTR_TAG: $(UPSTREAM_BRANCH)
+      CTR_TAG: v$(CHART_TAG)
     workingDirectory: $(System.DefaultWorkingDirectory)/osm

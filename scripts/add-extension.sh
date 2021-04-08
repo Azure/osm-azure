@@ -14,7 +14,7 @@ echo "Azure Resource ID: $RESOURCEID"
 if [[ -z "$EXTENSION_SETTINGS" ]]; then
     EXTENSION_SETTINGS="osm_extension.json"
     jq -n \
-        --arg tag "$CHECKOUT_TAG" \
+        --arg tag "$EXTENSION_TAG" \
         --arg namespace "$RELEASE_NAMESPACE" \
         '{properties: {extensionType: "Microsoft.openservicemesh", autoUpgradeMinorVersion: "false", version: $tag, releaseTrain: "Staging", scope: { cluster: { releaseNamespace: $namespace } }, "configurationProtectedSettings": { "osm.OpenServiceMesh.controllerLogLevel": "debug", } } }' > osm_extension.json
 fi

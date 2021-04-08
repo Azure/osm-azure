@@ -8,8 +8,22 @@ WAIT_TIME_DEPLOYMENTS=600
 SLEEP_TIME_DEPLOYMENTS=10
 ARC_CLUSTER=${ARC_CLUSTER:-true}
 
+@test "chart version on cluster matches extension tag $EXTENSION_TAG" {
+    if [ $ARC_CLUSTER == false ]; then
+        skip "arc cluster-specific test"
+    fi
+
+    run wait_for_condition $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "helm ls -o json --namespace arc-osm-system | jq -r '.[].chart'" "osm-arc-$EXTENSION_TAG"
+    assert_success
+}
+
 @test "arc-osm-system deployments have succeeded" {
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace arc-osm-system"
+    assert_success
+}
+
+@test "only one osm-controller pod" {
+    run wait_for_condition $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-controller | wc -l" "2"
     assert_success
 }
 
@@ -49,13 +63,6 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     fi
     run wait_for_process $WAIT_TIME_DEPLOYMENTS $SLEEP_TIME_DEPLOYMENTS "kubectl wait --for=condition=available deployment --all --namespace azure-arc"
     assert_success
-}
-
-@test "chart version on cluster matches extension tag" {
-    if [ $ARC_CLUSTER == false ]; then
-        skip "arc cluster-specific test"
-    fi
-    [[ "$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')" == "osm-arc-$EXTENSION_TAG" ]]
 }
 
 @test "openservicemesh.io/ignore is true in azure-arc" { 

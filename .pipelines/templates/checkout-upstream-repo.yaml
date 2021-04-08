@@ -1,0 +1,4 @@
+steps:
+  - bash: |
+      git clone -b v${CHART_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+    displayName: Checkout $(upstream.repo) @ v${CHART_TAG}
