@@ -6,7 +6,7 @@ Use the checklist below to ensure your release PR is complete before marking it 
 
 - [ ] I have ensured that required images are available in MCR:
 	1. osm-controller, osm-injector and init images of the corresponding chart version
-	2. fluent-bit and envoy images of versions listed in osm-arc/oss values.yaml
+	2. envoy image of version listed in osm-arc/oss values.yaml
 
 - [ ] I have updated the Helm chart:
     1. Updated the chart version, app version and dependency version in charts/osm-arc/Chart.yaml    

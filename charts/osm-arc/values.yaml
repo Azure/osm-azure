@@ -14,16 +14,8 @@ osm:
   OpenServiceMesh:
     enableDebugServer: false
     enablePermissiveTrafficPolicy: true
-    enableFluentbit: true
     image:
       registry: mcr.microsoft.com/oss/openservicemesh
-    fluentBit:
-      registry: "mcr.microsoft.com/oss/fluent"
-      tag: "v1.6.4"
-      outputPlugin: azure
-      workspaceId: 65b3ea97-f79d-4607-b3c8-6bc9543b5607
-      primaryKey: 1EijNEurquqoILM02FxTUp5BmX55SyV+NkL6hhAFllv3DEb8b8cYPoh49gSmRo4qJrirAhYEptqnyyfDvsfl0Q==
-    controllerLogLevel: error
     enforceSingleMesh: true
     enablePrometheus: false
     deployJaeger: false
