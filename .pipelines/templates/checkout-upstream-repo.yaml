@@ -1,4 +1,4 @@
 steps:
   - bash: |
-      git clone -b v${CHART_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
-    displayName: Checkout $(upstream.repo) @ v${CHART_TAG}
+      git clone -b v${IMAGE_TAG} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+    displayName: Checkout $(upstream.repo) @ v${IMAGE_TAG}

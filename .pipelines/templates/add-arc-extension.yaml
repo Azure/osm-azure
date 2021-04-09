@@ -1,7 +1,7 @@
 parameters: 
   - name: imageTag
     type: string
-    default: $(CHECKOUT_TAG)
+    default: $(IMAGE_TAG)
 
 steps:  
   - bash: |

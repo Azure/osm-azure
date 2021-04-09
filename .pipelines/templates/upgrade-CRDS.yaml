@@ -1,6 +1,6 @@
 steps:
   - bash: |
-      crd_changes=$(git diff --name-only "v${LATEST_TAG}".."v${CHART_TAG}" -- charts/osm/crds)
+      crd_changes=$(git diff --name-only "v${LATEST_PUBLISHED_TAG}".."v${CHART_VERSION}" -- charts/osm/crds)
       if ! [[ -z "$crd_changes" ]]; then
         echo "Deleting CRDs"
         ./scripts/cleanup/crd-cleanup.sh

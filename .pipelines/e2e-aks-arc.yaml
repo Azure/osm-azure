@@ -27,7 +27,7 @@ jobs:
         make test-e2e
       displayName: "Run osm-azure e2e tests"
       env: 
-        EXTENSION_TAG: $(CHART_TAG)
+        EXTENSION_TAG: $(CHART_VERSION)
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: templates/run-upstream-e2e.yaml
     - template: templates/debug-resources.yaml
