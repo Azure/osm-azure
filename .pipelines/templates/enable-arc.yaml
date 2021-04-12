@@ -1,5 +1,12 @@
 steps:  
   - bash: |
+      ./scripts/install-connectedk8s.sh
+    displayName: Install az connectedk8s extension
+    env:
+      SUBSCRIPTION: $(SUBSCRIPTION_ID)
+      CONNECTEDK8S_VERSION: $(connectedk8s.version)
+      AZ_EXTENSION_LOCATION: $(AZ_EXTENSION_LOCATION)
+  - bash: |
       ./scripts/connect-to-arc.sh
     displayName: Connect AKS cluster to Azure Arc
     env:
@@ -7,5 +14,3 @@ steps:
       RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
       CLUSTERNAME: $(AZURE_CLUSTER_NAME)
       REGION: $(AZURE_LOCATION)
-      AZ_EXTENSION_LOCATION: $(AZ_EXTENSION_LOCATION)
-      CONNECTEDK8S_VERSION: $(connectedk8s.version)
