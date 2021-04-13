@@ -8,5 +8,5 @@ steps:
     displayName: "Run upstream e2e tests"
     env: 
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)
-      CTR_TAG: v$(CHART_TAG)
+      CTR_TAG: v$(CHART_VERSION)
     workingDirectory: $(System.DefaultWorkingDirectory)/osm
