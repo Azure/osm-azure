@@ -8,8 +8,8 @@ Azure:
     Distribution: <cluster_distribution>
 
 OpenServiceMesh:
-    ignoreNamespaces: "kube-system azure-arc arc-osm-system"
-    compatibleDistros: "AKS GKE AWS rancher canonical openshift"
+  ignoreNamespaces: "kube-system azure-arc arc-osm-system"
+  testedDistros: "aks gke eks rancher_rke openshift"
 
 osm:
   OpenServiceMesh:
