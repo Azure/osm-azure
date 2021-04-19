@@ -20,7 +20,7 @@ osm:
     enablePrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.17.1
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.17.2
   
 alpine:
   image:
