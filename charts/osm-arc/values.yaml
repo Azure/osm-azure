@@ -21,7 +21,15 @@ osm:
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
     sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.17.2
-  
+    osmcontroller:
+      podLabels: {
+        app.kubernetes.io/component: osm-controller
+      }
+    injector:
+      podLabels: {
+        app.kubernetes.io/component: osm-controller
+      }
+
 alpine:
   image:
     name: "mcr.microsoft.com/azure-policy/alpine"
