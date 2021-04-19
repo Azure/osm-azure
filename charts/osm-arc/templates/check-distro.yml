@@ -1,3 +1,7 @@
+# 
+# The job in this YAML file verifies if the current k8s distribution has been tested for osm-arc. 
+# The job is executed in helm pre-install phase of OSM release lifecycle. 
+#
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -44,12 +48,15 @@ spec:
               token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
               testedDistrosList=${testedDistros}
               current=${currentDistro}
+              tested=false
               for distro in ${testedDistrosList}
               do
                 if [[ "${distro}" == "${current}" ]]; then
                   echo "${current} is a tested distribution for osm-arc"
-                  exit 0
+                  tested=true
                 fi
               done
-              echo "Warning: ${current} is not a tested distribution for osm-arc"
-              exit 1
+              if [[ "$tested" = "false" ]]; then
+                echo "Warning: ${current} is not a tested distribution for osm-arc"
+                exit 0
+              fi 
