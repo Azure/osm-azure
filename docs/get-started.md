@@ -1,4 +1,4 @@
-# Get Started with Open Service Mesh Arc extension
+# Get Started with Open Service Mesh Arc Add-on
 Use the following scripts to publish chart, enable connected cluster, and add OSM Arc extension.
 
 ## Prerequisites
