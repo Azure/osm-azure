@@ -9,7 +9,7 @@ Use the following scripts to publish chart, enable connected cluster, and add OS
 
 > Note: Get latest wheels: https://github.com/Azure/azure-arc-kubernetes-preview/tree/master/extensions
 
-1. Install the latest [connectedk8s](https://docs.microsoft.com/en-us/cli/azure/connectedk8s?view=azure-cli-latest).
+1. Install the latest [connectedk8s](https://docs.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster).
 ```bash
 WHEEL="<location of the Azure CLI Python wheel file>"
 az extension add --source $WHEEL --yes || true
