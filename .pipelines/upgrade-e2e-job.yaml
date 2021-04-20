@@ -2,9 +2,9 @@ trigger:
   branches:
     include:
     - main
-  tags: 
+  paths:
     include:
-    - v*
+      - charts/osm-arc/Chart.yaml
 
 pr:
   branches:
