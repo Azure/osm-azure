@@ -1,5 +1,5 @@
 # Get Started with Open Service Mesh Arc Add-on
-Use the following scripts to publish chart, enable connected cluster, and add OSM Arc extension.
+Use the following scripts to publish chart, enable connected cluster, and add OSM Arc add-on.
 
 ## Prerequisites
 - Running Kubernetes cluster
