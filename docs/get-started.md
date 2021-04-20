@@ -81,8 +81,7 @@ az k8s-extension create \
   --release-train=staging \
   --name=osm \
   --release-namespace=arc-osm-system \
-  --version=0.8.2 \
-  --subscription=<Azure-subscription>
+  --version=0.8.2
 ```
 
 
@@ -94,7 +93,6 @@ az k8s-extension delete \
   --resource-group=<Azure-resource-group> \
   --cluster-type=connectedClusters \
   --name=osm \
-  --subscription=<Azure-subscription> \
   --yes || true
 ```
 
