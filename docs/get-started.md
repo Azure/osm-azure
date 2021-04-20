@@ -42,12 +42,6 @@ az feature register \
 ```
 
 ```bash
-az feature register \
-  --namespace Microsoft.KubernetesConfiguration \
-  --name extensions
-```
-
-```bash
 az provider register \
   --namespace Microsoft.ExtendedLocation
 ```
