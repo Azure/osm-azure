@@ -31,12 +31,6 @@ az account set --subscription=<your-Azure-subscription-ID>
 
 ```bash
 az feature register \
-  --namespace Microsoft.Kubernetes \
-  --name previewAccess
-```
-
-```bash
-az feature register \
   --namespace Microsoft.KubernetesConfiguration \
   --name sourceControlConfiguration
 ```
