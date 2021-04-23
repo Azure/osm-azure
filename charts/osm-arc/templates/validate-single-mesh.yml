@@ -1,0 +1,63 @@
+# 
+# The job in this YAML file verifies if the current k8s distribution has been tested for osm-arc. 
+# The job is executed in helm pre-install phase of OSM release lifecycle. 
+#
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: validate-single-mesh-account
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validate-single-mesh
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook-weight": "15"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeededd
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      labels:
+        app: validate-single-mesh
+    spec:
+      serviceAccountName: validate-single-mesh
+      automountServiceAccountToken: true
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: validate-single-mesh
+          image: {{ .Values.alpine.image.name }}:{{ .Values.alpine.image.tag }}
+          imagePullPolicy: IfNotPresent
+          env: 
+            - name: testedDistros
+              value: {{ .Values.OpenServiceMesh.testedDistros }}
+            - name: currentDistro
+              value: {{ .Values.Azure.Cluster.Distribution }}
+          command: 
+            - "/bin/sh"
+            - "-ec"
+            - |
+              set -o pipefail
+              token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              testedDistrosList=${testedDistros}
+              current=${currentDistro}
+              tested=false
+              for distro in ${testedDistrosList}
+              do
+                if [[ "${distro}" == "${current}" ]]; then
+                  echo "${current} is a tested distribution for osm-arc"
+                  tested=true
+                fi
+              done
+              if [[ "$tested" = "false" ]]; then
+                echo "Warning: ${current} is not a tested distribution for osm-arc"
+                exit 0
+              fi 
