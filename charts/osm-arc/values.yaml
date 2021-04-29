@@ -35,3 +35,8 @@ alpine:
   image:
     name: "mcr.microsoft.com/azure-policy/alpine"
     tag: "prod_20200505.1"
+
+kubectl:
+  image:
+    name: "bitnami/kubectl"
+    tag: "latest"

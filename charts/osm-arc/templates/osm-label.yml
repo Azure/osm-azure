@@ -8,7 +8,7 @@ metadata:
   name: osm-label-account
   namespace: {{ .Release.Namespace }}
   annotations:
-    "helm.sh/hook-weight": "20"
+    "helm.sh/hook-weight": "25"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 ---
@@ -17,7 +17,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: osm-label-cluster-role
   annotations:
-    "helm.sh/hook-weight": "25"
+    "helm.sh/hook-weight": "30"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 rules:
@@ -41,7 +41,7 @@ metadata:
   name: osm-label-role-binding
   namespace: kube-system
   annotations:
-    "helm.sh/hook-weight": "30"
+    "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 subjects:
@@ -59,7 +59,7 @@ metadata:
   name: osm-label-role-binding
   namespace: azure-arc
   annotations:
-    "helm.sh/hook-weight": "30"
+    "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 subjects:
@@ -77,7 +77,7 @@ metadata:
   name: osm-label-role-binding
   namespace: arc-osm-system
   annotations:
-    "helm.sh/hook-weight": "30"
+    "helm.sh/hook-weight": "35"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 subjects:
@@ -95,7 +95,7 @@ metadata:
   name: osm-label
   namespace: {{ .Release.Namespace }}
   annotations:
-    "helm.sh/hook-weight": "35"
+    "helm.sh/hook-weight": "40"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
