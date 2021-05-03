@@ -40,3 +40,8 @@ kubectl:
   image:
     name: "bitnami/kubectl"
     tag: "latest"
+
+helm:
+  image:
+    name: "alpine/helm"
+    tag: "latest"
