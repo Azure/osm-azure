@@ -1,5 +1,0 @@
-steps: 
-  - bash: | 
-      helm dependency update $(chart.path)
-      helm package --destination $(image.dir) $(chart.path) --debug
-    displayName: Package the helm chart
