@@ -1,6 +1,0 @@
-dependencies:
-- name: osm
-  repository: https://openservicemesh.github.io/osm
-  version: 0.8.3
-digest: sha256:ee2c2ed4624f337202533a1411113fd285b470cfd129169b344fc42bea381374
-generated: "2021-05-04T17:58:39.8757326-04:00"
