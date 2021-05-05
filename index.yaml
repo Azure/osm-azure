@@ -1,0 +1,154 @@
+apiVersion: v1
+entries:
+  osm-arc:
+  - apiVersion: v2
+    appVersion: v0.8.3
+    created: "2021-05-04T22:18:28.8516007-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.8.3
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 792cdb905a93df1298f190c5cff8a888bdbd7c7951aa197755830f9837554c2f
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.8.3.tgz
+    version: 0.8.3
+  - apiVersion: v2
+    appVersion: v0.8.3-rc.1
+    created: "2021-05-04T22:18:28.8502085-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.8.3-rc.1
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 59505755c4b77d32ac789ffaf5a1073dd4263a26ca7bb081e1f044b793a3a0f1
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.8.3-rc.1.tgz
+    version: 0.8.3-rc.1
+  - apiVersion: v2
+    appVersion: v0.8.2
+    created: "2021-05-04T22:18:28.8487246-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.8.2
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: edb13c7611a6b6bc62c864f7c7533a3615de795b65f473229c18f83bed81545e
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.8.2.tgz
+    version: 0.8.2
+  - apiVersion: v2
+    appVersion: v0.8.0-rc.2
+    created: "2021-05-04T22:18:28.8472092-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.8.0-rc.2
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 8015bb213cd64cfabf8556934a2669d6697a9d6da6f4430dfee11fc7fa4eff58
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.8.0-rc.2.tgz
+    version: 0.8.0-rc.2
+  - apiVersion: v2
+    appVersion: v0.8.0-rc.1
+    created: "2021-05-04T22:18:28.8457731-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.8.0-rc.1
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 3515c7cdae6acd64d9ea6e6ee43a0121bbd170f03883b78b4ebb15ff5295ecfe
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.8.0-rc.1.tgz
+    version: 0.8.0-rc.1
+  - apiVersion: v2
+    appVersion: v0.7.0
+    created: "2021-05-04T22:18:28.844343-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.7.0
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 8e6885d92322bcd614263e77cb75a9a2dfb0c292c3c88bae7328ae914bc1457a
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.7.0.tgz
+    version: 0.7.0
+  - apiVersion: v2
+    appVersion: v0.7.0-rc.1.1
+    created: "2021-05-04T22:18:28.8414554-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.7.0-rc.1
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 759abf68b721f7c82486300a7a518ccf4c895cfad055f0e92dbc0f3a06ff959b
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.7.0-rc.1.1.tgz
+    version: 0.7.0-rc.1.1
+  - apiVersion: v2
+    appVersion: v0.7.0-rc.1
+    created: "2021-05-04T22:18:28.8429016-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.7.0-rc.1
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 9a52203d831bf5cfa63d8289518c6cf95c035d01bed418d62e4ec7bca8f446d1
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.7.0-rc.1.tgz
+    version: 0.7.0-rc.1
+  - apiVersion: v2
+    appVersion: v0.6.1
+    created: "2021-05-04T22:18:28.8398434-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.6.1
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 037a0470b167b2a96a25e5e738acb91fd904bb1dd45fd88ed62698243d8bfdc4
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: v0.6.0
+    created: "2021-05-04T22:18:28.8371665-04:00"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 0.6.0
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: b2f3f28e07709c9cab58c06d0b9562d6b8803588ee37cc14811fc9ef5083dad9
+    name: osm-arc
+    type: application
+    urls:
+    - https://azure.github.io/osm-azure/osm-arc-0.6.0.tgz
+    version: 0.6.0
+generated: "2021-05-04T22:18:28.8355614-04:00"
