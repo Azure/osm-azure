@@ -12,7 +12,7 @@ jobs:
     - template: templates/install-helm3.yaml
     - template: templates/install-oras.yaml
     - template: templates/install-bats.yaml
-    - template: tempaltes/install-jq.yaml
+    - template: templates/install-jq.yaml
     - template: templates/package-helm-chart.yaml
     - template: templates/publish-helm-chart.yaml
       parameters:
