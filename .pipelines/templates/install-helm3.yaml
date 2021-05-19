@@ -4,7 +4,6 @@ parameters:
 steps:
   - bash: |
       curl -LO https://get.helm.sh/helm-${{ parameters.version }}-linux-amd64.zip
-      sudo apt-get install unzip
       unzip -o helm-${{ parameters.version }}-linux-amd64.zip
     displayName: Install Helm
     workingDirectory: $(Pipeline.Workspace)

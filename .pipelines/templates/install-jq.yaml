@@ -1,5 +1,0 @@
-steps: 
-  - bash: |
-       sudo apt-get install jq -y
-    displayName: Install jq
-    workingDirectory: $(Pipeline.Workspace)
