@@ -13,7 +13,7 @@ pool: Upstream Pool
 variables:
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   upstream.repo: https://github.com/openservicemesh/osm
-  CHART_VERSION: 0.8.4
+  CHART_VERSION: $(OSM_VERSION)
 
 stages:
 - stage: run_e2e
