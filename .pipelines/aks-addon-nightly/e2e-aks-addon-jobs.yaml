@@ -1,0 +1,12 @@
+jobs:
+  - job: test_osm_aks_addon
+    pool: Upstream Pool
+    workspace:
+      clean: all
+    steps:
+    - template: ../templates/checkout-upstream-repo.yaml
+    - template: ../templates/aks-setup.yaml
+    - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml
+    - template: ../templates/run-upstream-e2e.yaml
+    - template: ../templates/debug-resources.yaml
+    - template: ../templates/aks-cleanup.yaml

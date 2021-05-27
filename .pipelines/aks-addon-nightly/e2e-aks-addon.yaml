@@ -1,0 +1,21 @@
+trigger: none
+
+schedules:
+  - cron: "0 0 * * *"
+    always: true
+    displayName: "OSM AKS Addon Nightly Test"
+    branches:
+      include:
+        - main
+
+pool: Upstream Pool
+
+variables:
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+  upstream.repo: https://github.com/openservicemesh/osm
+  CHART_VERSION: $(OSM_VERSION)
+
+stages:
+- stage: run_e2e
+  jobs:
+    - template: e2e-aks-addon-jobs.yaml
