@@ -115,6 +115,8 @@ spec:
       automountServiceAccountToken: true
       restartPolicy: Never
       terminationGracePeriodSeconds: 0
+      nodeSelector:
+        beta.kubernetes.io/os: linux
       containers:
         - name: osm-label
           image: {{ .Values.alpine.image.name }}:{{ .Values.alpine.image.tag }}
