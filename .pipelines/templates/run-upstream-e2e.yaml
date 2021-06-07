@@ -3,6 +3,7 @@ steps:
       sleep 180
     displayName: "Add delay before running upstream e2es"
   - bash: |
+      git checkout v$(CHART_VERSION)
       make build-osm
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60m -installType=NoInstall -OsmNamespace=$(release.namespace)
     displayName: "Run upstream e2e tests"
