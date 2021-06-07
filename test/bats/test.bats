@@ -32,11 +32,6 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
-@test "configmap has been deployed" {
-    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get configmap/osm-config -n arc-osm-system"
-    assert_success
-}
-
 @test "mutating webhook has been deployed" {
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get mutatingwebhookconfigurations.admissionregistration.k8s.io arc-osm-webhook-osm"
     assert_success
