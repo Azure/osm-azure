@@ -1,4 +1,4 @@
 steps:
   - bash: |
-      git clone -b v${CHART_VERSION} $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
-    displayName: Checkout $(upstream.repo) @ v${CHART_VERSION}
+      git clone $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+    displayName: Checkout $(upstream.repo)

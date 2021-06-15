@@ -1,11 +1,23 @@
 steps:
   - bash: |
+      git checkout v$(CHART_VERSION)
       crd_changes=$(git diff --name-only "v${LATEST_PUBLISHED_TAG}".."v${CHART_VERSION}" -- charts/osm/crds)
-      if ! [[ -z "$crd_changes" ]]; then
+      echo "##vso[task.setvariable variable=CRD_CHANGES]$crd_changes"
+    displayName: Verify if CRD changes are necessary
+    workingDirectory: $(System.DefaultWorkingDirectory)/osm
+  - bash: |
+      git checkout v$(LATEST_PUBLISHED_TAG)
+      if ! [[ -z "$(CRD_CHANGES)" ]]; then
         echo "Deleting CRDs"
         ./scripts/cleanup/crd-cleanup.sh
+      fi
+    displayName: Delete old CRDS if necessary
+    workingDirectory: $(System.DefaultWorkingDirectory)/osm
+  - bash: |
+      git checkout v$(CHART_VERSION)
+      if ! [[ -z "$(CRD_CHANGES)" ]]; then
         echo "Installing new CRDs"
         kubectl apply -f charts/osm/crds
       fi
-    displayName: Delete old CRDS and install new ones if necessary
+    displayName: Install new CRDS if necessary
     workingDirectory: $(System.DefaultWorkingDirectory)/osm
