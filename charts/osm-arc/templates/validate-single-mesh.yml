@@ -89,21 +89,18 @@ spec:
               osm_namespaces=$(kubectl get deployments -l app=osm-controller -A -o=jsonpath={..metadata.namespace})
               for namespace in $osm_namespaces
               do
-                for validateNamespace in ${validatenamespaces} 
-                do
-                  if [ "$namespace" = "kube-system" ]; then
-                    if [ "${enforcesinglemesh}" = "true" ]; then
-                      echo "osm already exists in namespace $namespace. osm-arc enforces single-mesh cluster."
+                if [ "$namespace" = "kube-system" ]; then
+                  if [ "${enforcesinglemesh}" = "true" ]; then
+                    echo "osm already exists in namespace $namespace. osm-arc enforces single-mesh cluster."
+                    exit 1
+                  else
+                    aks_enforce_single_mesh=$(kubectl get deployment -l app=osm-controller -n kube-system -o jsonpath={.items..metadata.labels..enforceSingleMesh})
+                    if [ "$aks_enforce_single_mesh" = "true" ]; then
+                      echo "osm in namespace $namespace already exists and enforces single-mesh cluster."
                       exit 1
-                    else
-                      aks_enforce_single_mesh=$(kubectl get deployment -l app=osm-controller -n kube-system -o jsonpath={.items..metadata.labels..enforceSingleMesh})
-                      if [ "$aks_enforce_single_mesh" = "true" ]; then
-                        echo "osm in namespace $namespace already exists and enforces single-mesh cluster."
-                        exit 1
-                      fi
                     fi
-                  fi 
-                done
+                  fi
+                fi 
               done
         - name: validate-single-mesh-oss
           image: {{ .Values.helm.image.name }}:{{ .Values.helm.image.tag }}
