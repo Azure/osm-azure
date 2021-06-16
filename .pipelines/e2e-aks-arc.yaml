@@ -5,7 +5,7 @@ parameters:
 
 jobs: 
   - job: test_osm_chart_arc_cluster
-    pool: Upstream Pool
+    pool: staging-pool
     workspace: 
       clean: all
     steps: 

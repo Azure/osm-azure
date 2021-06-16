@@ -1,6 +1,6 @@
 jobs:
   - job: test_osm_aks_addon
-    pool: Upstream Pool
+    pool: staging-pool
     workspace:
       clean: all
     steps:

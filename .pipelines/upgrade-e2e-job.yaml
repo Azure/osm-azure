@@ -10,9 +10,9 @@ pr:
   branches:
     include:
     - main
-  #paths:
-    #include:
-      #- charts/osm-arc/Chart.yaml
+  paths:
+    include:
+      - charts/osm-arc/Chart.yaml
 
 variables:
   chart.name: osm-arc
