@@ -8,8 +8,8 @@ Azure:
     Distribution: <cluster_distribution>
 
 OpenServiceMesh:
-    ignoreNamespaces: "kube-system azure-arc arc-osm-system"
-    testedDistros: "aks gke eks openshift rancher_rke"
+  ignoreNamespaces: "kube-system azure-arc arc-osm-system"
+  testedDistros: "aks gke eks openshift rancher_rke"
 
 osm:
   OpenServiceMesh:
@@ -18,11 +18,11 @@ osm:
     image:
       registry: mcr.microsoft.com/oss/openservicemesh
     enforceSingleMesh: true
-    enablePrometheus: false
+    deployPrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.17.3
-    osmcontroller:
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.18.3
+    osmController:
       podLabels: {
         app.kubernetes.io/component: osm-controller
       }
