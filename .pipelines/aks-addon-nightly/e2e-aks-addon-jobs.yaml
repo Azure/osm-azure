@@ -8,5 +8,7 @@ jobs:
     - template: ../templates/aks-setup.yaml
     - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml
     - template: ../templates/run-upstream-e2e.yaml
+      parameters:
+        aksAddonRun: true
     - template: ../templates/debug-resources.yaml
     - template: ../templates/aks-cleanup.yaml
