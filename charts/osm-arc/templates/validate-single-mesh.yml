@@ -80,8 +80,6 @@ spec:
           env: 
             - name: enforcesinglemesh
               value: {{ .Values.osm.OpenServiceMesh.enforceSingleMesh | quote }}
-            - name: validatenamespaces
-              value: {{ .Values.OpenServiceMesh.validateNamespaces }}
           command: 
             - "/bin/sh"
             - "-ec"
@@ -130,6 +128,7 @@ spec:
                 chart_namespace="${temp#\"}"
                 if [[ $(expr match "$chart_name" 'osm') != 0 ]]; then
                   if [[ $(expr match "$chart_name" 'osm-arc') != 0 ]]; then
+                    # For upgrades, osm-arc should be allowed to be re-installed in the existing release namespace
                     if [[ "$chart_namespace" != "${releasenamespace}" ]]; then
                       echo "osm-arc is already installed in namespace: $chart_namespace"
                       exit 1
