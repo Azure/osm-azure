@@ -74,7 +74,7 @@ spec:
       restartPolicy: Never
       terminationGracePeriodSeconds: 0
       containers:
-        - name: validate-single-mesh-aks-addon
+        - name: validate-single-mesh-kubectl
           image: {{ .Values.kubectl.image.name }}:{{ .Values.kubectl.image.tag }}
           imagePullPolicy: IfNotPresent
           env: 
@@ -100,7 +100,7 @@ spec:
                   fi
                 fi 
               done
-        - name: validate-single-mesh-oss
+        - name: validate-single-mesh-helm
           image: {{ .Values.helm.image.name }}:{{ .Values.helm.image.tag }}
           imagePullPolicy: IfNotPresent
           env: 
