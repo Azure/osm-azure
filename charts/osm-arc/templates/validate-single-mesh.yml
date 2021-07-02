@@ -1,0 +1,150 @@
+# 
+# The job in this YAML file verifies if the current k8s distribution has been tested for osm-arc. 
+# The job is executed in helm pre-install phase of OSM release lifecycle. 
+#
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: validate-single-mesh-account
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: validate-single-mesh-role
+  annotations:
+    "helm.sh/hook-weight": "10"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+- apiGroups: ["", "apps"]
+  resources: ["namespaces", "pods", "deployments", "secrets"]
+  verbs: ["get", "list"]
+{{- if eq .Values.Azure.Cluster.Distribution "openshift" }}
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+    - anyuid
+  resources:
+    - securitycontextconstraints
+  verbs:
+    - use
+{{- end }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: validate-single-mesh-role-binding
+  annotations:
+    "helm.sh/hook-weight": "15"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+subjects:
+- kind: ServiceAccount
+  name: validate-single-mesh-account
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: validate-single-mesh-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validate-single-mesh
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook-weight": "20"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeededd
+spec:
+  ttlSecondsAfterFinished: 0
+  backoffLimit: 5
+  template:
+    metadata:
+      labels:
+        app: validate-single-mesh
+    spec:
+      serviceAccountName: validate-single-mesh-account
+      automountServiceAccountToken: true
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: validate-single-mesh-kubectl
+          image: {{ .Values.kubectl.image.name }}:{{ .Values.kubectl.image.tag }}
+          imagePullPolicy: IfNotPresent
+          env: 
+            - name: enforcesinglemesh
+              value: {{ .Values.osm.OpenServiceMesh.enforceSingleMesh | quote }}
+          command: 
+            - "/bin/sh"
+            - "-ec"
+            - |
+              osm_namespaces=$(kubectl get deployments -l app=osm-controller -A -o=jsonpath={..metadata.namespace})
+              for namespace in $osm_namespaces
+              do
+                if [ "$namespace" = "kube-system" ]; then
+                  if [ "${enforcesinglemesh}" = "true" ]; then
+                    echo "osm already exists in namespace $namespace. osm-arc enforces single-mesh cluster."
+                    exit 1
+                  else
+                    aks_enforce_single_mesh=$(kubectl get deployment -l app=osm-controller -n kube-system -o jsonpath={.items..metadata.labels..enforceSingleMesh})
+                    if [ "$aks_enforce_single_mesh" = "true" ]; then
+                      echo "osm in namespace $namespace already exists and enforces single-mesh cluster."
+                      exit 1
+                    fi
+                  fi
+                fi 
+              done
+        - name: validate-single-mesh-helm
+          image: {{ .Values.helm.image.name }}:{{ .Values.helm.image.tag }}
+          imagePullPolicy: IfNotPresent
+          env: 
+            - name: enforcesinglemesh
+              value: {{ .Values.osm.OpenServiceMesh.enforceSingleMesh | quote }}
+            - name: releasenamespace
+              value: {{ .Release.Namespace }}
+          command: 
+            - "/bin/sh"
+            - "-ec"
+            - |
+              apk add --no-cache bash
+              bash
+              apk add jq
+              i=0
+              helm_list=$(helm ls --all --all-namespaces -o json | jq)
+              chart=$(echo $helm_list | jq .[$i])
+              while [[ "$chart" != "null" ]]
+              do
+                chart_name=$(echo $chart | jq .chart)
+                chart_namespace=$(echo $chart | jq .namespace)
+                temp="${chart_name%\"}"
+                chart_name="${temp#\"}"
+                temp="${chart_namespace%\"}"
+                chart_namespace="${temp#\"}"
+                if [[ $(expr match "$chart_name" 'osm') != 0 ]]; then
+                  if [[ $(expr match "$chart_name" 'osm-arc') != 0 ]]; then
+                    # For upgrades, osm-arc should be allowed to be re-installed in the existing release namespace
+                    if [[ "$chart_namespace" != "${releasenamespace}" ]]; then
+                      echo "osm-arc is already installed in namespace: $chart_namespace"
+                      exit 1
+                    fi
+                  elif [[ "${enforcesinglemesh}" == "true" ]]; then
+                    echo "$chart_name already exists in namespace $chart_namespace. osm-arc enforces single-mesh cluster."
+                    exit 1
+                  else
+                    oss_release_name=$(echo $chart | jq .name)
+                    oss_enforce_single_mesh=$(helm get values $oss_release_name -n $namespace --all -o json | jq .osm.OpenServiceMesh.enforceSingleMesh)
+                    if [[ "$oss_enforce_single_mesh" = "true" ]]; then
+                      echo "$chart_name already exists in namespace $chart_namespace. $chart_name enforces single-mesh cluster."
+                      exit 1
+                    fi
+                  fi
+                fi
+                i=`expr $i + 1`
+                chart=$(echo $helm_list | jq .[$i])
+              done
