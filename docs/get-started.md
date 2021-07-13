@@ -21,29 +21,9 @@ WHEEL="<location of the Azure CLI Python wheel file>"
 az extension add --source $WHEEL --yes || true
 ```
 
-## Enable Arc Features
-The following steps need to be run only once for a given subscription:
-
 _Optional_: set default Azure subscription for the `az` CLI:
 ```bash
 az account set --subscription=<your-Azure-subscription-ID>
-```
-
-```bash
-az feature register \
-  --namespace Microsoft.KubernetesConfiguration \
-  --name sourceControlConfiguration
-```
-
-```bash
-az provider register \
-  --namespace Microsoft.ExtendedLocation
-```
-
-```bash
-az feature register \
-  --namespace Microsoft.ExtendedLocation \
-  --name CustomLocations-ppauto
 ```
 
 ## Connect Cluster and Install Arc Extension
