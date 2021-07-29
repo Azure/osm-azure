@@ -73,6 +73,9 @@ spec:
       automountServiceAccountToken: true
       restartPolicy: Never
       terminationGracePeriodSeconds: 0
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
       containers:
         - name: validate-single-mesh-kubectl
           image: {{ .Values.kubectl.image.name }}:{{ .Values.kubectl.image.tag }}
