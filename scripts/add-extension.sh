@@ -7,7 +7,6 @@ EXTENSION_NAME="${EXTENSION_NAME:-osm}"
 EXTENSION_SETTINGS=$1
 RELEASE_TRAIN="${RELEASE_TRAIN:-staging}"
 
-
 az account set --subscription="$SUBSCRIPTION" > /dev/null 2>&1
 
 # confirm
