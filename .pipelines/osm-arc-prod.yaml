@@ -15,5 +15,5 @@ jobs:
       displayName: "Run osm-azure e2e tests"
       env: 
         EXTENSION_TAG: $(EXTENSION_VERSION)
-      KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+        KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: templates/aks-cleanup.yaml
