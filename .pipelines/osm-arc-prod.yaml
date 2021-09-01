@@ -4,6 +4,7 @@ jobs:
     workspace: 
       clean: all
     steps:
+    - template: templates/install-helm3.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
     - template: templates/add-arc-extension.yaml
