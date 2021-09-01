@@ -2,6 +2,9 @@ parameters:
   - name: imageTag
     type: string
     default: $(IMAGE_TAG)
+  - name: releaseTrain
+    type: string
+    default: "staging"
 
 steps:
   - bash: |
@@ -22,3 +25,4 @@ steps:
       EXTENSION_TAG: ${{ parameters.imageTag }}
       REGION: $(AZURE_LOCATION)
       RELEASE_NAMESPACE: $(release.namespace)
+      RELEASE_TRAIN: ${{ parameters.releaseTrain }}

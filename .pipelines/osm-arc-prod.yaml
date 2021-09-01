@@ -1,0 +1,19 @@
+jobs: 
+  - job: test_osm_arc_prod
+    pool: staging-pool
+    workspace: 
+      clean: all
+    steps:
+    - template: templates/aks-setup.yaml
+    - template: templates/enable-arc.yaml
+    - template: templates/add-arc-extension.yaml
+      parameters: 
+        imageTag: $(EXTENSION_VERSION)
+        releaseTrain: $(EXTENSION_RELEASE_TRAIN)
+    - script: |
+        make test-e2e
+      displayName: "Run osm-azure e2e tests"
+      env: 
+        EXTENSION_TAG: $(EXTENSION_VERSION)
+      KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+    - template: templates/aks-cleanup.yaml

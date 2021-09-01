@@ -1,0 +1,9 @@
+trigger: none
+
+variables:
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+
+stages: 
+- stage: run_e2e
+  jobs:
+    - template: osm-arc-prod.yaml
