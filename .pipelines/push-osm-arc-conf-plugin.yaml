@@ -1,0 +1,7 @@
+jobs: 
+  - job: push_osm_arc_plugin
+    pool: staging-pool
+    workspace: 
+      clean: all
+    steps:
+    - template: 
