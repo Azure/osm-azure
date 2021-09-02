@@ -7,4 +7,4 @@ variables:
 stages: 
 - stage: push_conf_test_plugin
   jobs:
-    - template: push_osm_arc_conf_plugin.yaml
+    - template: push-osm-arc-conf-plugin.yaml
