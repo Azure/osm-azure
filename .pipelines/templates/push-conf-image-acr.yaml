@@ -7,5 +7,6 @@ steps:
       REGISTRY_NAME: $(REGISTRY_NAME)
   - bash: |
       docker push $(CONF_REPOSITORY_NAME):$(plugin.version)
+    displayName: Push conformance test image to ACR
     env:
       CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)

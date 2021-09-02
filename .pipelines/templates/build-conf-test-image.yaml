@@ -1,6 +1,6 @@
 steps:
   - bash: |
-      docker build $(plugin.path)/. -t $(CONF_REPOSITORY_NAME)/$(plugin.version)
+      docker build $(plugin.path)/. -t $(CONF_REPOSITORY_NAME):$(plugin.version)
     displayName: Build conformance test image
     env: 
       CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)
