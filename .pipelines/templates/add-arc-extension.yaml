@@ -12,8 +12,6 @@ steps:
     displayName: Install az k8s-extension
     env:
       SUBSCRIPTION: $(SUBSCRIPTION_ID)
-      K8S_EXTENSION_VERSION: $(k8sextension.version)
-      AZ_EXTENSION_LOCATION: $(AZ_EXTENSION_LOCATION)
   - bash: |
       echo "Image tag: ${{ parameters.imageTag }}"
       ./scripts/add-extension.sh

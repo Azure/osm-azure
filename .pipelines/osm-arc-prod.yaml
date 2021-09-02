@@ -4,6 +4,8 @@ jobs:
     workspace: 
       clean: all
     steps:
+    - template: templates/install-helm3.yaml
+    - template: templates/install-bats.yaml
     - template: templates/aks-setup.yaml
     - template: templates/enable-arc.yaml
     - template: templates/add-arc-extension.yaml
@@ -15,5 +17,5 @@ jobs:
       displayName: "Run osm-azure e2e tests"
       env: 
         EXTENSION_TAG: $(EXTENSION_VERSION)
-      KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+        KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: templates/aks-cleanup.yaml
