@@ -1,0 +1,11 @@
+steps: 
+  - bash: |
+      az login --identity > /dev/null 2>&1
+      az acr login --name $(REGISTRY_NAME) > /dev/null 2>&1
+    displayName: Login to acr
+    env: 
+      REGISTRY_NAME: $(REGISTRY_NAME)
+    bash: |
+      docker push $(CONF_REPOSITORY_NAME):$(plugin.version)
+    env:
+      CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)

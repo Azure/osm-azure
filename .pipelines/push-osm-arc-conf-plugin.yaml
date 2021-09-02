@@ -4,4 +4,6 @@ jobs:
     workspace: 
       clean: all
     steps:
-    - template: 
+    - template: templates/install-oras.yaml
+    - template: templates/build-conf-test-image.yaml
+    - template: templates/push-conf-image-acr.yaml
