@@ -5,7 +5,7 @@ steps:
     displayName: Login to acr
     env: 
       REGISTRY_NAME: $(REGISTRY_NAME)
-    bash: |
+  - bash: |
       docker push $(CONF_REPOSITORY_NAME):$(plugin.version)
     env:
       CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)
