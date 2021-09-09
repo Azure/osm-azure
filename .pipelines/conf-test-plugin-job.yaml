@@ -1,0 +1,10 @@
+trigger: none
+
+variables:
+  plugin.name: osm-arc
+  plugin.path: $(System.DefaultWorkingDirectory)/conformance/plugins/$(plugin.name)
+
+stages: 
+- stage: push_conf_test_plugin
+  jobs:
+    - template: push-osm-arc-conf-plugin.yaml

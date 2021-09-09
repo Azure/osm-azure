@@ -1,0 +1,12 @@
+steps: 
+  - bash: |
+      az login --identity > /dev/null 2>&1
+      az acr login --name $(CONF_REGISTRY_NAME) > /dev/null 2>&1
+    displayName: Login to acr
+    env: 
+      REGISTRY_NAME: $(CONF_REGISTRY_NAME)
+  - bash: |
+      docker push $(CONF_REPOSITORY_NAME):$(plugin.version)
+    displayName: Push conformance test image to ACR
+    env:
+      CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)
