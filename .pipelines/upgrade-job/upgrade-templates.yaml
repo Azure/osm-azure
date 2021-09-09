@@ -1,6 +1,6 @@
 steps:    
-  - template: templates/get-latest-tag.yaml
-  - template: templates/add-arc-extension.yaml
+  - template: ../templates/get-latest-tag.yaml
+  - template: ../templates/add-arc-extension.yaml
     parameters: 
       imageTag: $(LATEST_PUBLISHED_TAG)
   - script: |
@@ -9,5 +9,5 @@ steps:
     env: 
       EXTENSION_TAG: $(LATEST_PUBLISHED_TAG)
       KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  - template: templates/upgrade-CRDS.yaml
-  - template: templates/update-arc-addon.yaml
+  - template: ../templates/upgrade-CRDS.yaml
+  - template: ../templates/update-arc-addon.yaml
