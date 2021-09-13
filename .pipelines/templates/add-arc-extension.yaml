@@ -21,6 +21,6 @@ steps:
       RESOURCEGROUP: $(AZURE_CLUSTER_NAME)
       CLUSTERNAME: $(AZURE_CLUSTER_NAME)
       EXTENSION_TAG: ${{ parameters.imageTag }}
-      REGION: $(AZURE_LOCATION)
+      REGION: $(ARC_CLUSTER_LOCATION)
       RELEASE_NAMESPACE: $(release.namespace)
       RELEASE_TRAIN: ${{ parameters.releaseTrain }}

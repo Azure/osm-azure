@@ -6,7 +6,7 @@ steps:
   - script: |
       az login --identity > /dev/null 2>&1
 
-      az group create -n ${AZURE_CLUSTER_NAME} -l ${AZURE_LOCATION} > /dev/null 2>&1
+      az group create -n ${AZURE_CLUSTER_NAME} -l ${AKS_CLUSTER_LOCATION} > /dev/null 2>&1
 
       az aks create \
           -g ${AZURE_CLUSTER_NAME} \

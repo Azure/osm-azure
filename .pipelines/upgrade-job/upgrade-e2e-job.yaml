@@ -25,6 +25,6 @@ variables:
 stages: 
 - stage: run_e2e
   jobs:
-    - template: e2e-aks-arc.yaml
+    - template: ../pr-job/e2e-aks-arc.yaml
       parameters: 
         releaseE2E: true
