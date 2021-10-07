@@ -16,7 +16,7 @@ steps:
         git checkout $release_branch
       fi
       make build-osm
-      go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -test.timeout 60m -installType=NoInstall -OsmNamespace=$(release.namespace)
+      go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$(release.namespace)
     displayName: "Run upstream e2e tests"
     env:
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)

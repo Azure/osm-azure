@@ -9,5 +9,4 @@ steps:
     env: 
       EXTENSION_TAG: $(LATEST_PUBLISHED_TAG)
       KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  - template: ../templates/upgrade-CRDS.yaml
   - template: ../templates/update-arc-addon.yaml
