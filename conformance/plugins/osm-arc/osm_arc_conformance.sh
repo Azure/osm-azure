@@ -135,9 +135,9 @@ export CTR_TAG=v$OSM_ARC_VERSION
 make build-osm
 
 if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
-  go test ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1 | go-junit-report > ../../tmp/results/results.xml
+  go test ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1 | go-junit-report > ../../tmp/results/results.xml
 else
-  go test ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1 | go-junit-report > ../../tmp/results/results.xml
+  go test ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1 | go-junit-report > ../../tmp/results/results.xml
 fi
 
 sleep 120
