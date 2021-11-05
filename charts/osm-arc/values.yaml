@@ -40,10 +40,10 @@ alpine:
 
 kubectl:
   image:
-    name: "bitnami/kubectl"
-    tag: "latest"
+    name: "mcr.microsoft.com/oss/kubernetes/kubectl"
+    tag: "v1.22.3"
 
 helm:
   image:
-    name: "alpine/helm"
-    tag: "latest"
+    name: "mcr.microsoft.com/oss/openservicemesh/osm-arc/tools/osm-helm-cli"
+    tag: "3.7.1"
