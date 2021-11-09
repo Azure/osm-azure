@@ -4,6 +4,7 @@ jobs:
     workspace:
       clean: all
     steps:
+    - template: ../templates/install-helm3.yaml
     - template: ../templates/checkout-upstream-repo.yaml
     - template: ../templates/aks-setup.yaml
     - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml
