@@ -115,13 +115,11 @@ spec:
             - "/bin/sh"
             - "-ec"
             - |
-              apk add --no-cache bash
-              bash
-              apk add jq
               i=0
-              helm_list=$(helm ls --all --all-namespaces -o json | jq)
+              list=$(helm ls --all --all-namespaces -o json)
+              helm_list=$(helm ls --all --all-namespaces -o json | jq '.')
               chart=$(echo $helm_list | jq .[$i])
-              while [[ "$chart" != "null" ]]
+              while [ "$chart" != "null" ]
               do
                 chart_name=$(echo $chart | jq .chart)
                 chart_namespace=$(echo $chart | jq .namespace)
@@ -129,25 +127,30 @@ spec:
                 chart_name="${temp#\"}"
                 temp="${chart_namespace%\"}"
                 chart_namespace="${temp#\"}"
-                if [[ $(expr match "$chart_name" 'osm') != 0 ]]; then
-                  if [[ $(expr match "$chart_name" 'osm-arc') != 0 ]]; then
-                    # For upgrades, osm-arc should be allowed to be re-installed in the existing release namespace
-                    if [[ "$chart_namespace" != "${releasenamespace}" ]]; then
-                      echo "osm-arc is already installed in namespace: $chart_namespace"
-                      exit 1
-                    fi
-                  elif [[ "${enforcesinglemesh}" == "true" ]]; then
-                    echo "$chart_name already exists in namespace $chart_namespace. osm-arc enforces single-mesh cluster."
-                    exit 1
-                  else
-                    oss_release_name=$(echo $chart | jq .name)
-                    oss_enforce_single_mesh=$(helm get values $oss_release_name -n $namespace --all -o json | jq .osm.OpenServiceMesh.enforceSingleMesh)
-                    if [[ "$oss_enforce_single_mesh" = "true" ]]; then
-                      echo "$chart_name already exists in namespace $chart_namespace. $chart_name enforces single-mesh cluster."
-                      exit 1
-                    fi
-                  fi
-                fi
+                case "$chart_name" in
+                  *"osm"* )
+                  case "$chart_name" in
+                    *"osm-arc"* )
+                      if [ "$chart_namespace" != "${releasenamespace}" ]; then
+                        echo "osm-arc is already installed in namespace: $chart_namespace"
+                        exit 1
+                      fi ;;
+                    * )
+                      if [ "${enforcesinglemesh}" = "true" ]; then
+                        echo "$chart_name already exists in namespace $chart_namespace. osm-arc enforces single-mesh cluster."
+                        exit 1
+                      else
+                        oss_release_name=$(echo $chart | jq .name)
+                        oss_enforce_single_mesh=$(helm get values $oss_release_name -n $namespace --all -o json | jq .osm.OpenServiceMesh.enforceSingleMesh)
+                        if [ "$oss_enforce_single_mesh" = "true" ]; then
+                          echo "$chart_name already exists in namespace $chart_namespace. $chart_name enforces single-mesh cluster."
+                          exit 1
+                        fi
+                      fi 
+                      ;;
+                  esac
+                  ;;
+                esac
                 i=`expr $i + 1`
                 chart=$(echo $helm_list | jq .[$i])
               done
