@@ -18,6 +18,15 @@ RUN python3 -m pip install junit_xml
 
 RUN go get -u github.com/jstemmer/go-junit-report
 
+# upgrading libgssapi-krb5-2, libk5crypto3, libkrb5-3, and libkrb5support0 due to CVE-2021-37750
+# upgrading linux-libc-dev due to CVE-2020-16119, CVE-2021-22543, CVE-2021-3444, and more
+RUN apt-get update && apt-get -y upgrade && \ 
+    apt-get install libgssapi-krb5-2 && \
+    apt-get install libk5crypto3 && \
+    apt-get install libkrb5-3 && \
+    apt-get install libkrb5support0 && \
+    apt-get install linux-libc-dev
+
 COPY --from=lachlanevenson/k8s-kubectl:v1.20.5 /usr/local/bin/kubectl /usr/local/bin/kubectl
 
 COPY ./osm_arc_conformance.sh /
