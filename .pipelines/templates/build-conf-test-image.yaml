@@ -1,6 +1,23 @@
+parameters: 
+  - name: imageScan
+    type: boolean
+    default: false
+  - name: imageName
+    type: string
+    default: osm-arc-conformance
+  - name: imageTag
+    type: string
+    default: test
+
 steps:
   - bash: |
-      docker build $(plugin.path)/. -t $(CONF_REPOSITORY_NAME):$(plugin.version)
+      if [[ "${{ parameters.imageScan }}" == "True" ]]; then
+        # if image is being built for vulnerability scan
+        docker build $(plugin.path)/. -t ${{ parameters.imageName }}:${{ parameters.imageTag }}
+      else
+        # if image is being built to be pushed to osmazure ACR
+        docker build $(plugin.path)/. -t $(CONF_REPOSITORY_NAME):$(plugin.version)
+      fi
     displayName: Build conformance test image
     env: 
       CONF_REPOSITORY_NAME: $(CONF_REPOSITORY_NAME)

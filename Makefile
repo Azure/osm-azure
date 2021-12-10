@@ -45,6 +45,18 @@ e2e-cleanup:
 	kubectl delete namespace arc-osm-system
 	if [ $(TEST_KIND) ]; then kind delete cluster; fi
 
+install-trivy:
+	wget https://github.com/aquasecurity/trivy/releases/download/v0.18.0/trivy_0.18.0_Linux-64bit.tar.gz
+	tar zxvf trivy_0.18.0_Linux-64bit.tar.gz
+
+trivy-scan-image:
+	# Show all vulnerabilities in logs
+	./trivy "$(IMAGE_NAME):$(IMAGE_TAG)"
+
+
+	# Exit if medium, high, or critical vulnerability for OS vulnerabilities
+	./trivy --exit-code 1 --ignore-unfixed --vuln-type os --severity MEDIUM,HIGH,CRITICAL "$(IMAGE_NAME):$(IMAGE_TAG)" || exit 1
+
 # Install shellcheck with: "sudo apt install shellcheck"
 .PHONY: shellcheck
 shellcheck:
