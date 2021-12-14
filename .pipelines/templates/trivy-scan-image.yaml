@@ -1,0 +1,15 @@
+parameters: 
+  - name: imageName
+    type: string
+    default: osm-arc-conformance
+  - name: imageTag
+    type: string
+    default: test
+
+steps:
+  - bash: |
+      make trivy-scan-image
+    displayName: Scan ${{ parameters.imageName }}:${{ parameters.imageTag }} with trivy
+    env: 
+      IMAGE_NAME: ${{ parameters.imageName }}
+      IMAGE_TAG: ${{ parameters.imageTag }}

@@ -1,0 +1,28 @@
+trigger: none
+
+schedules:
+  - cron: "0 0 * * *"
+    always: true
+    displayName: "Nightly Image Vulnerability Scan"
+    branches:
+      include:
+        - main
+
+pr:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - tools/helm
+      - conformance/plugins/osm-arc
+
+variables:
+  plugin.name: osm-arc
+  plugin.path: $(System.DefaultWorkingDirectory)/conformance/plugins/$(plugin.name)
+  helm.cli.path: $(System.DefaultWorkingDirectory)/tools/helm
+
+stages: 
+- stage: scan_images
+  jobs:
+    - template: image-scan-job.yaml

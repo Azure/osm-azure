@@ -1,0 +1,4 @@
+steps:
+  - bash: |
+      make install-trivy
+    displayName: Install trivy
