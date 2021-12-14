@@ -22,8 +22,8 @@ steps:
       echo ${UNIQUE_TAG}
     displayName: Create Unique Tag
   - script: |
-      echo ${{ parameters.releaseTag }}
-      if [[ "${{ parameters.releaseTag }}" == "True" ]]; then
+      echo ${{ lower(parameters.releaseTag) }}
+      if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
         # Add "-release" for chart created by release job.  
         echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-release"
       else
