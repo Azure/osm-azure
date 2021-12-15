@@ -11,7 +11,7 @@ parameters:
 
 steps:
   - bash: |
-      if [[ "${{ parameters.imageScan }}" == "True" ]]; then
+      if [[ ${{ lower(parameters.imageScan) }} == "true" ]]; then
         # if image is being built for vulnerability scan
         docker build $(plugin.path)/. -t ${{ parameters.imageName }}:${{ parameters.imageTag }}
       else
