@@ -2,6 +2,11 @@ trigger:
   branches:
     include:
     - main
+  paths:
+    exclude:
+      - docs/*
+      - conformance/*
+      - tools/*
 
 pr:
   branches:
@@ -11,6 +16,7 @@ pr:
     exclude:
       - docs/*
       - conformance/*
+      - tools/*
 
 variables:
   chart.name: osm-arc
