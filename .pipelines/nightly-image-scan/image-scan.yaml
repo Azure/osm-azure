@@ -1,4 +1,11 @@
-trigger: none
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - tools/helm
+      - conformance/plugins/osm-arc
 
 schedules:
   - cron: "0 0 * * *"
