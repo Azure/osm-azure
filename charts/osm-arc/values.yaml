@@ -12,12 +12,12 @@ OpenServiceMesh:
   testedDistros: "aks gke eks openshift rancher_rke"
 
 osm:
-  OpenServiceMesh:
+  osm:
     enableDebugServer: false
     enablePermissiveTrafficPolicy: true
     image:
       registry: mcr.microsoft.com/oss/openservicemesh
-      tag: v0.11.1
+      tag: v1.0.0-rc.4
     enforceSingleMesh: true
     enableReconciler: true
     deployPrometheus: false
@@ -32,6 +32,14 @@ osm:
       podLabels: {
         app.kubernetes.io/component: osm-controller
       }
+    prometheus:
+      image: mcr.microsoft.com/oss/prometheus/prometheus:v2.18.1
+    curlImage: mcr.microsoft.com/oss/tutum/curl
+    tracing:
+      image: mcr.microsoft.com/oss/jaegertracing/all-in-one
+    grafana:
+      image: mcr.microsoft.com/oss/grafana/grafana:v8.2.2
+      rendererImage: mcr.microsoft.com/oss/grafana/grafana-image-renderer:v3.2.1
 
 alpine:
   image:
