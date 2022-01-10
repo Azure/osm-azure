@@ -82,7 +82,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env: 
             - name: enforcesinglemesh
-              value: {{ .Values.osm.OpenServiceMesh.enforceSingleMesh | quote }}
+              value: {{ .Values.osm.osm.enforceSingleMesh | quote }}
           command: 
             - "/bin/sh"
             - "-ec"
@@ -108,7 +108,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env: 
             - name: enforcesinglemesh
-              value: {{ .Values.osm.OpenServiceMesh.enforceSingleMesh | quote }}
+              value: {{ .Values.osm.osm.enforceSingleMesh | quote }}
             - name: releasenamespace
               value: {{ .Release.Namespace }}
           command: 
@@ -141,12 +141,14 @@ spec:
                         exit 1
                       else
                         oss_release_name=$(echo $chart | jq .name)
-                        oss_enforce_single_mesh=$(helm get values $oss_release_name -n $namespace --all -o json | jq .osm.OpenServiceMesh.enforceSingleMesh)
+                        temp="${oss_release_name%\"}"
+                        oss_release_name="${temp#\"}"
+                        oss_enforce_single_mesh=$(helm get values $oss_release_name -n $chart_namespace --all -o json | jq .osm.enforceSingleMesh)
                         if [ "$oss_enforce_single_mesh" = "true" ]; then
                           echo "$chart_name already exists in namespace $chart_namespace. $chart_name enforces single-mesh cluster."
                           exit 1
                         fi
-                      fi 
+                      fi
                       ;;
                   esac
                   ;;
