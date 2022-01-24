@@ -7,6 +7,7 @@ trigger:
       - docs/*
       - conformance/*
       - tools/*
+      - .github/*
 
 pr:
   branches:
@@ -17,6 +18,7 @@ pr:
       - docs/*
       - conformance/*
       - tools/*
+      - .github/*
 
 variables:
   chart.name: osm-arc
