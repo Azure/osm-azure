@@ -12,11 +12,10 @@ az account set --subscription="$SUBSCRIPTION" > /dev/null 2>&1
 helm ls --all --all-namespaces
 
 if [[ -z "$EXTENSION_SETTINGS" ]]; then
-   az k8s-extension create \
+   az k8s-extension update \
       --cluster-name $CLUSTERNAME \
       --resource-group $RESOURCEGROUP \
       --cluster-type connectedClusters \
-      --extension-type Microsoft.openservicemesh \
       --scope cluster \
       --release-train staging \
       --name $EXTENSION_NAME \
@@ -27,7 +26,6 @@ else
       --cluster-name $CLUSTERNAME \
       --resource-group $RESOURCEGROUP \
       --cluster-type connectedClusters \
-      --extension-type Microsoft.openservicemesh \
       --scope cluster \
       --release-train staging \
       --name $EXTENSION_NAME \
