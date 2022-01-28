@@ -6,7 +6,7 @@ trigger:
     include:
       - charts/osm-arc/Chart.yaml
       - scripts/add-extension.sh
-      - scripts/upgrade-extension.sh
+      - scripts/update-extension.sh
 
 pr:
   branches:
@@ -16,7 +16,7 @@ pr:
     include:
       - charts/osm-arc/Chart.yaml
       - scripts/add-extension.sh
-      - scripts/upgrade-extension.sh
+      - scripts/update-extension.sh
 
 variables:
   chart.name: osm-arc
