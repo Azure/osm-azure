@@ -5,10 +5,10 @@ Use the checklist below to ensure your release PR is complete before marking it 
 -->
 
 - [ ] I have ensured that required images are available in MCR:
-	1. osm-controller, osm-injector and init images of the corresponding chart version
+	1. osm-controller, osm-injector, osm-bootstrap, osm-crds and init images of the corresponding chart version
 	2. envoy image of version listed in osm-arc/oss values.yaml
     3. grafana, grafana-image-renderer, prometheus, jaegertracing/all-in-one image of version listed in osm-arc/oss values.yaml
-
+- [ ] I have ensured that all the images mentioned in the previous step (aside from grafana-image-renderer) are available for both amd64 and arm64 architectures
 - [ ] I have updated the Helm chart:
     1. Updated the chart version, app version and dependency version in charts/osm-arc/Chart.yaml    
     2. Made applicable updates to the osm-arc values.yaml if any were made in the upstream OSM chart
