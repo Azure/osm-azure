@@ -6,6 +6,9 @@
 Azure:
   Cluster:
     Distribution: <cluster_distribution>
+  Extension:
+    Name: ""
+    ResourceId: ""
 
 OpenServiceMesh:
   ignoreNamespaces: "kube-system azure-arc arc-osm-system"

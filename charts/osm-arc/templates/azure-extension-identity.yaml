@@ -1,0 +1,10 @@
+apiVersion: clusterconfig.azure.com/v1beta1
+kind: AzureExtensionIdentity
+metadata:
+  name: osm
+  namespace: azure-arc
+spec:
+  serviceAccounts:
+    - name: {{ .Release.Name }}
+      namespace: arc-osm-system
+  tokenNamespace: azure-arc
