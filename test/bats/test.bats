@@ -42,6 +42,26 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
+@test "mdm container has been deployed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep mdm"
+    assert_success
+}
+
+@test "msi-adapter container has been deployed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep msi-adapter"
+    assert_success
+}
+
+@test "telegraf container has been deployed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep telegraf"
+    assert_success
+}
+
+@test "prom-mdm-converter container has been deployed" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep prom-mdm-converter"
+    assert_success
+}
+
 @test "mutating webhook has been deployed" {
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get mutatingwebhookconfigurations.admissionregistration.k8s.io arc-osm-webhook-osm"
     assert_success
