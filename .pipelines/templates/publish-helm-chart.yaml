@@ -35,7 +35,8 @@ steps:
   - bash: |
       if [[ -n "${IMAGE_TAG}" ]]; then
         echo 'pushing chart'
-        oras push $(REPOSITORY_NAME):${IMAGE_TAG} ./$(chart.name)-${CHART_VERSION}.tgz:application/tar+gzip --debug
+        mv $(chart.name)-${CHART_VERSION}.tgz $(chart.name)-${IMAGE_TAG}.tgz
+        oras push $(REPOSITORY_NAME):${IMAGE_TAG} ./$(chart.name)-${IMAGE_TAG}.tgz:application/tar+gzip --debug
       else 
         echo "Helm chart was not published to staging ACR because $IMAGE_TAG was not set by the pipeline" && exit 1
       fi
@@ -43,6 +44,9 @@ steps:
     env:
       HELM_EXPERIMENTAL_OCI: 1
       REPOSITORY_NAME: $(REPOSITORY_NAME)
+  - task: ManifestGeneratorTask@0
+    inputs:
+      BuildDropPath: $(image.dir)
   - task: PublishBuildArtifacts@1
     displayName: Publish artifacts
     inputs:
