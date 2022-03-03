@@ -24,7 +24,7 @@ spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
         - name: mdm
-          image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220111.2
+          image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220224.1
           env:
             - name: ROLEINSTANCE
               valueFrom:
