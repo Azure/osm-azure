@@ -67,10 +67,23 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
+        - name: metrics-converter
+            image: stardotstar/provider-azure-arc-metrics-agent:v1.1.0-rc.0-linux-amd64
+            imagePullPolicy: Always
+        - name: telegraf
+            image: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf:1.21
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - name: telegraf-conf
+                mountPath: /etc/telegraf/telegraf.conf
+                subPath: telegraf.conf
       volumes:
         - name: mdm-config
           configMap:
             name: osm-mdm-config
+        - name: telegraf-conf
+          configMap:
+            name: osm-telegraf-config
 ---
 apiVersion: v1
 kind: ConfigMap
