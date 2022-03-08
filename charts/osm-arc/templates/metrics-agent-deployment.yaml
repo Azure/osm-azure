@@ -20,7 +20,7 @@ spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
         - name: mdm
-          image: {{ .Values.metrics.mdm.image.registry }}:{{ .Values.metrics.mdm.image.tag }}
+          image: {{ .Values.metrics.mdm.image.repository }}:{{ .Values.metrics.mdm.image.tag }}
           imagePullPolicy: {{ .Values.metrics.mdm.image.pullPolicy }}
           env:
             - name: ROLEINSTANCE
@@ -41,7 +41,7 @@ spec:
             - name: mdm-config
               mountPath: /tmp/geneva_mdm
         - name: msi-adapter
-          image: {{ .Values.metrics.msiAdapter.image.registry }}:{{ .Values.metrics.msiAdapter.image.tag }}
+          image: {{ .Values.metrics.msiAdapter.image.repository }}:{{ .Values.metrics.msiAdapter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.msiAdapter.image.pullPolicy }}
           env:
             - name: TOKEN_NAMESPACE
@@ -65,10 +65,10 @@ spec:
               add:
                 - NET_ADMIN
         - name: prom-mdm-converter
-          image: {{ .Values.metrics.promMdmConverter.image.registry }}:{{ .Values.metrics.promMdmConverter.image.tag }}
+          image: {{ .Values.metrics.promMdmConverter.image.repository }}:{{ .Values.metrics.promMdmConverter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
         - name: telegraf
-          image: {{ .Values.metrics.telegraf.image.registry }}:{{ .Values.metrics.telegraf.image.tag }}
+          image: {{ .Values.metrics.telegraf.image.repository }}:{{ .Values.metrics.telegraf.image.tag }}
           imagePullPolicy: {{ .Values.metrics.telegraf.image.pullPolicy }}
           volumeMounts:
             - name: telegraf-conf
