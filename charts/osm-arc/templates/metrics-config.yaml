@@ -1,6 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: osm-mdm-config
+  namespace: {{ .Release.Namespace }}
+data:
+  mdmconfig.json: "{\"imdsInfo\":[{ \"account\": \"{{ .Values.metrics.mdm.accountName }}\" }]}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: osm-telegraf-config
   namespace: {{ .Release.Namespace }}
 data:

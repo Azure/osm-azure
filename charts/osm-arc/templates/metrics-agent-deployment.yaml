@@ -81,11 +81,3 @@ spec:
         - name: telegraf-conf
           configMap:
             name: osm-telegraf-config
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: osm-mdm-config
-  namespace: {{ .Release.Namespace }}
-data:
-  mdmconfig.json: "{\"imdsInfo\":[{ \"account\": \"{{ .Values.metrics.mdm.accountName }}\" }]}"
