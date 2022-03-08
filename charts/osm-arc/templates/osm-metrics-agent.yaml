@@ -1,30 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mdm-agent-3
+  name: osm-metrics-agent
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: test
-    app.kubernetes.io/component: mdm-agent-3
+    app: osm-metrics-agent
+    {{- include "osm.arcLabels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: test
-      app.kubernetes.io/component: mdm-agent-3
+      app: osm-metrics-agent
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: test
-        app.kubernetes.io/component: mdm-agent-3
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        app: osm-metrics-agent
+        {{- include "osm.arcLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Release.Name }}
       containers:
         - name: mdm
-          image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220224.1
+          image: {{ .Values.metrics.mdm.image.registry }}:{{ .Values.metrics.mdm.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.mdm.image.pullPolicy }}
           env:
             - name: ROLEINSTANCE
               valueFrom:
@@ -33,19 +30,19 @@ spec:
             - name: CONFIG_OVERRIDES_FILE
               value: /tmp/geneva_mdm/mdmconfig.json
             - name: METRIC_ENDPOINT
-              value: https://az-int.int.microsoftmetrics.com/
+              value: {{ .Values.metrics.mdm.metricEndpoint }}
             - name: MDM_INPUT
               value: statsd_udp,statsd_tcp
             - name: MDM_LOG_LEVEL
               value: "Info"
             - name: ME_AZURE_ENV
-              value: "test"
+              value: {{ .Values.metrics.mdm.environment }}
           volumeMounts:
             - name: mdm-config
               mountPath: /tmp/geneva_mdm
         - name: msi-adapter
-          image: azurearcfork8sdev.azurecr.io/arc-preview/msi-adapter:0.0.10
-          imagePullPolicy: Always
+          image: {{ .Values.metrics.msiAdapter.image.registry }}:{{ .Values.metrics.msiAdapter.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.msiAdapter.image.pullPolicy }}
           env:
             - name: TOKEN_NAMESPACE
               value: azure-arc
@@ -67,12 +64,12 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
-        - name: metrics-converter
-          image: stardotstar/provider-azure-arc-metrics-agent:v1.1.0-rc.0-linux-amd64
-          imagePullPolicy: Always
+        - name: prom-mdm-converter
+          image: {{ .Values.metrics.promMdmConverter.image.registry }}:{{ .Values.metrics.promMdmConverter.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
         - name: telegraf
-          image: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf:1.21
-          imagePullPolicy: IfNotPresent
+          image: {{ .Values.metrics.telegraf.image.registry }}:{{ .Values.metrics.telegraf.image.tag }}
+          imagePullPolicy: {{ .Values.metrics.telegraf.image.pullPolicy }}
           volumeMounts:
             - name: telegraf-conf
               mountPath: /etc/telegraf/telegraf.conf
@@ -91,4 +88,4 @@ metadata:
   name: osm-mdm-config
   namespace: {{ .Release.Namespace }}
 data:
-  mdmconfig.json: "{\"imdsInfo\":[{ \"account\": \"OsmGenevaTesting\" }]}"
+  mdmconfig.json: "{\"imdsInfo\":[{ \"account\": \"{{ .Values.metrics.mdm.accountName }}\" }]}"

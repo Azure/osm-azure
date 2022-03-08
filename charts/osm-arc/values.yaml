@@ -44,6 +44,37 @@ osm:
       image: mcr.microsoft.com/oss/grafana/grafana:v8.2.2
       rendererImage: mcr.microsoft.com/oss/grafana/grafana-image-renderer:v3.2.1
 
+metrics:
+  mdm:
+    image:
+      registry: linuxgeneva-microsoft.azurecr.io/genevamdm
+      tag: master_20220216.1
+      pullPolicy: IfNotPresent
+    metricEndpoint: https://az-int.int.microsoftmetrics.com/
+    accountName: OsmGenevaTesting
+    environment: test # test | prod TODO
+
+  msiAdapter:
+    image:
+      registry: azurearcfork8sdev.azurecr.io/arc-preview/msi-adapter
+      tag: 0.0.10
+      pullPolicy: IfNotPresent
+
+  telegraf:
+    image:
+      registry: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf
+      tag: 1.21
+      pullPolicy: IfNotPresent
+    debugLogging: false
+    prometheusRemoteWritePort: 8090
+    prometheusRemoteWriteUrl: 127.0.0.1
+
+  promMdmConverter:
+    image:
+      registry: stardotstar/provider-azure-arc-metrics-agent # TODO: update
+      tag: v1.1.0-rc.0-linux-amd64
+      pullPolicy: IfNotPresent
+
 alpine:
   image:
     name: "mcr.microsoft.com/azure-policy/alpine"

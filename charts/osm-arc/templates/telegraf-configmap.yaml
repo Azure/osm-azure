@@ -22,7 +22,7 @@ data:
 
     [[outputs.http]]
       ## URL is the address to send metrics to
-      url = "http://localhost:8090/push"
+      url = "http://{{ .Values.metrics.telegraf.prometheusRemoteWriteUrl }}:{{ .Values.metrics.telegraf.prometheusRemoteWritePort }}/push"
 
       ## Data format to output.
       data_format = "prometheusremotewrite"
@@ -32,5 +32,7 @@ data:
         Content-Encoding = "snappy"
         X-Prometheus-Remote-Write-Version = "0.1.0"
 
+    {{ if .Values.metrics.telegraf.debugLogging }}
     [[outputs.file]]
       files = ["stdout"]
+    {{ end }}
