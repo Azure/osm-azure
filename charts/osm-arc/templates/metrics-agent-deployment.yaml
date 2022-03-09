@@ -67,6 +67,13 @@ spec:
         - name: prom-mdm-converter
           image: {{ .Values.metrics.promMdmConverter.image.repository }}:{{ .Values.metrics.promMdmConverter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
+          env:
+            - name: GENEVA_DEFAULT_MDM_NAMESPACE
+              value: osm-controller-metrics
+            - name: MDM_ACCOUNT
+              value: {{ .Values.metrics.mdm.accountName }}
+            - name: EXTENSION_ARM_ID
+              value: {{ .Values.Azure.Extension.ResourceId }}
         - name: telegraf
           image: {{ .Values.metrics.telegraf.image.repository }}:{{ .Values.metrics.telegraf.image.tag }}
           imagePullPolicy: {{ .Values.metrics.telegraf.image.pullPolicy }}
