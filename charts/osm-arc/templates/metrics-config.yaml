@@ -28,6 +28,15 @@ data:
       insecure_skip_verify = true
       namedrop = ["rest_client_requests_*", "rest_client_request_*", "go_memstats_gc_*", "go_memstats_stack_*", "go_threads*", "go_memstats_mcache_*_bytes", "go_memstats_mspan_*_bytes", "go_memstats_last*", "go_memstats_next*", "go_memstats_other*", "go_memstats_sys*", "go_memstats_heap_idle_bytes", "go_memstats_heap_inuse_bytes", "go_memstats_heap_objects", "go_memstats_heap_released_bytes", "go_memstats_heap_sys_bytes", "process_*_fds", "process_threads_*", "process_*_pagefault_*", "process_disk_*", "process_*_context_switches_*", "process_num*", "process_open*", "process_resident*", "process_working*", "dotnet_collection_count_total*", "dotnet_total_memory_bytes", "go_gc_duration_seconds", "go_goroutines", "go_info", "internal_*", "workqueue_*", "kubernetes_node", "version_*"]
 
+    [[inputs.kube_inventory]]
+      url = "https://kubernetes.default.svc"
+      namespace = "arc-osm-system"
+      bearer_token = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+      tls_ca = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+      response_timeout = "5s"
+      resource_include = [ "pods" ]
+      fielddrop = ["state_code", "state_reason", "phase_reason", "terminated_reason", "resource_requests_millicpu_units", "resource_requests_memory_bytes", "resource_limits_millicpu_units", "resource_limits_memory_bytes"]
+
     [[outputs.http]]
       ## URL is the address to send metrics to
       url = "http://{{ .Values.metrics.telegraf.prometheusRemoteWriteUrl }}:{{ .Values.metrics.telegraf.prometheusRemoteWritePort }}/push"

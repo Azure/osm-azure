@@ -65,7 +65,7 @@ metrics:
       repository: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf
       tag: 1.21
       pullPolicy: IfNotPresent
-    debugLogging: false
+    debugLogging: true
     prometheusRemoteWritePort: 8090
     prometheusRemoteWriteUrl: 127.0.0.1
 
