@@ -65,7 +65,7 @@ metrics:
       repository: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf
       tag: 1.21
       pullPolicy: IfNotPresent
-    debugLogging: true
+    debugLogging: true # TODO: disable after testing
     prometheusRemoteWritePort: 8090
     prometheusRemoteWriteUrl: 127.0.0.1
 
@@ -73,7 +73,7 @@ metrics:
     image:
       repository: stardotstar/provider-azure-arc-metrics-agent # TODO: update
       tag: v1.1.0-rc.0-linux-amd64
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
 
 alpine:
   image:
