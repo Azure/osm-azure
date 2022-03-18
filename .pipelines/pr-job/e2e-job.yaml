@@ -8,6 +8,7 @@ trigger:
       - conformance/*
       - tools/*
       - .github/*
+      - scripts/register-extension-prod.sh
 
 pr:
   branches:
@@ -19,6 +20,7 @@ pr:
       - conformance/*
       - tools/*
       - .github/*
+      - scripts/register-extension-prod.sh
 
 variables:
   chart.name: osm-arc
