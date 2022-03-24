@@ -15,10 +15,16 @@ steps:
         release_branch=release-v$(echo $trimmed_tag | cut -d'.' -f -2)
         git checkout $release_branch
       fi
+
+      if [[ "$(CHART_VERSION)" == *"-"* && "$(CHART_VERSION)" != *"rc"* ]]; then
+        export CTR_TAG=v$trimmed_tag
+      else
+        export CTR_TAG=v$(CHART_VERSION)
+      fi
+
       make build-osm
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$(release.namespace)
     displayName: "Run upstream e2e tests"
     env:
       CTR_REGISTRY: $(UPSTREAM_DOCKER_REGISTRY)
-      CTR_TAG: v$(CHART_VERSION)
     workingDirectory: $(System.DefaultWorkingDirectory)/osm
