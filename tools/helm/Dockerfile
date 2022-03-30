@@ -7,9 +7,13 @@ ARG TARGETOS
 
 ENV helm_version 3.7.1
 
-# upgrading libssl1.1, libgssapi-krb5-2, libk5crypto3 libkrb5-3, and libkrb5support0 due to CVE-2021-37750
+# upgrading libssl1.1 due to CVE-2021-37750
 # upgrading bsdutils due to CVE-2021-3995 and CVE-2021-3996
-RUN clean-install jq curl ca-certificates libssl1.1 libgssapi-krb5-2 libk5crypto3 libkrb5-3 libkrb5support0 libgmp10 bsdutils
+# upgrading libc-bin due to CVE-2021-33574, CVE-2022-23218, CVE-2022-23219 and CVE-2021-43396
+# upgrading libc6 due to CVE-2021-33574, CVE-2022-23218, CVE-2022-23219, and CVE-2021-43396
+# upgrading libsystemd0 and libudev1 due to CVE-2021-3997
+
+RUN clean-install jq curl ca-certificates libssl1.1 libgmp10 bsdutils libc-bin libc6 libsystemd0 libudev1
 
 RUN curl https://get.helm.sh/helm-v${helm_version}-${TARGETOS}-${TARGETARCH}.tar.gz -o helm.tar.gz && \
     tar -xvf helm.tar.gz && \

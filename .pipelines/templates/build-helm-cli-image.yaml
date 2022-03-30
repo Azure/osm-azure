@@ -10,7 +10,7 @@ parameters:
     default: linux/amd64
   - name: baseImage
     type: string
-    default: k8s.gcr.io/build-image/debian-base:bullseye-v1.0.0
+    default: k8s.gcr.io/build-image/debian-base:bullseye-v1.2.0
 
 steps:
   - bash: |
