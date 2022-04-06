@@ -32,6 +32,11 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
+@test "only one osm-bootstrap pod" {
+    run wait_for_condition $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-bootstrap | wc -l" "2"
+    assert_success
+}
+
 @test "osm-controller pod is ready" {
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=Ready --timeout=60s pod -l app=osm-controller -n arc-osm-system"
     assert_success
@@ -42,22 +47,35 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
+@test "osm-bootstrap pod is ready" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl wait --for=condition=Ready --timeout=60s pod -l app=osm-bootstrap -n arc-osm-system"
+    assert_success
+}
+
 @test "mdm container has been deployed" {
+    [ "$EXTENSION_TAG" != "1.1.1" ] && [ "$EXTENSION_TAG" = "`echo -e "$EXTENSION_TAG\n1.1.1" | sort -V | head -n1`" ] && skip "mdm container not deployed for $EXTENSION_TAG"
+
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep mdm"
     assert_success
 }
 
 @test "msi-adapter container has been deployed" {
+    [ "$EXTENSION_TAG" != "1.1.1" ] && [ "$EXTENSION_TAG" = "`echo -e "$EXTENSION_TAG\n1.1.1" | sort -V | head -n1`" ] && skip "msi-adapter container not deployed for $EXTENSION_TAG"
+
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep msi-adapter"
     assert_success
 }
 
 @test "telegraf container has been deployed" {
+    [ "$EXTENSION_TAG" != "1.1.1" ] && [ "$EXTENSION_TAG" = "`echo -e "$EXTENSION_TAG\n1.1.1" | sort -V | head -n1`" ] && skip "telegraf container not deployed for $EXTENSION_TAG"
+
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep telegraf"
     assert_success
 }
 
 @test "prom-mdm-converter container has been deployed" {
+    [ "$EXTENSION_TAG" != "1.1.1" ] && [ "$EXTENSION_TAG" = "`echo -e "$EXTENSION_TAG\n1.1.1" | sort -V | head -n1`" ] && skip "prom-mdm-converter container not deployed for $EXTENSION_TAG"
+
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get pods -n arc-osm-system -l app=osm-metrics-agent -o jsonpath="{..image}" |tr -s '[[:space:]]' '\n' |sort |uniq -c | grep prom-mdm-converter"
     assert_success
 }

@@ -21,13 +21,13 @@ osm:
     enablePermissiveTrafficPolicy: true
     image:
       registry: mcr.microsoft.com/oss/openservicemesh
-      tag: v1.0.0
+      tag: v1.1.1
     enforceSingleMesh: true
     enableReconciler: true
     deployPrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.19.1
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.19.3
     osmController:
       podLabels: {
         app.kubernetes.io/component: osm-controller
@@ -37,25 +37,22 @@ osm:
         app.kubernetes.io/component: osm-controller
       }
     prometheus:
-      image: mcr.microsoft.com/oss/prometheus/prometheus:v2.18.1
+      image: mcr.microsoft.com/oss/prometheus/prometheus:v2.34.0
     curlImage: mcr.microsoft.com/oss/tutum/curl
     tracing:
       image: mcr.microsoft.com/oss/jaegertracing/all-in-one
     grafana:
       image: mcr.microsoft.com/oss/grafana/grafana:v8.2.2
       rendererImage: mcr.microsoft.com/oss/grafana/grafana-image-renderer:v3.2.1
+  contour:
+    contour:
+      registry: mcr.microsoft.com
+      repository: oss/contour/contour
+    envoy:
+      registry: mcr.microsoft.com
+      repository: oss/envoyproxy/envoy
 
 alpine:
   image:
     name: "mcr.microsoft.com/azure-policy/alpine"
     tag: "prod_20200505.1"
-
-kubectl:
-  image:
-    name: "mcr.microsoft.com/oss/kubernetes/kubectl"
-    tag: "v1.22.3"
-
-helm:
-  image:
-    name: "mcr.microsoft.com/oss/openservicemesh/osm-arc/tools/osm-helm-cli"
-    tag: "3.7.1"
