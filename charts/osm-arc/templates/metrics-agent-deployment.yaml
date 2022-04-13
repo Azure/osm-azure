@@ -58,8 +58,6 @@ spec:
               value: "true"
             - name: TEST_MODE
               value: "false"
-            - name: TEST_FILE
-              value: "/data/token.json"
           securityContext:
             capabilities:
               add:
@@ -68,11 +66,13 @@ spec:
           image: {{ .Values.metrics.promMdmConverter.image.repository }}:{{ .Values.metrics.promMdmConverter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
           env:
+            - name: SERVER_PORT
+              value: "{{ .Values.metrics.telegraf.prometheusRemoteWritePort }}"
             - name: GENEVA_DEFAULT_MDM_NAMESPACE
-              value: osm-controller-metrics
+              value: osm-control-plane-metrics
             - name: MDM_ACCOUNT
               value: {{ .Values.metrics.mdm.accountName }}
-            - name: EXTENSION_ARM_ID
+            - name: EXTENSION_RESOURCE_ID
               value: {{ .Values.Azure.Extension.ResourceId }}
         - name: telegraf
           image: {{ .Values.metrics.telegraf.image.repository }}:{{ .Values.metrics.telegraf.image.tag }}

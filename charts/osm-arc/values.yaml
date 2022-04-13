@@ -71,8 +71,8 @@ metrics:
 
   promMdmConverter:
     image:
-      repository: stardotstar/provider-azure-arc-metrics-agent # TODO: update
-      tag: v1.1.0-rc.0-linux-amd64
+      repository: upstreamarc.azurecr.io/prom-mdm-converter
+      tag: v1.0.0
       pullPolicy: Always
 
 alpine:
