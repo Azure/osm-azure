@@ -48,7 +48,7 @@ metrics:
   mdm:
     image:
       repository: linuxgeneva-microsoft.azurecr.io/genevamdm
-      tag: master_20220216.1
+      tag: master_20220401.1
       pullPolicy: IfNotPresent
     metricEndpoint: https://az-int.int.microsoftmetrics.com/
     accountName: OsmGenevaTesting
@@ -56,8 +56,8 @@ metrics:
 
   msiAdapter:
     image:
-      repository: azurearcfork8sdev.azurecr.io/arc-preview/msi-adapter
-      tag: 0.0.10
+      repository: mcr.microsoft.com/azurearck8s/msi-adapter
+      tag: 1.0.0
       pullPolicy: IfNotPresent
 
   telegraf:

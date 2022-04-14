@@ -70,7 +70,7 @@ spec:
               value: "{{ .Values.metrics.telegraf.prometheusRemoteWritePort }}"
             - name: GENEVA_DEFAULT_MDM_NAMESPACE
               value: osm-control-plane-metrics
-            - name: MDM_ACCOUNT
+            - name: GENEVA_ACCOUNT_NAME
               value: {{ .Values.metrics.mdm.accountName }}
             - name: EXTENSION_RESOURCE_ID
               value: {{ .Values.Azure.Extension.ResourceId }}
