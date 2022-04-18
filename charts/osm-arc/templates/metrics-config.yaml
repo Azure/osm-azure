@@ -21,7 +21,7 @@ data:
 
     [[inputs.prometheus]]
       monitor_kubernetes_pods = true
-      kubernetes_label_selector = "app.kubernetes.io/component=osm-controller"
+      kubernetes_label_selector = "app=osm-prometheus"
       monitor_kubernetes_pods_namespace = "arc-osm-system"
       bearer_token = "/var/run/secrets/kubernetes.io/serviceaccount/token"
       tls_ca = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
