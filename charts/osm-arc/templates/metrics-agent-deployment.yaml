@@ -22,6 +22,13 @@ spec:
         - name: mdm
           image: {{ .Values.metrics.mdm.image.repository }}:{{ .Values.metrics.mdm.image.tag }}
           imagePullPolicy: {{ .Values.metrics.mdm.image.pullPolicy }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
           env:
             - name: ROLEINSTANCE
               valueFrom:
@@ -43,6 +50,13 @@ spec:
         - name: msi-adapter
           image: {{ .Values.metrics.msiAdapter.image.repository }}:{{ .Values.metrics.msiAdapter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.msiAdapter.image.pullPolicy }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
           env:
             - name: TOKEN_NAMESPACE
               value: {{ .Release.Namespace }}
@@ -65,6 +79,13 @@ spec:
         - name: prom-mdm-converter
           image: {{ .Values.metrics.promMdmConverter.image.repository }}:{{ .Values.metrics.promMdmConverter.image.tag }}
           imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
           env:
             - name: SERVER_PORT
               value: "{{ .Values.metrics.telegraf.prometheusRemoteWritePort }}"
@@ -77,6 +98,13 @@ spec:
         - name: telegraf
           image: {{ .Values.metrics.telegraf.image.repository }}:{{ .Values.metrics.telegraf.image.tag }}
           imagePullPolicy: {{ .Values.metrics.telegraf.image.pullPolicy }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
           volumeMounts:
             - name: telegraf-conf
               mountPath: /etc/telegraf/telegraf.conf
