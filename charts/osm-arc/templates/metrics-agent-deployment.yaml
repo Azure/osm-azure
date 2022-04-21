@@ -6,6 +6,11 @@ metadata:
   labels:
     app: osm-metrics-agent
     {{- include "osm.arcLabels" . | nindent 4 }}
+  annotations:
+    # this will ensure pods are rolled in next helm upgrade if cert files are updated.
+    {{- if .Values.Azure.proxySettings.isProxyEnabled }}
+    checksum/arc-proxy-config: {{ include (print $.Template.BasePath "/arc-proxy.yaml") . | sha256sum }}
+    {{- end }}
 spec:
   replicas: 1
   selector:
@@ -24,10 +29,10 @@ spec:
           imagePullPolicy: {{ .Values.metrics.mdm.image.pullPolicy }}
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
           env:
             - name: ROLEINSTANCE
@@ -52,10 +57,10 @@ spec:
           imagePullPolicy: {{ .Values.metrics.msiAdapter.image.pullPolicy }}
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
           env:
             - name: TOKEN_NAMESPACE
@@ -81,10 +86,10 @@ spec:
           imagePullPolicy: {{ .Values.metrics.promMdmConverter.image.pullPolicy }}
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
           env:
             - name: SERVER_PORT
@@ -100,15 +105,25 @@ spec:
           imagePullPolicy: {{ .Values.metrics.telegraf.image.pullPolicy }}
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
             limits:
-              cpu: 100m
+              cpu: 50m
               memory: 100Mi
+          {{- if .Values.Azure.proxySettings.isProxyEnabled }}
+          envFrom:
+            - secretRef:
+                name: arc-proxy-config
+          {{- end }}
           volumeMounts:
             - name: telegraf-conf
               mountPath: /etc/telegraf/telegraf.conf
               subPath: telegraf.conf
+            {{- if  and .Values.Azure.proxySettings.isProxyEnabled .Values.Azure.proxySettings.proxyCert }}
+            - mountPath: /etc/ssl/certs/proxy-cert.crt
+              subPath: proxy-cert.crt
+              name: proxy-certstore
+            {{- end }}
       volumes:
         - name: mdm-config
           configMap:
@@ -116,3 +131,8 @@ spec:
         - name: telegraf-conf
           configMap:
             name: osm-telegraf-config
+        {{- if  and .Values.Azure.proxySettings.isProxyEnabled .Values.Azure.proxySettings.proxyCert }}
+        - name: proxy-certstore
+          secret:
+            secretName: arc-proxy-cert
+        {{- end }}

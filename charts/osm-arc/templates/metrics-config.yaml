@@ -35,7 +35,7 @@ data:
       tls_ca = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
       response_timeout = "5s"
       resource_include = [ "pods" ]
-      fielddrop = ["state_code"]
+      fielddrop = ["state_code", "state_reason", "phase_reason", "terminated_reason", "resource_requests_millicpu_units", "resource_requests_memory_bytes", "resource_limits_millicpu_units", "resource_limits_memory_bytes"]
 
     [[outputs.http]]
       ## URL is the address to send metrics to
