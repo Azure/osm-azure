@@ -56,9 +56,9 @@ metrics:
       repository: linuxgeneva-microsoft.azurecr.io/genevamdm
       tag: master_20220401.1
       pullPolicy: IfNotPresent
-    metricEndpoint: https://az-int.int.microsoftmetrics.com/ # TODO
-    accountName: OsmGenevaTesting
-    environment: test # test | prod TODO
+    metricEndpoint: ""
+    accountName: AzureServiceMesh
+    environment: ""
 
   msiAdapter:
     image:
