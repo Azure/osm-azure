@@ -1,0 +1,55 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-identity
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "osm.arcLabels" . | nindent 4 }}
+rules:
+  - apiGroups: [ 'clusterconfig.azure.com' ]
+    resources: [ 'azureclusteridentityrequests' ]
+    verbs: [ 'get', 'create' ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{.Release.Name}}-identity
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "osm.arcLabels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: osm-identity
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-telegraf
+  labels:
+    {{- include "osm.arcLabels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources:
+    - pods
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-telegraf
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "osm.arcLabels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-telegraf
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}
+    namespace: {{ .Release.Namespace }}
