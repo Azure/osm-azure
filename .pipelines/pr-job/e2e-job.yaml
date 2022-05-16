@@ -5,6 +5,8 @@ trigger:
   paths:
     exclude:
       - docs/*
+      - .pipelines/aks-addon-nightly
+      - .pipelines/templates/aks-addon-templates
       - conformance/*
       - tools/*
       - .github/*
@@ -17,6 +19,8 @@ pr:
   paths:
     exclude:
       - docs/*
+      - .pipelines/aks-addon-nightly
+      - .pipelines/templates/aks-addon-templates
       - conformance/*
       - tools/*
       - .github/*

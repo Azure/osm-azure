@@ -1,6 +1,12 @@
 steps:
   - bash: |
+      docker run -v $(System.DefaultWorkingDirectory)/kubeconfig.json:/kube/config --env KUBECONFIG=/kube/config -i mcr.microsoft.com/azure-cli 
+      az login --identity
+      az -v 
+      az extension remove --name aks-preview
       az extension add --name aks-preview
       az feature register --namespace "Microsoft.ContainerService" --name "AKS-OpenServiceMesh"
+      az provider register -n Microsoft.ContainerService
       az aks enable-addons --addons open-service-mesh -g ${AZURE_CLUSTER_NAME} -n ${AZURE_CLUSTER_NAME}
+      exit
     displayName: Enable OSM AKS addon

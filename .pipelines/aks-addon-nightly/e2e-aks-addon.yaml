@@ -1,4 +1,20 @@
-trigger: none
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - .pipelines/aks-addon-nightly
+      - .pipelines/templates/aks-addon-templates
+
+pr:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+      - .pipelines/aks-addon-nightly
+      - .pipelines/templates/aks-addon-templates
 
 schedules:
   - cron: "0 0 * * *"
