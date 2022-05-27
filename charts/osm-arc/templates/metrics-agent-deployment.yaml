@@ -21,6 +21,8 @@ spec:
       containers:
         - name: mdm
           image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220401.1
+          command: ["/bin/echo"]
+          args: ["$(EULA_CONTENT)"]
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -40,11 +42,16 @@ spec:
               value: statsd_udp,statsd_tcp
             - name: MDM_LOG_LEVEL
               value: "Info"
+            - name: EULA_CONTENT
+              value: |-
+{{ .Values.OpenServiceMesh.eulaContent | indent 16 }}
           volumeMounts:
             - name: mdm-config
               mountPath: /tmp/geneva_mdm
         - name: msi-adapter
           image: mcr.microsoft.com/azurearck8s/msi-adapter:1.0.0
+          command: ["/bin/echo"]
+          args: ["$(EULA_CONTENT)"]
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -68,12 +75,17 @@ spec:
               value: "true"
             - name: TEST_MODE
               value: "false"
+            - name: EULA_CONTENT
+              value: |-
+{{ .Values.OpenServiceMesh.eulaContent | indent 16 }}
           securityContext:
             capabilities:
               add:
                 - NET_ADMIN
         - name: prom-mdm-converter
           image: upstreamarc.azurecr.io/prom-mdm-converter:v1.0.0
+          command: ["/bin/echo"]
+          args: ["$(EULA_CONTENT)"]
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -91,8 +103,13 @@ spec:
               value: AzureServiceMesh
             - name: EXTENSION_RESOURCE_ID
               value: {{ .Values.Azure.Extension.ResourceId }}
+            - name: EULA_CONTENT
+              value: |-
+{{ .Values.OpenServiceMesh.eulaContent | indent 16 }}
         - name: telegraf
           image: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf:1.21
+          command: ["/bin/echo"]
+          args: ["$(EULA_CONTENT)"]
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -105,6 +122,10 @@ spec:
             - name: telegraf-conf
               mountPath: /etc/telegraf/telegraf.conf
               subPath: telegraf.conf
+          env:
+            - name: EULA_CONTENT
+              value: |-
+{{ .Values.OpenServiceMesh.eulaContent | indent 16 }}
       volumes:
         - name: mdm-config
           configMap:

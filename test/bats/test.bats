@@ -62,6 +62,26 @@ ARC_CLUSTER=${ARC_CLUSTER:-true}
     assert_success
 }
 
+@test "mdm container printed EULA" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl logs -n arc-osm-system -l app=osm-metrics-agent -c mdm | grep -q \"MICROSOFT SOFTWARE LICENSE TERMS\""
+    assert_success
+}
+
+@test "msi-adapter container printed EULA" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl logs -n arc-osm-system -l app=osm-metrics-agent -c msi-adapter | grep -q \"MICROSOFT SOFTWARE LICENSE TERMS\""
+    assert_success
+}
+
+@test "telegraf container printed EULA" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl logs -n arc-osm-system -l app=osm-metrics-agent -c telegraf | grep -q \"MICROSOFT SOFTWARE LICENSE TERMS\""
+    assert_success
+}
+
+@test "prom-mdm-converter container printed EULA" {
+    run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl logs -n arc-osm-system -l app=osm-metrics-agent -c prom-mdm-converter | grep -q \"MICROSOFT SOFTWARE LICENSE TERMS\""
+    assert_success
+}
+
 @test "mutating webhook has been deployed" {
     run wait_for_process $WAIT_TIME $SLEEP_TIME "kubectl get mutatingwebhookconfigurations.admissionregistration.k8s.io arc-osm-webhook-osm"
     assert_success
