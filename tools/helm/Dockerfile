@@ -14,8 +14,9 @@ ENV helm_version 3.7.1
 # upgrading libsystemd0 and libudev1 due to CVE-2021-3997
 # upgrading zlib1g due to CVE-2018-25032
 # upgrading gzip and liblzma5 due to CVE-2022-1271
+# upgrading dpkg due to CVE-2022-1664
 
-RUN clean-install jq curl ca-certificates libssl1.1 libgmp10 bsdutils libc-bin libc6 libsystemd0 libudev1 zlib1g gzip liblzma5
+RUN clean-install jq curl ca-certificates libssl1.1 libgmp10 bsdutils libc-bin libc6 libsystemd0 libudev1 zlib1g gzip liblzma5 dpkg
 
 RUN curl https://get.helm.sh/helm-v${helm_version}-${TARGETOS}-${TARGETARCH}.tar.gz -o helm.tar.gz && \
     tar -xvf helm.tar.gz && \
