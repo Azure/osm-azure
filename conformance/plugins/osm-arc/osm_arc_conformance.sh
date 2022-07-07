@@ -132,6 +132,7 @@ cd osm
 export CTR_REGISTRY="openservicemesh"
 export CTR_TAG=v$OSM_ARC_VERSION
 
+go env -w GO111MODULE=on
 make build-osm
 
 if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
