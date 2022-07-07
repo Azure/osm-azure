@@ -3,7 +3,7 @@ sonobuoy-config:
   plugin-name: azure-arc-osm-conformance
   result-format: junit
 spec:
-  image: osmazure.azurecr.io/tests/osm-arc-conformance:0.1.7
+  image: osmazure.azurecr.io/tests/osm-arc-conformance:0.1.8
   imagePullPolicy: Always
   name: plugin
   resources: {}
