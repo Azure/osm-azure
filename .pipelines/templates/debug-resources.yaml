@@ -1,3 +1,8 @@
+parameters: 
+  - name: osmArc
+    type: boolean
+    default: true
+
 steps:
   - script: |
       kubectl get pods -A
@@ -38,31 +43,31 @@ steps:
       export OSM_METRICS_AGENT_NAME=$(kubectl get pods -n $(release.namespace) --selector app=osm-metrics-agent --no-headers | awk '{print $1}' | head -n1)
       echo "##vso[task.setvariable variable=OSM_METRICS_POD]$OSM_METRICS_AGENT_NAME"
     displayName: Get osm-metrics-agent pod name
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
       kubectl logs $OSM_METRICS_POD mdm -n $(release.namespace)
     displayName: Get logs from mdm container in osm-metrics-pod
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
       kubectl logs $OSM_METRICS_POD msi-adapter -n $(release.namespace)
     displayName: Get logs from msi-adapter container in osm-metrics-pod
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
       kubectl logs $OSM_METRICS_POD prom-mdm-converter -n $(release.namespace)
     displayName: Get logs from prom-mdm-converter container in osm-metrics-pod
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
       kubectl logs $OSM_METRICS_POD telegraf -n $(release.namespace)
     displayName: Get logs from telegraf container in osm-metrics-pod
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       kubectl describe pod -l app=osm-metrics-agent -n $(release.namespace)
     displayName: Describe osm-metrics-agent pod 
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       export DNS_POD_1=$(kubectl get pods -n kube-system --selector k8s-app=kube-dns --no-headers | awk '{print $1}' | sed -n '1 p')
       kubectl logs $DNS_POD_1 -n kube-system
@@ -76,7 +81,7 @@ steps:
   - script: |
       helm history osm -n $(release.namespace)
     displayName: Get Helm history
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       kubectl get events -A
     displayName: List all events
@@ -88,15 +93,15 @@ steps:
   - script: |
       kubectl get pods -n azure-arc -o yaml
     displayName: Get azure-arc pods
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       kubectl get deployments -n azure-arc -o yaml
     displayName: Get azure-arc deployments
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       HELM_OUTPUT=$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')
       if [[ "$HELM_OUTPUT" != "osm-arc-$CHART_VERSION" ]]; then
         echo "Incorrect chart version" && exit 1
       fi 
     displayName: Ensure that helm chart version is still correct
-    condition: always()
+    condition: eq('${{ parameters.osmArc }}', 'True')
