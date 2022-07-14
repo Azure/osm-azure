@@ -12,4 +12,6 @@ jobs:
       parameters:
         aksAddonRun: true
     - template: ../templates/debug-resources.yaml
+      parameters:
+        osmArc: false
     - template: ../templates/aks-cleanup.yaml
