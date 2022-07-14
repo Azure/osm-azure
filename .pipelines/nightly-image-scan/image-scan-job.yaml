@@ -7,13 +7,8 @@ jobs:
     - template: ../templates/build-conf-test-image.yaml
       parameters:
         imageScan: true
-    - template: ../templates/build-helm-cli-image.yaml
     - template: ../templates/install-trivy.yaml
     - template: ../templates/trivy-scan-image.yaml
       parameters:
         imageName: osm-arc-conformance
-        imageTag: test
-    - template: ../templates/trivy-scan-image.yaml
-      parameters:
-        imageName: osm-helm-cli
         imageTag: test
