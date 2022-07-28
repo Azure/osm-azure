@@ -3,7 +3,7 @@ sonobuoy-config:
   plugin-name: azure-arc-osm-conformance
   result-format: junit
 spec:
-  image: osmazure.azurecr.io/tests/osm-arc-conformance:0.1.8
+  image: osmazure.azurecr.io/tests/osm-arc-conformance:0.1.9
   imagePullPolicy: Always
   name: plugin
   resources: {}
@@ -11,5 +11,5 @@ spec:
   - name: results
     emptyDir: {}
   volumeMounts:
-  - mountPath: /tmp/results
+  - mountPath: /tmp/sonobuoy/results
     name: results
