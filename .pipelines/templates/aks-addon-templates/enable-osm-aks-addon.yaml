@@ -1,6 +1,7 @@
 steps:
   - bash: |
-      az extension add --name aks-preview
+      az extension add --name aks-preview --version 0.5.87
+      az -v
       az feature register --namespace "Microsoft.ContainerService" --name "AKS-OpenServiceMesh"
       az aks enable-addons --addons open-service-mesh -g ${AZURE_CLUSTER_NAME} -n ${AZURE_CLUSTER_NAME}
     displayName: Enable OSM AKS addon
