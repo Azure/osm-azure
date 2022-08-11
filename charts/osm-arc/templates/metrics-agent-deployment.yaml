@@ -6,6 +6,10 @@ metadata:
   labels:
     app: osm-metrics-agent
     {{- include "osm.arcLabels" . | nindent 4 }}
+  {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
+  annotations:
+    seccomp.security.alpha.kubernetes.io/pod: runtime/default
+  {{- end }}
 spec:
   replicas: 1
   selector:
@@ -16,8 +20,13 @@ spec:
       labels:
         app: osm-metrics-agent
         {{- include "osm.arcLabels" . | nindent 8 }}
+      {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: runtime/default
+      {{- end }}
     spec:
       serviceAccountName: {{ .Release.Name }}
+      serviceAccount: {{ .Release.Name }}
       containers:
         - name: mdm
           image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220401.1
@@ -69,9 +78,13 @@ spec:
             - name: TEST_MODE
               value: "false"
           securityContext:
+            runAsUser: 0
             capabilities:
               add:
                 - NET_ADMIN
+            {{- if eq .Values.Azure.Cluster.Distribution "openshift" }}
+            privileged: true
+            {{- end }}
         - name: prom-mdm-converter
           image: upstreamarc.azurecr.io/prom-mdm-converter:v1.0.0
           imagePullPolicy: IfNotPresent
