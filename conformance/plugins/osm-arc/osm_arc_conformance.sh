@@ -130,7 +130,13 @@ git clone -b $OSM_TEST_BRANCH $UPSTREAM_REPO
 cd osm
 
 export CTR_REGISTRY="openservicemesh"
-export CTR_TAG=v$OSM_ARC_VERSION
+
+if [[ "$OSM_ARC_VERSION" == *"-"* && "$OSM_ARC_VERSION" != *"rc"* ]]; then
+  trimmed_tag=$(echo $OSM_ARC_VERSION | cut -d'-' -f 1)
+  export CTR_TAG=v$trimmed_tag
+else
+  export CTR_TAG=v$OSM_ARC_VERSION
+fi
 
 go env -w GO111MODULE=on
 make build-osm
