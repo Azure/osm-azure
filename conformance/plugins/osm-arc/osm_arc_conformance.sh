@@ -24,9 +24,72 @@ function waitForResources {
     echo "$available"
 }
 
+testsRun="false"
 # saveResults prepares the results for handoff to the Sonobuoy worker.
 # See: https://github.com/vmware-tanzu/sonobuoy/blob/master/docs/plugins.md
 saveResults() {
+
+  if [[ "$testsRun" == "true" ]]; then
+    results=$(cat ./temp_results/results.xml)
+
+    echo $results
+
+    if [[ "$results" =~ .*"Summarizing "+[0-9]*+" Failures:" ]]; then
+        # Parse xml output to get all tests that are failing
+        failed_tests=$(echo $results | awk -F 'Summarizing ' '{print $2}')
+        IFS='/'
+
+        # Split into array with '/' as a delimiter
+        read -a failed_tests_arr <<< "$failed_tests"
+
+        test_names=()
+        for val in "${failed_tests_arr[@]}"; do
+            # Look for "[]", "[Cross-platform]", or "[linux]", and get the test name from rest of substring.
+            temp_1=""
+            if [[ "$val" == *"[]"* ]]; then
+                temp_1=$(echo $val | awk -F '\\[\\] ' '{print $2}')
+            fi
+            if [[ "$val" == *"[Cross-platform]"* ]]; then
+                temp_1=$(echo $val | awk -F '\\[Cross-platform\\] ' '{print $2}')
+            fi
+            if [[ "$val" == *"[linux]"* ]]; then
+                temp_1=$(echo $val | awk -F '\\[linux\\] ' '{print $2}')
+            fi
+
+            if [[ "$temp_1" != "" ]]; then
+              temp_2=$(echo $temp_1 | awk -F '\\[' '{print $1}')
+              test_name=$(echo ${temp_2% *})
+              test_name_clean=$(echo "${test_name//&gt;/>}")
+              test_names+=("$test_name_clean")
+            fi
+        done
+
+        # Format "ginkgo.focus" statement to rerun all failed e2es
+        ginkgo_focus_statements=""
+        for test in "${test_names[@]}"; do
+            ginkgo_focus_statements+="-ginkgo.focus=\"\\b$test\\b\" "
+        done
+
+        echo $ginkgo_focus_statements
+
+        ## Try rerunning failed tests again
+        if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
+          eval "gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v $ginkgo_focus_statements -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1"
+        else
+          eval "gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v $ginkgo_focus_statements -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1"
+        fi
+
+        sleep 120
+    else
+      echo "Tests passed, no retry"
+      cp ./temp_results/results.xml ../..$results_dir/results.xml
+    fi
+
+  fi
+
+  kubectl delete ns $OSM_ARC_RELEASE_NAMESPACE
+  kubectl delete mutatingwebhookconfiguration $MUTATING_WEBHOOK_CONFIG_NAME
+  
   cd ${results_dir}
 
     # Sonobuoy worker expects a tar file.
@@ -141,15 +204,15 @@ fi
 go env -w GO111MODULE=on
 make build-osm
 
+mkdir temp_results
+
+testsRun="true"
 if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
-  gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 elif [[ "$KUBERNETES_DISTRIBUTION" == "RKE" ]]; then
-  gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTCP server-first traffic\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTCP server-first traffic\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 else
-  gotestsum --junitfile ../..$results_dir/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 fi
 
 sleep 120
-
-kubectl delete ns $OSM_ARC_RELEASE_NAMESPACE
-kubectl delete mutatingwebhookconfiguration $MUTATING_WEBHOOK_CONFIG_NAME
