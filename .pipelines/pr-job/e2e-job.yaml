@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
     - main
+    - release-v*
   paths:
     exclude:
       - docs/*
@@ -14,6 +15,7 @@ pr:
   branches:
     include:
     - main
+    - release-v*
   paths:
     exclude:
       - docs/*
