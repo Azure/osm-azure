@@ -34,7 +34,7 @@ saveResults() {
 
     echo $results
 
-    if [[ "$results" =~ .*"Summarizing "+[0-9]*+" Failures:" ]]; then
+    if [[ "$results" =~ .*"Summarizing "+[0-9]*+" Failure" ]]; then
         # Parse xml output to get all tests that are failing
         failed_tests=$(echo $results | awk -F 'Summarizing ' '{print $2}')
         IFS='/'
