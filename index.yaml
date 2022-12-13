@@ -2,8 +2,23 @@ apiVersion: v1
 entries:
   osm-arc:
   - apiVersion: v2
+    appVersion: v1.2.2-beta-1
+    created: "2022-12-13T19:03:33.3268185Z"
+    dependencies:
+    - name: osm
+      repository: https://openservicemesh.github.io/osm
+      version: 1.2.2
+    description: A Helm chart to install the OSM control plane on Azure Arc enabled
+      Kubernetes clusters.
+    digest: 8e725ee6334ddf28d3fcbeaf5f2f6ff4489620c4c3d2859e8fd9bfcdda3ee44e
+    name: osm-arc
+    type: application
+    urls:
+    - https://Azure.github.io/osm-azure/osm-arc-1.2.2-beta-1.tgz
+    version: 1.2.2-beta-1
+  - apiVersion: v2
     appVersion: v1.1.1
-    created: "2022-08-15T15:17:13.283837401Z"
+    created: "2022-12-13T19:03:33.31551353Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -18,7 +33,7 @@ entries:
     version: 1.1.1
   - apiVersion: v2
     appVersion: v1.1.1-1
-    created: "2022-08-15T15:17:13.274044355Z"
+    created: "2022-12-13T19:03:33.307256387Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -33,7 +48,7 @@ entries:
     version: 1.1.1-1
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2022-08-15T15:17:13.266504842Z"
+    created: "2022-12-13T19:03:33.299187752Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -48,7 +63,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v1.0.0-rc.4
-    created: "2022-08-15T15:17:13.257447706Z"
+    created: "2022-12-13T19:03:33.290699199Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -63,7 +78,7 @@ entries:
     version: 1.0.0-rc.4
   - apiVersion: v2
     appVersion: v1.0.0-1
-    created: "2022-08-15T15:17:13.2504196Z"
+    created: "2022-12-13T19:03:33.282937677Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -78,7 +93,7 @@ entries:
     version: 1.0.0-1
   - apiVersion: v2
     appVersion: v0.11.1
-    created: "2022-08-15T15:17:13.202567683Z"
+    created: "2022-12-13T19:03:33.233982543Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -93,7 +108,7 @@ entries:
     version: 0.11.1
   - apiVersion: v2
     appVersion: v0.9.2
-    created: "2022-08-15T15:17:13.242141176Z"
+    created: "2022-12-13T19:03:33.27483614Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -108,7 +123,7 @@ entries:
     version: 0.9.2
   - apiVersion: v2
     appVersion: v0.9.1
-    created: "2022-08-15T15:17:13.239419636Z"
+    created: "2022-12-13T19:03:33.272199231Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -123,7 +138,7 @@ entries:
     version: 0.9.1
   - apiVersion: v2
     appVersion: v0.9.1-rc.1
-    created: "2022-08-15T15:17:13.23568838Z"
+    created: "2022-12-13T19:03:33.268043658Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -138,7 +153,7 @@ entries:
     version: 0.9.1-rc.1
   - apiVersion: v2
     appVersion: v0.9.0
-    created: "2022-08-15T15:17:13.232987939Z"
+    created: "2022-12-13T19:03:33.265531954Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -153,7 +168,7 @@ entries:
     version: 0.9.0
   - apiVersion: v2
     appVersion: v0.8.4
-    created: "2022-08-15T15:17:13.230658804Z"
+    created: "2022-12-13T19:03:33.262826441Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -168,7 +183,7 @@ entries:
     version: 0.8.4
   - apiVersion: v2
     appVersion: v0.8.4-rc.1
-    created: "2022-08-15T15:17:13.228585973Z"
+    created: "2022-12-13T19:03:33.260568448Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -183,7 +198,7 @@ entries:
     version: 0.8.4-rc.1
   - apiVersion: v2
     appVersion: v0.8.3
-    created: "2022-08-15T15:17:13.225395925Z"
+    created: "2022-12-13T19:03:33.256967198Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -198,7 +213,7 @@ entries:
     version: 0.8.3
   - apiVersion: v2
     appVersion: v0.8.3-rc.1
-    created: "2022-08-15T15:17:13.223203092Z"
+    created: "2022-12-13T19:03:33.254673703Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -213,7 +228,7 @@ entries:
     version: 0.8.3-rc.1
   - apiVersion: v2
     appVersion: v0.8.2
-    created: "2022-08-15T15:17:13.221151462Z"
+    created: "2022-12-13T19:03:33.25242731Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -228,7 +243,7 @@ entries:
     version: 0.8.2
   - apiVersion: v2
     appVersion: v0.8.0-rc.2
-    created: "2022-08-15T15:17:13.219197932Z"
+    created: "2022-12-13T19:03:33.250348323Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -243,7 +258,7 @@ entries:
     version: 0.8.0-rc.2
   - apiVersion: v2
     appVersion: v0.8.0-rc.1
-    created: "2022-08-15T15:17:13.216083486Z"
+    created: "2022-12-13T19:03:33.24715149Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -258,7 +273,7 @@ entries:
     version: 0.8.0-rc.1
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2022-08-15T15:17:13.213311944Z"
+    created: "2022-12-13T19:03:33.244334673Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -273,7 +288,7 @@ entries:
     version: 0.7.0
   - apiVersion: v2
     appVersion: v0.7.0-rc.1.1
-    created: "2022-08-15T15:17:13.209142082Z"
+    created: "2022-12-13T19:03:33.240593818Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -288,7 +303,7 @@ entries:
     version: 0.7.0-rc.1.1
   - apiVersion: v2
     appVersion: v0.7.0-rc.1
-    created: "2022-08-15T15:17:13.211487917Z"
+    created: "2022-12-13T19:03:33.242517998Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -303,7 +318,7 @@ entries:
     version: 0.7.0-rc.1
   - apiVersion: v2
     appVersion: v0.6.1
-    created: "2022-08-15T15:17:13.207292054Z"
+    created: "2022-12-13T19:03:33.238449029Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -318,7 +333,7 @@ entries:
     version: 0.6.1
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2022-08-15T15:17:13.205163922Z"
+    created: "2022-12-13T19:03:33.23630674Z"
     dependencies:
     - name: osm
       repository: https://openservicemesh.github.io/osm
@@ -331,4 +346,4 @@ entries:
     urls:
     - https://Azure.github.io/osm-azure/osm-arc-0.6.0.tgz
     version: 0.6.0
-generated: "2022-08-15T15:17:13.19433786Z"
+generated: "2022-12-13T19:03:33.224556052Z"
