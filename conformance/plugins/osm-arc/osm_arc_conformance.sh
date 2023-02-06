@@ -165,7 +165,7 @@ if [ "${waitSuccessArc}" == false ]; then
     exit 1
 fi
 
-az extension add --name k8s-extension 2> ${results_dir}/error || python3 setup_failure_handler.py
+az extension add --name k8s-extension --version 1.3.5 2> ${results_dir}/error || python3 setup_failure_handler.py
 
 az k8s-extension create \
     --cluster-name $CLUSTER_NAME \
