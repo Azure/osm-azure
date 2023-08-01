@@ -1,6 +1,6 @@
 jobs: 
   - job: test_osm_arc_prod
-    pool: staging-pool
+    pool: staging-pool-amd64-mariner-2
     workspace: 
       clean: all
     steps:

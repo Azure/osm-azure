@@ -1,4 +1,14 @@
+parameters: 
+  - name: ghUser
+    type: string
+    default: "osm-user"
+  - name: osmRepo
+    type: string
+    default: "Azure/osm"
+
 steps:
   - bash: |
-      git clone $(upstream.repo) $(System.DefaultWorkingDirectory)/osm
+      git clone https://${{ parameters.ghUser }}:$(AZURE_OSM_TOKEN)}@github.com/${{ parameters.osmRepo }}
     displayName: Checkout $(upstream.repo)
+    env:
+      AZURE_OSM_TOKEN: $(AZURE_OSM_TOKEN)
