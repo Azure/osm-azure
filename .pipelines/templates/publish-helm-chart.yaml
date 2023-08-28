@@ -2,6 +2,9 @@ parameters:
   - name: releaseTag
     type: boolean
     default: false
+  - name: uniqueTag
+    type: boolean
+    default: false
 
 steps: 
   - bash: |
@@ -23,12 +26,22 @@ steps:
     displayName: Create Unique Tag
   - script: |
       echo ${{ lower(parameters.releaseTag) }}
-      if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
-        # Add "-release" for chart created by release job.  
-        echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-release"
+      if [[ ${{ lower(parameters.uniqueTag) }} == "true" ]]; then
+        if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
+          # Add "-release" for chart created by release job.  
+          echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-release"
+        else
+          # Add "-pr" for chart created by pr job.  
+          echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-pr"
+        fi
       else
-        # Add "-pr" for chart created by pr job.  
-        echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-pr"
+        if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
+          # Add "-release" for chart created by release job.  
+          echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-release"
+        else
+          # Add "-pr" for chart created by pr job.  
+          echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-pr"
+        fi
       fi
       echo ${IMAGE_TAG}
     displayName: Create image tag 
