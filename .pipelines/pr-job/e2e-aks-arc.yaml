@@ -5,6 +5,7 @@ parameters:
 
 jobs: 
   - job: test_osm_chart_arc_cluster
+    timeoutInMinutes: 150
     pool: staging-pool-amd64-mariner-2
     workspace: 
       clean: all
