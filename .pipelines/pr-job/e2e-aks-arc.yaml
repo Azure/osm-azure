@@ -5,7 +5,7 @@ parameters:
 
 jobs: 
   - job: test_osm_chart_arc_cluster
-    pool: staging-pool
+    pool: staging-pool-amd64-mariner-2
     workspace: 
       clean: all
     steps: 

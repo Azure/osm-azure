@@ -1,6 +1,6 @@
 jobs: 
   - job: nightly_image_scan
-    pool: staging-pool
+    pool: staging-pool-amd64-mariner-2
     workspace: 
       clean: all
     steps:

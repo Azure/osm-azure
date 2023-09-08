@@ -1,6 +1,6 @@
 jobs:
   - job: test_osm_aks_addon
-    pool: staging-pool
+    pool: staging-pool-amd64-mariner-2
     workspace:
       clean: all
     steps:
