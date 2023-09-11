@@ -28,7 +28,11 @@ steps:
         echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-release"
       else
         # Add "-pr" for chart created by pr job.  
-        echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-pr"
+        # echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-pr"
+
+        # Temporarily remove unique tag to unblock CI until k8s-extension CLI fix lands. 
+        echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-pr"
+        
       fi
       echo ${IMAGE_TAG}
     displayName: Create image tag 
