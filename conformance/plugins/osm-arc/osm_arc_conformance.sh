@@ -178,6 +178,7 @@ az k8s-extension create \
     --release-train $OSM_ARC_RELEASE_TRAIN \
     --name osm \
     --release-namespace $OSM_ARC_RELEASE_NAMESPACE \
+    --auto-upgrade-minor-version false \
     --version $OSM_ARC_VERSION 2> ${results_dir}/error || python3 setup_failure_handler.py
 
 # Wait for resources in osm-arc release ns
