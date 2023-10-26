@@ -165,7 +165,8 @@ if [ "${waitSuccessArc}" == false ]; then
     exit 1
 fi
 
-az extension add --name k8s-extension --version 1.3.5 2> ${results_dir}/error || python3 setup_failure_handler.py
+az extension add --name k8s-extension 2> ${results_dir}/error || python3 setup_failure_handler.py
+az extension update --name k8s-extension 2> ${results_dir}/error || python3 setup_failure_handler.py
 
 az k8s-extension create \
     --cluster-name $CLUSTER_NAME \
@@ -177,6 +178,7 @@ az k8s-extension create \
     --release-train $OSM_ARC_RELEASE_TRAIN \
     --name osm \
     --release-namespace $OSM_ARC_RELEASE_NAMESPACE \
+    --auto-upgrade-minor-version false \
     --version $OSM_ARC_VERSION 2> ${results_dir}/error || python3 setup_failure_handler.py
 
 # Wait for resources in osm-arc release ns
