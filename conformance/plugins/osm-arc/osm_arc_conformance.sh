@@ -152,6 +152,11 @@ if [[ -z "${OSM_TEST_BRANCH}" ]]; then
   python3 setup_failure_handler.py
 fi
 
+if [[ -z "${OSM_AZURE_TOKEN}" ]]; then
+  echo "ERROR: parameter OSM_AZURE_TOKEN is required." > ${results_dir}/error
+  python3 setup_failure_handler.py
+fi
+
 # Login with service principal
 az login --service-principal \
   -u ${CLIENT_ID} \
@@ -188,10 +193,11 @@ if [ "${waitSuccessArc}" == false ]; then
     exit 1
 fi
 
-export UPSTREAM_REPO="https://github.com/openservicemesh/osm"
+#export UPSTREAM_REPO="https://github.com/openservicemesh/osm"
+export GH_USER="OSM_AZURE_TOKEN"
 export MUTATING_WEBHOOK_CONFIG_NAME="arc-osm-webhook-osm"
 
-git clone -b $OSM_TEST_BRANCH $UPSTREAM_REPO
+git clone -b $OSM_TEST_BRANCH https://$GH_USER:$OSM_AZURE_TOKEN@github.com/Azure/osm
 cd osm
 
 export CTR_REGISTRY="openservicemesh"
