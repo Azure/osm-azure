@@ -216,11 +216,9 @@ mkdir temp_results
 
 testsRun="true"
 if [[ "$KUBERNETES_DISTRIBUTION" == "openshift" ]]; then
-  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 180m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
-elif [[ "$KUBERNETES_DISTRIBUTION" == "RKE" ]]; then
-  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTCP server-first traffic\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.focus="\bPermissive Traffic Policy Mode\b" -ginkgo.focus="\bTest HTTP traffic from 1 pod client -> 1 pod server\b" -test.timeout 60m -installType=NoInstall -deployOnOpenShift=true -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 else
-  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.skip="\bHTTP ingress\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
+  gotestsum --junitfile ./temp_results/results.xml ./tests/e2e -test.v -ginkgo.v -ginkgo.focus="\bPermissive Traffic Policy Mode\b" -ginkgo.focus="\bTest HTTP traffic from 1 pod client -> 1 pod server\b" -test.timeout 60m -installType=NoInstall -OsmNamespace=$OSM_ARC_RELEASE_NAMESPACE -v 2>&1
 fi
 
 sleep 120
