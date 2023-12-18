@@ -2,11 +2,11 @@ steps:
   - template: ../templates/get-latest-tag.yaml
   - template: ../templates/add-arc-extension.yaml
     parameters: 
-      imageTag: $(LATEST_PUBLISHED_TAG)
+      imageTag: 1.2.3 # Temporarily hard-coding
   - script: |
       make test-e2e
     displayName: "Run osm-azure e2e tests on latest release chart"
     env: 
-      EXTENSION_TAG: $(LATEST_PUBLISHED_TAG)
+      EXTENSION_TAG: 1.2.3 # Temporarily hard-coding
       KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   - template: ../templates/update-arc-addon.yaml
