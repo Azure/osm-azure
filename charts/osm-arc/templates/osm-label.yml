@@ -1,6 +1,6 @@
-# 
-# The job in this YAML file tries to add 'openservicemesh.io/ignore' label to 'kube-system', 'azure-arc', and 'arc-osm-system' namespaces.
-# The job is executed in helm pre-install phase of OSM release lifecycle. 
+#
+# The job in this file adds 'openservicemesh.io/ignore' label to 'kube-system', 'azure-arc', and 'arc-osm-system' namespaces.
+# The job is executed in Helm pre-install phase of OSM release lifecycle.
 #
 apiVersion: v1
 kind: ServiceAccount
@@ -11,7 +11,9 @@ metadata:
     "helm.sh/hook-weight": "25"
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+
 ---
+
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -34,7 +36,9 @@ rules:
   verbs:
     - use
 {{- end }}
+
 ---
+
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -52,7 +56,9 @@ roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
+
 ---
+
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -70,7 +76,9 @@ roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
+
 ---
+
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -88,7 +96,9 @@ roleRef:
   kind: ClusterRole
   name: osm-label-cluster-role
   apiGroup: rbac.authorization.k8s.io
+
 ---
+
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -122,14 +132,14 @@ spec:
         - name: osm-label
           image: {{ .Values.alpine.image.name }}:{{ .Values.alpine.image.tag }}
           imagePullPolicy: IfNotPresent
-          env: 
+          env:
             - name: labelnamespaces
               value: {{ .Values.OpenServiceMesh.ignoreNamespaces }}
             - name: osmnamespace
               value: {{ .Release.Namespace }}
           securityContext:
             allowPrivilegeEscalation: false
-          command: 
+          command:
             - "/bin/sh"
             - "-ec"
             - |
@@ -184,11 +194,9 @@ spec:
                 fi
               else
                 echo "Failed to retrieve ${osmnamespace} details"
-              fi  
+              fi
       securityContext:
         runAsUser: 1000
         runAsGroup: 3000
         fsGroup: 2000
         supplementalGroups: [5555]
-
-

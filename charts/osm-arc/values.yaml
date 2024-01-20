@@ -5,6 +5,8 @@
 ## Values populated by Azure Arc K8s RP during the installation of the extension
 Azure:
   Cluster:
+    # This variable is populated by the Azure Arc RP
+    # Expected values: https://github.com/Azure/azure-cli-extensions/blob/0bf8ef35e22d520708dc3fc99179f3f2e1a87332/src/connectedk8s/azext_connectedk8s/custom.py#L436
     Distribution: <cluster_distribution>
     Region: ""
   Extension:
