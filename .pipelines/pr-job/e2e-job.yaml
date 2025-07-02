@@ -16,7 +16,13 @@ pr:
     include:
     - main
     - release-v*
-    - release-v1.2
+  paths:
+    exclude:
+      - docs/*
+      - conformance/*
+      - tools/*
+      - .github/*
+      - scripts/register-extension-prod.sh
 
 variables:
   chart.name: osm-arc
@@ -24,7 +30,7 @@ variables:
   image.dir: $(Build.ArtifactStagingDirectory)
   image.artifact.name: drop
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  upstream.repo: https://github.com/Azure/osm
+  upstream.repo: https://github.com/openservicemesh/osm
 
 stages:
 - stage: run_e2e
