@@ -32,7 +32,7 @@ variables:
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   upstream.repo: https://github.com/Azure/osm
 
-stages: 
+stages:
 - stage: run_e2e
   jobs:
     - template: e2e-aks-arc.yaml
