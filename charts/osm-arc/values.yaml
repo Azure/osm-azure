@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 ## Values populated by Azure Arc K8s RP during the installation of the extension
+
 Azure:
   Cluster:
     Distribution: <cluster_distribution>
@@ -28,7 +29,7 @@ osm:
     deployPrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.32.2-hotfix.20241216
+    sidecarImage: mcr.microsoft.com/oss/v2/envoyproxy/envoy:v1.34.1
     osmController:
       podLabels: {
         app.kubernetes.io/component: osm-controller
