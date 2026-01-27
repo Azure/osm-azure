@@ -1,4 +1,10 @@
 steps:
+  - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+    displayName: Install Azure CLI if needed
   - script: |
       az login --identity 2>&1
       az group delete -n ${AZURE_CLUSTER_NAME} --yes --no-wait 2>&1

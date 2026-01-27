@@ -8,6 +8,12 @@ parameters:
 
 steps:
   - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+    displayName: Install Azure CLI if needed
+  - bash: |
       az login --identity
       az acr login --name $(REGISTRY_NAME) 2>&1
     displayName: Login to acr

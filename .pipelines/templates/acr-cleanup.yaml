@@ -1,5 +1,11 @@
 steps:
   - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+    displayName: Install Azure CLI if needed
+  - bash: |
       if [[ -n "${IMAGE_TAG}" ]]; then
         az login --identity 2>&1
         echo ${IMAGE_TAG}

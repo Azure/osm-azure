@@ -1,5 +1,15 @@
 steps:
   - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+      # Install jq if not available
+      if ! command -v jq >/dev/null 2>&1; then
+        sudo tdnf install -y jq
+      fi
+    displayName: Install Azure CLI and jq if needed
+  - bash: |
       set -e
       az login --verbose --identity
       ARC_ACCESS_TOKEN=$(az account get-access-token --verbose --resource $(ARC_RESOURCE_TOKEN) | jq -r '.accessToken')
