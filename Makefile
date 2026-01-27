@@ -46,7 +46,11 @@ e2e-cleanup:
 	if [ $(TEST_KIND) ]; then kind delete cluster; fi
 
 install-trivy:
-	wget https://github.com/aquasecurity/trivy/releases/download/v0.18.0/trivy_0.18.0_Linux-64bit.tar.gz
+	# Use curl instead of wget for better compatibility
+	if ! command -v curl >/dev/null 2>&1; then \
+		sudo tdnf install -y curl; \
+	fi
+	curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.18.0/trivy_0.18.0_Linux-64bit.tar.gz
 	tar zxvf trivy_0.18.0_Linux-64bit.tar.gz
 
 trivy-scan-image:

@@ -3,8 +3,13 @@ parameters:
 
 steps:
   - bash: |
-      curl -LO https://get.helm.sh/helm-${{ parameters.version }}-linux-amd64.zip
-      unzip -o helm-${{ parameters.version }}-linux-amd64.zip
+      # Install curl if not available
+      if ! command -v curl >/dev/null 2>&1; then
+        sudo tdnf install -y curl
+      fi
+      # Download and extract Helm using tar instead of zip
+      curl -LO https://get.helm.sh/helm-${{ parameters.version }}-linux-amd64.tar.gz
+      tar -zxf helm-${{ parameters.version }}-linux-amd64.tar.gz
     displayName: Install Helm
     workingDirectory: $(Pipeline.Workspace)
   - bash: |
