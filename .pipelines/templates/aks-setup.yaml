@@ -1,4 +1,4 @@
-parameters: 
+parameters:
   - name: aksAddonRun
     type: boolean
     default: false
@@ -9,9 +9,9 @@ steps:
       echo ${AZURE_CLUSTER_NAME}
     displayName: Create azure cluster name variable
   - script: |
-      az login --identity > /dev/null 2>&1
+      az login --identity 2>&1
 
-      az group create -n ${AZURE_CLUSTER_NAME} -l ${AKS_CLUSTER_LOCATION} > /dev/null 2>&1
+      az group create -n ${AZURE_CLUSTER_NAME} -l ${AKS_CLUSTER_LOCATION} 2>&1
 
       if [[ "${{ parameters.aksAddonRun }}" == "True" ]]; then
         az aks create \
@@ -20,17 +20,17 @@ steps:
             --enable-managed-identity \
             --no-ssh-key \
             --kubernetes-version ${K8S_VERSION} \
-            > /dev/null 2>&1
+            2>&1
       else
         az aks create \
             -g ${AZURE_CLUSTER_NAME} \
             -n ${AZURE_CLUSTER_NAME} \
             --enable-managed-identity \
             --no-ssh-key \
-            > /dev/null 2>&1
+            2>&1
       fi
 
       az aks get-credentials -n ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -f $(System.DefaultWorkingDirectory)/kubeconfig.json
 
-      kubectl wait --for=condition=ready nodes --all --timeout=5m 
+      kubectl wait --for=condition=ready nodes --all --timeout=5m
     displayName: Create AKS cluster

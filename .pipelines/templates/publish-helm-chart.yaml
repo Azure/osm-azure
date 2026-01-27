@@ -1,4 +1,4 @@
-parameters: 
+parameters:
   - name: releaseTag
     type: boolean
     default: false
@@ -6,12 +6,12 @@ parameters:
     type: boolean
     default: false
 
-steps: 
+steps:
   - bash: |
-      az login --identity > /dev/null 2>&1
-      az acr login --name $(REGISTRY_NAME) > /dev/null 2>&1
+      az login --identity
+      az acr login --name $(REGISTRY_NAME) 2>&1
     displayName: Login to acr
-    env: 
+    env:
       REGISTRY_NAME: $(REGISTRY_NAME)
   - script: |
       cp $(image.dir)/$(chart.name)-*.tgz .
@@ -28,29 +28,29 @@ steps:
       echo ${{ lower(parameters.releaseTag) }}
       if [[ ${{ lower(parameters.uniqueTag) }} == "true" ]]; then
         if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
-          # Add "-release" for chart created by release job.  
+          # Add "-release" for chart created by release job.
           echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-release"
         else
-          # Add "-pr" for chart created by pr job.  
+          # Add "-pr" for chart created by pr job.
           echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-${UNIQUE_TAG}-pr"
         fi
       else
         if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
-          # Add "-release" for chart created by release job.  
+          # Add "-release" for chart created by release job.
           echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-release"
         else
-          # Add "-pr" for chart created by pr job.  
+          # Add "-pr" for chart created by pr job.
           echo "##vso[task.setvariable variable=IMAGE_TAG]${CHART_VERSION}-pr"
         fi
       fi
       echo ${IMAGE_TAG}
-    displayName: Create image tag 
+    displayName: Create image tag
   - bash: |
       if [[ -n "${IMAGE_TAG}" ]]; then
         echo 'pushing chart'
         mv $(chart.name)-${CHART_VERSION}.tgz $(chart.name)-${IMAGE_TAG}.tgz
         oras push $(REPOSITORY_NAME):${IMAGE_TAG} ./$(chart.name)-${IMAGE_TAG}.tgz:application/tar+gzip --debug
-      else 
+      else
         echo "Helm chart was not published to staging ACR because $IMAGE_TAG was not set by the pipeline" && exit 1
       fi
     displayName: Push helm chart to staging ACR
