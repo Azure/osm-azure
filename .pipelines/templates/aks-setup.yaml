@@ -11,29 +11,13 @@ steps:
   - bash: |
       # Install Azure CLI if not available
       if ! command -v az >/dev/null 2>&1; then
-        echo "Azure CLI not found, installing..."
-        # Install prerequisites
-        if ! command -v curl >/dev/null 2>&1; then
-          sudo tdnf install -y curl
-        fi
-        if ! command -v rpm >/dev/null 2>&1; then
-          sudo tdnf install -y rpm
-        fi
-        # Import Microsoft signing key
-        sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-        # Add Microsoft repository
-        echo -e "[azure-cli]
-name=Azure CLI
-baseurl=https://packages.microsoft.com/yumrepos/azure-cli
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/azure-cli.repo
-        # Install Azure CLI
         sudo tdnf install -y azure-cli
-      else
-        echo "Azure CLI is already installed"
       fi
-    displayName: Install Azure CLI if needed
+      # Install openssl if not available
+      if ! command -v openssl >/dev/null 2>&1; then
+        sudo tdnf install -y openssl
+      fi
+    displayName: Install Azure CLI and openssl if needed
   - script: |
       az login --identity 2>&1
 
