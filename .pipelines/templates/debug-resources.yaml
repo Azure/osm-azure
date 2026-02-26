@@ -4,6 +4,16 @@ parameters:
     default: true
 
 steps:
+  - bash: |
+      # Install kubectl if not available
+      if ! command -v kubectl >/dev/null 2>&1; then
+        sudo tdnf install -y kubernetes-client
+      fi
+      # Install helm if not available
+      if ! command -v helm >/dev/null 2>&1; then
+        sudo tdnf install -y helm
+      fi
+    displayName: Install kubectl and helm if needed
   - script: |
       kubectl get pods -A
     displayName: Get all pods to debug

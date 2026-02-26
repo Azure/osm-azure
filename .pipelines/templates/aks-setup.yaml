@@ -17,7 +17,11 @@ steps:
       if ! command -v openssl >/dev/null 2>&1; then
         sudo tdnf install -y openssl
       fi
-    displayName: Install Azure CLI and openssl if needed
+      # Install kubectl if not available
+      if ! command -v kubectl >/dev/null 2>&1; then
+        sudo tdnf install -y kubernetes-client
+      fi
+    displayName: Install Azure CLI, openssl, and kubectl if needed
   - script: |
       az login --identity 2>&1
 
