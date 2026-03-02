@@ -9,7 +9,11 @@ steps:
       if ! command -v go >/dev/null 2>&1; then
         sudo tdnf install -y golang
       fi
-    displayName: Install Go if needed
+      # Install make if not available
+      if ! command -v make >/dev/null 2>&1; then
+        sudo tdnf install -y make
+      fi
+    displayName: Install Go and make if needed
   - bash: |
       sleep 180
     displayName: "Add delay before running upstream e2es"
