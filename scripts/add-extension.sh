@@ -40,3 +40,11 @@ else
       --config Azure.enableMonitoring=true \
       --configuration-settings-file $EXTENSION_SETTINGS
 fi
+
+if [[ $? -ne 0 ]]; then
+   echo "Failed to add OSM extension to cluster $CLUSTERNAME in resource group $RESOURCEGROUP"
+   kubectl events -n $RELEASE_NAMESPACE --sort-by='.metadata.creationTimestamp'
+   exit 1
+else
+   echo "Successfully added OSM extension to cluster $CLUSTERNAME in resource group $RESOURCEGROUP"
+fi
