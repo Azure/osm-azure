@@ -31,7 +31,7 @@ steps:
       else
         export CTR_TAG=v$(CHART_VERSION)
       fi
-
+      export GOEXPERIMENT=nosystemcrypto # MSFT GO 1.25+ turns on systemcrypto by default. We're not trying to run our e2e tests with CGO
       make build-osm
       # Skipping ingressbackend e2e test until nginx-AKS issue is resolved.
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -ginkgo.skip="\bIngress using IngressBackend API\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTest HTTP traffic from 1 pod client -> 1 pod server before and after osm-controller restart\b" -test.timeout 120m -installType=NoInstall -OsmNamespace=$(release.namespace)
