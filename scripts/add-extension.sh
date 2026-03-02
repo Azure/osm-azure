@@ -43,7 +43,7 @@ fi
 
 if [[ $? -ne 0 ]]; then
    echo "Failed to add OSM extension to cluster $CLUSTERNAME in resource group $RESOURCEGROUP"
-   kubectl events -n $RELEASE_NAMESPACE --sort-by='.metadata.creationTimestamp'
+   kubectl events -n $RELEASE_NAMESPACE
    exit 1
 else
    echo "Successfully added OSM extension to cluster $CLUSTERNAME in resource group $RESOURCEGROUP"
