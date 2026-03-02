@@ -22,7 +22,7 @@ osm:
     enableDebugServer: false
     enablePermissiveTrafficPolicy: true
     image:
-      registry: mcr.microsoft.com/oss/openservicemesh
+      registry: mcr.microsoft.com/oss/v2/openservicemesh
       tag: v1.2.11
     enforceSingleMesh: true
     enableReconciler: false
