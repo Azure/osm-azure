@@ -1,11 +1,11 @@
-steps: 
+steps:
   - bash: |
-      tags=$(git tag | tr - \~ | sort -V | tr \~ - | sed "/^$tag$/q")
+      tags=$(git tag | tr - \~ | sort -V | tr \~ - | sed "/^v${tag//./\\.}$/q")
       tags=$(grep -Eve '-(alpha|beta|rc)' <<< "$tags")
       prev=$(tail -1 <<< "$tags" | head -1)
       prev_2=$(tail -2 <<< "$tags" | head -1)
 
-      # if preceding tag is of the format $prev-x (ex: v1.1.1-1) then use that instead as latest. 
+      # if preceding tag is of the format $prev-x (ex: v1.1.1-1) then use that instead as latest.
       if [[ "$prev_2" == *"$prev"* ]]; then
         echo "##vso[task.setvariable variable=LATEST_PUBLISHED_TAG]${prev_2:1}"
       else
@@ -13,5 +13,5 @@ steps:
       fi
       echo ${LATEST_PUBLISHED_TAG}
     displayName: Get most recent published osm-arc tag
-    env: 
+    env:
       tag: $(CHART_VERSION)
