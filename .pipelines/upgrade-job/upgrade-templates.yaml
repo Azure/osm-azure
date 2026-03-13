@@ -4,6 +4,10 @@ steps:
     parameters:
       imageTag: $(LATEST_PUBLISHED_TAG)
   - script: |
+      # Install make if not available
+      if ! command -v make >/dev/null 2>&1; then
+        sudo tdnf install -y make
+      fi
       make test-e2e
     displayName: "Run osm-azure e2e tests on latest release chart"
     env:
