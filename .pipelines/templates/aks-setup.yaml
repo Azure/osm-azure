@@ -1,4 +1,4 @@
-parameters: 
+parameters:
   - name: aksAddonRun
     type: boolean
     default: false
@@ -8,10 +8,24 @@ steps:
       echo "##vso[task.setvariable variable=AZURE_CLUSTER_NAME]osm-helm-e2e-$(openssl rand -hex 6)"
       echo ${AZURE_CLUSTER_NAME}
     displayName: Create azure cluster name variable
+  - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+      # Install openssl if not available
+      if ! command -v openssl >/dev/null 2>&1; then
+        sudo tdnf install -y openssl
+      fi
+      # Install kubectl if not available
+      if ! command -v kubectl >/dev/null 2>&1; then
+        sudo tdnf install -y kubernetes-client
+      fi
+    displayName: Install Azure CLI, openssl, and kubectl if needed
   - script: |
-      az login --identity > /dev/null 2>&1
+      az login --identity 2>&1
 
-      az group create -n ${AZURE_CLUSTER_NAME} -l ${AKS_CLUSTER_LOCATION} > /dev/null 2>&1
+      az group create -n ${AZURE_CLUSTER_NAME} -l ${AKS_CLUSTER_LOCATION} 2>&1
 
       if [[ "${{ parameters.aksAddonRun }}" == "True" ]]; then
         az aks create \
@@ -20,17 +34,17 @@ steps:
             --enable-managed-identity \
             --no-ssh-key \
             --kubernetes-version ${K8S_VERSION} \
-            > /dev/null 2>&1
+            2>&1
       else
         az aks create \
             -g ${AZURE_CLUSTER_NAME} \
             -n ${AZURE_CLUSTER_NAME} \
             --enable-managed-identity \
             --no-ssh-key \
-            > /dev/null 2>&1
+            2>&1
       fi
 
       az aks get-credentials -n ${AZURE_CLUSTER_NAME} -g ${AZURE_CLUSTER_NAME} -f $(System.DefaultWorkingDirectory)/kubeconfig.json
 
-      kubectl wait --for=condition=ready nodes --all --timeout=5m 
+      kubectl wait --for=condition=ready nodes --all --timeout=5m
     displayName: Create AKS cluster

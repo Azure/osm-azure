@@ -1,15 +1,15 @@
-parameters: 
+parameters:
   - name: releaseE2E #runs update tests specific to cutting new releases
     type: boolean
     default: false
 
-jobs: 
+jobs:
   - job: test_osm_chart_arc_cluster
     timeoutInMinutes: 120
     pool: staging-pool-amd64-mariner-2
-    workspace: 
+    workspace:
       clean: all
-    steps: 
+    steps:
     - template: ../templates/install-helm3.yaml
     - template: ../templates/install-oras.yaml
     - template: ../templates/install-bats.yaml
@@ -26,9 +26,13 @@ jobs:
     - ${{ if eq(parameters.releaseE2E, false) }}:
       - template: ../templates/add-arc-extension.yaml
     - script: |
+        # Install make if not available
+        if ! command -v make >/dev/null 2>&1; then
+          sudo tdnf install -y make
+        fi
         make test-e2e
       displayName: "Run osm-azure e2e tests"
-      env: 
+      env:
         EXTENSION_TAG: $(CHART_VERSION)
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
     - template: ../templates/run-upstream-e2e.yaml

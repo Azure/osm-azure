@@ -1,9 +1,19 @@
-parameters: 
+parameters:
   - name: aksAddonRun
     type: boolean
     default: false
 
 steps:
+  - bash: |
+      # Install Go if not available
+      if ! command -v go >/dev/null 2>&1; then
+        sudo tdnf install -y golang
+      fi
+      # Install make if not available
+      if ! command -v make >/dev/null 2>&1; then
+        sudo tdnf install -y make
+      fi
+    displayName: Install Go and make if needed
   - bash: |
       sleep 180
     displayName: "Add delay before running upstream e2es"
@@ -21,9 +31,12 @@ steps:
       else
         export CTR_TAG=v$(CHART_VERSION)
       fi
-
+      export GOEXPERIMENT=nosystemcrypto # MSFT GO 1.25+ turns on systemcrypto by default. We're not trying to run our e2e tests with CGO
+      # Pull the e2e images from Keith's dev sub registry so we don't hit dockerhub or build locally.
+      export E2E_CTR_REGISTRY=proxywasmbuilder.azurecr.io
+      export E2E_CTR_TAG=20260303
       make build-osm
-      # Skipping ingressbackend e2e test until nginx-AKS issue is resolved. 
+      # Skipping ingressbackend e2e test until nginx-AKS issue is resolved.
       go test ./tests/e2e -test.v -ginkgo.v -ginkgo.progress -ginkgo.skip="\bIngress using IngressBackend API\b" -ginkgo.skip="\bTest reinstalling OSM in the same namespace with the same mesh name\b" -ginkgo.skip="\bTest HTTP traffic from 1 pod client -> 1 pod server before and after osm-controller restart\b" -test.timeout 120m -installType=NoInstall -OsmNamespace=$(release.namespace)
     displayName: "Run upstream e2e tests"
     env:

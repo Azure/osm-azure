@@ -3,6 +3,13 @@ parameters:
 
 steps:
   - bash: |
+      # Install essential tools if not available
+      if ! command -v curl >/dev/null 2>&1; then
+        sudo tdnf install -y curl
+      fi
+      if ! command -v tar >/dev/null 2>&1; then
+        sudo tdnf install -y tar
+      fi
       mkdir -p oras/
       curl -LO https://github.com/deislabs/oras/releases/download/v${{ parameters.version }}/oras_${{ parameters.version }}_linux_amd64.tar.gz
       tar xvzf oras_${{ parameters.version }}_linux_amd64.tar.gz -C oras/

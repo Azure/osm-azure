@@ -3,6 +3,13 @@ parameters:
 
 steps:
   - bash: |
+      # Install essential tools if not available
+      if ! command -v curl >/dev/null 2>&1; then
+        sudo tdnf install -y curl
+      fi
+      if ! command -v tar >/dev/null 2>&1; then
+        sudo tdnf install -y tar
+      fi
       curl -L https://github.com/bats-core/bats-core/archive/v${{ parameters.batsVersion }}.tar.gz | tar xz
       pushd bats-core-${{ parameters.batsVersion }}
       sudo ./install.sh /usr/local

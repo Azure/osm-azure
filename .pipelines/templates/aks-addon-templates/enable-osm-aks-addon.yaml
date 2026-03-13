@@ -1,5 +1,11 @@
 steps:
   - bash: |
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+    displayName: Install Azure CLI if needed
+  - bash: |
       az extension add --name aks-preview --version 0.5.87
       az -v
       az feature register --namespace "Microsoft.ContainerService" --name "AKS-OpenServiceMesh"

@@ -1,9 +1,15 @@
-steps: 
+steps:
   - bash: |
-      az login --identity > /dev/null 2>&1
-      az acr login --name $(CONF_REGISTRY_NAME) > /dev/null 2>&1
+      # Install Azure CLI if not available
+      if ! command -v az >/dev/null 2>&1; then
+        sudo tdnf install -y azure-cli
+      fi
+    displayName: Install Azure CLI if needed
+  - bash: |
+      az login --identity2>&1
+      az acr login --name $(CONF_REGISTRY_NAME)2>&1
     displayName: Login to acr
-    env: 
+    env:
       REGISTRY_NAME: $(CONF_REGISTRY_NAME)
   - bash: |
       docker push $(CONF_REPOSITORY_NAME):$(plugin.version)

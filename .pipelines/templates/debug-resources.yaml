@@ -1,9 +1,19 @@
-parameters: 
+parameters:
   - name: osmArc
     type: boolean
     default: true
 
 steps:
+  - bash: |
+      # Install kubectl if not available
+      if ! command -v kubectl >/dev/null 2>&1; then
+        sudo tdnf install -y kubernetes-client
+      fi
+      # Install helm if not available
+      if ! command -v helm >/dev/null 2>&1; then
+        sudo tdnf install -y helm
+      fi
+    displayName: Install kubectl and helm if needed
   - script: |
       kubectl get pods -A
     displayName: Get all pods to debug
@@ -16,7 +26,7 @@ steps:
     condition: always()
   - script: |
       kubectl describe pod -l app=osm-controller -n $(release.namespace)
-    displayName: Describe osm-controller pod 
+    displayName: Describe osm-controller pod
     condition: always()
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
@@ -26,7 +36,7 @@ steps:
     condition: always()
   - script: |
       kubectl describe pod -l app=osm-injector -n $(release.namespace)
-    displayName: Describe osm-injector pod 
+    displayName: Describe osm-injector pod
     condition: always()
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
@@ -36,7 +46,7 @@ steps:
     condition: always()
   - script: |
       kubectl describe pod -l app=osm-bootstrap -n $(release.namespace)
-    displayName: Describe osm-bootstrap pod 
+    displayName: Describe osm-bootstrap pod
     condition: always()
   - script: |
       #Using kubectl logs with "-l" doesn't give entire output
@@ -66,7 +76,7 @@ steps:
     condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       kubectl describe pod -l app=osm-metrics-agent -n $(release.namespace)
-    displayName: Describe osm-metrics-agent pod 
+    displayName: Describe osm-metrics-agent pod
     condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       export DNS_POD_1=$(kubectl get pods -n kube-system --selector k8s-app=kube-dns --no-headers | awk '{print $1}' | sed -n '1 p')
@@ -98,10 +108,17 @@ steps:
       kubectl get deployments -n azure-arc -o yaml
     displayName: Get azure-arc deployments
     condition: eq('${{ parameters.osmArc }}', 'True')
+  - bash: |
+      # Install jq if not available
+      if ! command -v jq >/dev/null 2>&1; then
+        sudo tdnf install -y jq
+      fi
+    displayName: Install jq if needed
+    condition: eq('${{ parameters.osmArc }}', 'True')
   - script: |
       HELM_OUTPUT=$(helm ls -o json --namespace arc-osm-system | jq -r '.[].chart')
       if [[ "$HELM_OUTPUT" != "osm-arc-$CHART_VERSION" ]]; then
         echo "Incorrect chart version" && exit 1
-      fi 
+      fi
     displayName: Ensure that helm chart version is still correct
     condition: eq('${{ parameters.osmArc }}', 'True')

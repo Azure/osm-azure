@@ -1,4 +1,14 @@
-steps:  
+steps:
+  - bash: |
+      # Install Python if not available
+      if ! command -v python >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then
+        sudo tdnf install -y python3 python3-pip
+      fi
+      # Ensure pip is available
+      if ! command -v pip >/dev/null 2>&1 && ! command -v pip3 >/dev/null 2>&1; then
+        sudo tdnf install -y python3-pip
+      fi
+    displayName: Install Python and pip if needed
   - bash: |
       ./scripts/install-connectedk8s.sh
     displayName: Install az connectedk8s extension
