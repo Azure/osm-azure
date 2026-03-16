@@ -23,13 +23,13 @@ osm:
     enablePermissiveTrafficPolicy: true
     image:
       registry: mcr.microsoft.com/oss/v2/openservicemesh
-      tag: v1.2.12
+      tag: v1.2.13
     enforceSingleMesh: true
     enableReconciler: false
     deployPrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/v2/envoyproxy/envoy:v1.34.12
+    sidecarImage: mcr.microsoft.com/oss/v2/envoyproxy/envoy:v1.36.4
     osmController:
       podLabels: {
         app.kubernetes.io/component: osm-controller
