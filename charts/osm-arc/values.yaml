@@ -29,7 +29,7 @@ osm:
     deployPrometheus: false
     deployJaeger: false
     webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/v2/envoyproxy/envoy:v1.36.4
+    sidecarImage: mcr.microsoft.com/oss/v2/envoyproxy/envoy:v1.37.2
     osmController:
       podLabels: {
         app.kubernetes.io/component: osm-controller
