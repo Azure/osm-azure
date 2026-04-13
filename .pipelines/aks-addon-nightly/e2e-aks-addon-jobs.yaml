@@ -1,3 +1,12 @@
+# e2e-aks-addon-jobs.yaml — Test job for the AKS OSM addon nightly pipeline.
+#
+# Unlike the Arc extension flow, the AKS addon path:
+#   - Does NOT package/publish a Helm chart (the addon is managed by AKS RP)
+#   - Does NOT connect the cluster to Arc
+#   - Uses `az aks enable-addons --addons open-service-mesh` instead
+#   - Runs upstream OSM e2e tests with aksAddonRun=true
+#     (which uses UPSTREAM_E2E_BRANCH instead of release branch matching)
+#
 jobs:
   - job: test_osm_aks_addon
     pool: staging-pool-amd64-mariner-2
@@ -8,12 +17,12 @@ jobs:
     - template: ../templates/checkout-upstream-repo.yaml
     - template: ../templates/aks-setup.yaml
       parameters:
-        aksAddonRun: true
-    - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml
+        aksAddonRun: true          # Pins K8s version for addon compatibility
+    - template: ../templates/aks-addon-templates/enable-osm-aks-addon.yaml  # Enable addon
     - template: ../templates/run-upstream-e2e.yaml
       parameters:
-        aksAddonRun: true
+        aksAddonRun: true          # Uses UPSTREAM_E2E_BRANCH for test checkout
     - template: ../templates/debug-resources.yaml
       parameters:
-        osmArc: false
+        osmArc: false              # Skip Arc-specific debug collection
     - template: ../templates/aks-cleanup.yaml

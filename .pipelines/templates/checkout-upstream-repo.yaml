@@ -1,3 +1,9 @@
+# checkout-upstream-repo.yaml — Clone the upstream OSM repository.
+#
+# Clones the upstream Open Service Mesh repo to $(System.DefaultWorkingDirectory)/osm.
+# This is used to run the upstream e2e tests against the deployed Arc extension,
+# verifying compatibility with the upstream OSM test suite.
+#
 steps:
   - bash: |
       git clone $(upstream.repo) $(System.DefaultWorkingDirectory)/osm

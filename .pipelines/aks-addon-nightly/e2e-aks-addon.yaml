@@ -1,3 +1,12 @@
+# e2e-aks-addon.yaml — Nightly E2E tests for the AKS OSM addon (non-Arc path).
+#
+# This pipeline tests OSM deployed as a native AKS addon (not as an Arc extension).
+# The AKS addon path is a separate deployment mechanism where OSM is enabled via:
+#   az aks enable-addons --addons open-service-mesh
+#
+# Runs on a nightly schedule (00:00 UTC) against the main branch.
+# Manual trigger is disabled (trigger: none).
+#
 trigger: none
 
 schedules:
@@ -13,7 +22,7 @@ pool: staging-pool-amd64-mariner-2
 variables:
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   upstream.repo: https://github.com/openservicemesh/osm
-  CHART_VERSION: $(OSM_VERSION)
+  CHART_VERSION: $(OSM_VERSION)  # Set via pipeline variable in Azure DevOps
 
 stages:
 - stage: run_e2e

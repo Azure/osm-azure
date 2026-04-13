@@ -1,3 +1,17 @@
+# metrics-rbac.yaml — RBAC resources for the osm-metrics-agent and Arc extension identity.
+#
+# This file defines the permissions required by:
+#   1. The extension identity (msi-adapter) to request Azure AD tokens via Arc's identity system
+#   2. Telegraf to discover and monitor pods in the release namespace
+#   3. The metrics agent to read/patch namespace metadata
+#
+# On OpenShift clusters, additional SecurityContextConstraints (SCC) permissions are granted
+# to allow privileged container execution.
+#
+
+# --- Extension Identity Role ---
+# Allows the extension service account to get/create AzureClusterIdentityRequests,
+# which are the mechanism for obtaining managed identity tokens from the Arc agent.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -10,6 +24,7 @@ rules:
     resources: [ 'azureclusteridentityrequests' ]
     verbs: [ 'get', 'create' ]
 ---
+# Bind the identity role to the extension's service account
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -26,6 +41,9 @@ subjects:
     name: {{ .Release.Name }}
     namespace: {{ .Release.Namespace }}
 ---
+# --- Telegraf ClusterRole ---
+# Allows the Telegraf container to discover pods for the kube_inventory input plugin.
+# Telegraf needs to list and watch pods to collect Kubernetes metadata alongside metrics.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -38,6 +56,7 @@ rules:
     - pods
     verbs: ["get", "list", "watch"]
 ---
+# Bind the telegraf ClusterRole to the extension's service account (scoped to release namespace)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -54,6 +73,11 @@ subjects:
     name: {{ .Release.Name }}
     namespace: {{ .Release.Namespace }}
 ---
+# --- Metrics Agent ClusterRole ---
+# Allows the metrics agent to read and patch namespace resources.
+# This is needed to query namespace metadata for metric attribution.
+# On OpenShift, also grants use of the "privileged" SecurityContextConstraint
+# required by the msi-adapter container.
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -73,6 +97,7 @@ rules:
     - use
 {{- end }}
 ---
+# Bind the metrics agent ClusterRole to the extension's service account
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:

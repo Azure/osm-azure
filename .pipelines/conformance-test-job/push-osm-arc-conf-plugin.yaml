@@ -1,3 +1,10 @@
+# push-osm-arc-conf-plugin.yaml — Build and push the Sonobuoy conformance test plugin image.
+#
+# Steps:
+#   1. Install ORAS (not currently used here, but available for OCI operations)
+#   2. Build the conformance test Docker image
+#   3. Push to the osmazure ACR
+#
 jobs: 
   - job: push_osm_arc_plugin
     pool: staging-pool-amd64-mariner-2
@@ -5,5 +12,5 @@ jobs:
       clean: all
     steps:
     - template: ../templates/install-oras.yaml
-    - template: ../templates/build-conf-test-image.yaml
-    - template: ../templates/push-conf-image-acr.yaml
+    - template: ../templates/build-conf-test-image.yaml    # Build image for ACR push
+    - template: ../templates/push-conf-image-acr.yaml      # Push to osmazure ACR

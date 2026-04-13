@@ -1,3 +1,16 @@
+# metrics-config.yaml — Configuration for the osm-metrics-agent telemetry pipeline.
+#
+# Contains two ConfigMaps:
+#   1. osm-mdm-config: Geneva MDM (Monitoring Data Model) agent configuration
+#   2. osm-telegraf-config: Telegraf metrics collection and shipping configuration
+#
+# The metrics pipeline flow:
+#   osm-controller (Prometheus metrics) → telegraf → prom-mdm-converter → mdm (Geneva)
+#
+
+# --- MDM Configuration ---
+# Minimal config that tells the Geneva MDM agent which account to emit metrics to.
+# The account "AzureServiceMesh" is the Geneva monitoring account for OSM telemetry.
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +19,14 @@ metadata:
 data:
   mdmconfig.json: "{\"imdsInfo\":[{ \"account\": \"AzureServiceMesh\" }]}"
 ---
+# --- Telegraf Configuration ---
+# Telegraf is configured to:
+#   1. Scrape Prometheus metrics from osm-controller pods (via kubernetes label discovery)
+#   2. Collect Kubernetes pod inventory from the release namespace
+#   3. Ship metrics to prom-mdm-converter via HTTP (Prometheus remote write format)
+#
+# The output goes to localhost:8090, which is the prom-mdm-converter container
+# running in the same pod (see metrics-agent-deployment.yaml).
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,11 +35,14 @@ metadata:
 data:
   telegraf.conf: |-
     [agent]
-      interval = "60s"
-      flush_interval = "10s"
-      metric_batch_size = 250
-      metric_buffer_limit = 1000
+      interval = "60s"           # Scrape metrics every 60 seconds
+      flush_interval = "10s"     # Flush buffered metrics every 10 seconds
+      metric_batch_size = 250    # Send up to 250 metrics per batch
+      metric_buffer_limit = 1000 # Buffer up to 1000 metrics before dropping
 
+    # Input: Scrape Prometheus metrics from osm-controller pods.
+    # Uses Kubernetes service discovery to find pods with the label
+    # app.kubernetes.io/component=osm-controller (set in values.yaml podLabels).
     [[inputs.prometheus]]
       monitor_kubernetes_pods = true
       kubernetes_label_selector = "app.kubernetes.io/component=osm-controller"
@@ -26,8 +50,13 @@ data:
       bearer_token = "/var/run/secrets/kubernetes.io/serviceaccount/token"
       tls_ca = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
       insecure_skip_verify = true
+      # Filter out noisy/low-value metrics to reduce telemetry volume.
+      # Excluded: REST client metrics, Go runtime stats (GC, memstats, threads),
+      # workqueue metrics, process metrics, .NET metrics, and internal telegraf metrics.
       namedrop = ["rest_client_requests_*", "rest_client_request_*", "go_memstats_gc_*", "go_memstats_stack_*", "go_threads*", "go_memstats_mcache_*_bytes", "go_memstats_mspan_*_bytes", "go_memstats_last*", "go_memstats_next*", "go_memstats_other*", "go_memstats_sys*", "go_memstats_heap_idle_bytes", "go_memstats_heap_inuse_bytes", "go_memstats_heap_objects", "go_memstats_heap_released_bytes", "go_memstats_heap_sys_bytes", "process_*_fds", "process_threads_*", "process_*_pagefault_*", "process_disk_*", "process_*_context_switches_*", "process_num*", "process_open*", "process_resident*", "process_working*", "dotnet_collection_count_total*", "dotnet_total_memory_bytes", "go_gc_duration_seconds", "go_goroutines", "go_info", "internal_*", "workqueue_*", "kubernetes_node", "version_*"]
 
+    # Input: Collect Kubernetes pod inventory (metadata, status, labels).
+    # Used for correlating metrics with pod information in Geneva dashboards.
     [[inputs.kube_inventory]]
       url = "https://kubernetes.default.svc"
       namespace = "{{ .Release.Namespace }}"
@@ -35,8 +64,12 @@ data:
       tls_ca = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
       response_timeout = "5s"
       resource_include = [ "pods" ]
+      # Drop low-value pod fields to reduce telemetry volume
       fielddrop = ["state_code", "state_reason", "phase_reason", "terminated_reason", "resource_requests_millicpu_units", "resource_requests_memory_bytes", "resource_limits_millicpu_units", "resource_limits_memory_bytes"]
 
+    # Output: Ship metrics to prom-mdm-converter via Prometheus remote write protocol.
+    # The converter runs as a sidecar container on localhost:8090 and translates
+    # Prometheus format to Geneva MDM format.
     [[outputs.http]]
       ## URL is the address to send metrics to
       url = "http://127.0.0.1:8090/push"

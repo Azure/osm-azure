@@ -1,3 +1,12 @@
+# image-scan.yaml — Nightly vulnerability scanning pipeline.
+#
+# Triggers on:
+#   - Changes to tools/helm or conformance plugin code (on push and PR)
+#   - Nightly cron schedule (00:00 UTC)
+#
+# Scans the conformance test Docker image for known vulnerabilities using Trivy.
+# Fails if MEDIUM, HIGH, or CRITICAL OS-level vulnerabilities are found.
+#
 trigger:
   branches:
     include:

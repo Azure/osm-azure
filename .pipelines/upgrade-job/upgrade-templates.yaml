@@ -1,12 +1,28 @@
+# upgrade-templates.yaml — Test steps for validating extension version upgrades.
+#
+# This template implements the upgrade test flow:
+#   1. Get the latest published tag from git history
+#   2. Install that version (the "previous" version) on the cluster
+#   3. Run BATS tests to verify the previous version works
+#   4. Upgrade to the new version (being tested in this PR)
+#   5. The caller (e2e-aks-arc.yaml) runs tests again after this
+#
 steps:    
+  # Determine the most recently released chart version from git tags
   - template: ../templates/get-latest-tag.yaml
+
+  # Install the previous version of the extension (baseline for upgrade test)
   - template: ../templates/add-arc-extension.yaml
     parameters: 
       imageTag: $(LATEST_PUBLISHED_TAG)
+
+  # Run BATS tests against the previous version to verify baseline works
   - script: |
       make test-e2e
     displayName: "Run osm-azure e2e tests on latest release chart"
     env: 
       EXTENSION_TAG: $(LATEST_PUBLISHED_TAG)
       KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+
+  # Upgrade the extension to the new version being tested
   - template: ../templates/update-arc-addon.yaml

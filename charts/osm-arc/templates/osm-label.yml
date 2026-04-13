@@ -1,3 +1,26 @@
+# osm-label.yml — Helm pre-install hook that labels system namespaces.
+#
+# This is a critical pre-install hook that runs BEFORE the main OSM chart installs.
+# It prevents Envoy sidecar injection into system namespaces by adding the label:
+#   openservicemesh.io/ignore: "true"
+#
+# to the following namespaces (configured via .Values.OpenServiceMesh.ignoreNamespaces):
+#   - kube-system    (Kubernetes system components)
+#   - azure-arc      (Arc agents)
+#   - arc-osm-system (OSM extension itself)
+#
+# It also adds the label:
+#   admission.policy.azure.com/ignore: "true"
+# to the release namespace (arc-osm-system) to prevent Azure Policy from rejecting
+# Envoy proxy sidecar injection in workload namespaces.
+#
+# All resources use Helm hook annotations:
+#   - helm.sh/hook: pre-install           — Run before main chart install
+#   - helm.sh/hook-weight: 25-40          — Execution order (SA → ClusterRole → RoleBindings → Job)
+#   - helm.sh/hook-delete-policy          — Clean up after successful execution
+#
+# The job uses curl to interact with the Kubernetes API directly rather than kubectl,
+# since it runs in a minimal Alpine container.
 # 
 # The job in this YAML file tries to add 'openservicemesh.io/ignore' label to 'kube-system', 'azure-arc', and 'arc-osm-system' namespaces.
 # The job is executed in helm pre-install phase of OSM release lifecycle. 

@@ -1,3 +1,18 @@
+# metrics-agent-deployment.yaml — Deployment for the osm-metrics-agent pod.
+#
+# This pod collects OSM telemetry and ships it to Azure's Geneva monitoring system.
+# It contains four containers that form a local metrics pipeline:
+#
+#   1. telegraf      — Scrapes Prometheus metrics from osm-controller + K8s pod inventory
+#   2. prom-mdm-converter — Converts Prometheus remote write format to Geneva MDM format
+#   3. mdm           — Geneva Monitoring Data Model agent; emits metrics to Geneva backend
+#   4. msi-adapter   — Provides Azure AD managed identity tokens for authentication
+#
+# Data flow: osm-controller → telegraf → prom-mdm-converter → mdm → Geneva
+#
+# The msi-adapter runs alongside to provide authentication tokens to the other
+# containers. It connects to the Arc identity system via AzureExtensionIdentity.
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +22,7 @@ metadata:
     app: osm-metrics-agent
     {{- include "osm.arcLabels" . | nindent 4 }}
   {{- if (ne .Values.Azure.Cluster.Distribution "openshift") }}
+  # Seccomp annotation for non-OpenShift clusters (OpenShift uses SCCs instead)
   annotations:
     seccomp.security.alpha.kubernetes.io/pod: runtime/default
   {{- end }}
@@ -25,9 +41,13 @@ spec:
         seccomp.security.alpha.kubernetes.io/pod: runtime/default
       {{- end }}
     spec:
+      # Use the Helm release service account, which is linked to AzureExtensionIdentity
       serviceAccountName: {{ .Release.Name }}
       serviceAccount: {{ .Release.Name }}
       containers:
+        # --- Container 1: Geneva MDM Agent ---
+        # Receives metrics via statsd (UDP/TCP) from prom-mdm-converter and emits
+        # them to the Geneva monitoring backend. Config is loaded from the osm-mdm-config ConfigMap.
         - name: mdm
           image: linuxgeneva-microsoft.azurecr.io/genevamdm:master_20220401.1
           imagePullPolicy: IfNotPresent
@@ -42,16 +62,20 @@ spec:
             - name: ROLEINSTANCE
               valueFrom:
                 fieldRef:
-                  fieldPath: spec.nodeName
+                  fieldPath: spec.nodeName  # Node name used for metric attribution
             - name: CONFIG_OVERRIDES_FILE
               value: /tmp/geneva_mdm/mdmconfig.json
             - name: MDM_INPUT
-              value: statsd_udp,statsd_tcp
+              value: statsd_udp,statsd_tcp   # Accept metrics via both UDP and TCP statsd
             - name: MDM_LOG_LEVEL
               value: "Info"
           volumeMounts:
             - name: mdm-config
               mountPath: /tmp/geneva_mdm
+        # --- Container 2: MSI Adapter ---
+        # Managed Service Identity adapter that provides Azure AD tokens to other containers.
+        # It connects to the Arc identity system via the AzureExtensionIdentity CRD
+        # (defined in azure-extension-identity.yaml) to obtain managed identity tokens.
         - name: msi-adapter
           image: mcr.microsoft.com/azurearck8s/msi-adapter:1.0.0
           imagePullPolicy: IfNotPresent
@@ -64,27 +88,30 @@ spec:
               memory: 100Mi
           env:
             - name: TOKEN_NAMESPACE
-              value: {{ .Release.Namespace }}
+              value: {{ .Release.Namespace }}       # Namespace where identity tokens are requested
             - name: EXTENSION_ARMID
-              value: {{ .Values.Azure.Extension.ResourceId }}
+              value: {{ .Values.Azure.Extension.ResourceId }}  # ARM resource ID for the extension
             - name: EXTENSION_NAME
               value: {{ .Values.Azure.Extension.Name }}
             - name: CLUSTER_TYPE
-              value: ConnectedClusters
+              value: ConnectedClusters              # Arc cluster type identifier
             - name: CLUSTER_IDENTITY
-              value: "false"
+              value: "false"                        # Not using cluster-level identity
             - name: MANAGED_IDENTITY_AUTH
-              value: "true"
+              value: "true"                         # Enable managed identity authentication
             - name: TEST_MODE
               value: "false"
           securityContext:
-            runAsUser: 0
+            runAsUser: 0                            # Runs as root (required for MSI token acquisition)
             capabilities:
               add:
-                - NET_ADMIN
+                - NET_ADMIN                         # Required for network operations during token acquisition
             {{- if eq .Values.Azure.Cluster.Distribution "openshift" }}
-            privileged: true
+            privileged: true                        # OpenShift requires privileged mode for NET_ADMIN
             {{- end }}
+        # --- Container 3: Prometheus-to-MDM Converter ---
+        # HTTP server on port 8090 that receives Prometheus remote write data from telegraf
+        # and converts it to Geneva MDM format for consumption by the mdm container.
         - name: prom-mdm-converter
           image: upstreamarc.azurecr.io/prom-mdm-converter:v1.0.0
           imagePullPolicy: IfNotPresent
@@ -97,13 +124,17 @@ spec:
               memory: 100Mi
           env:
             - name: SERVER_PORT
-              value: "8090"
+              value: "8090"                                     # HTTP port for receiving Prometheus remote writes
             - name: GENEVA_DEFAULT_MDM_NAMESPACE
-              value: {{ .Values.Azure.Cluster.Region }}
+              value: {{ .Values.Azure.Cluster.Region }}          # Azure region used as MDM namespace for metric routing
             - name: GENEVA_ACCOUNT_NAME
-              value: AzureServiceMesh
+              value: AzureServiceMesh                            # Geneva monitoring account for OSM telemetry
             - name: EXTENSION_RESOURCE_ID
-              value: {{ .Values.Azure.Extension.ResourceId }}
+              value: {{ .Values.Azure.Extension.ResourceId }}    # ARM resource ID for metric attribution
+        # --- Container 4: Telegraf ---
+        # Metrics collection agent that scrapes Prometheus endpoints from osm-controller
+        # and Kubernetes pod inventory, then ships to prom-mdm-converter via HTTP.
+        # Configuration is loaded from the osm-telegraf-config ConfigMap (see metrics-config.yaml).
         - name: telegraf
           image: mcr.microsoft.com/oss/mirror/docker.io/library/telegraf:1.21
           imagePullPolicy: IfNotPresent
@@ -119,9 +150,11 @@ spec:
               mountPath: /etc/telegraf/telegraf.conf
               subPath: telegraf.conf
       volumes:
+        # MDM configuration ConfigMap (see metrics-config.yaml)
         - name: mdm-config
           configMap:
             name: osm-mdm-config
+        # Telegraf configuration ConfigMap (see metrics-config.yaml)
         - name: telegraf-conf
           configMap:
             name: osm-telegraf-config

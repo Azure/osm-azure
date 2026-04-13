@@ -1,3 +1,9 @@
+# install-oras.yaml — Install ORAS (OCI Registry as Storage) CLI.
+#
+# ORAS is used to push Helm charts as OCI artifacts to Azure Container Registry.
+# This approach stores charts as generic OCI artifacts rather than using Helm's
+# built-in OCI support, which was experimental at the time.
+#
 parameters:
   version: 0.8.1
 

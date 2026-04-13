@@ -1,40 +1,58 @@
 # Default values for osm-arc.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+#
+# This chart wraps the upstream OSM Helm chart (declared as a dependency in Chart.yaml)
+# and adds Azure Arc-specific resources: extension identity, metrics collection, and
+# namespace labeling. These values configure both the Arc-specific resources and
+# override upstream OSM defaults.
 
-## Values populated by Azure Arc K8s RP during the installation of the extension
+## ----- Azure Arc Extension Metadata -----
+## These values are populated AUTOMATICALLY by the Azure Arc Extension RP at install time.
+## They should not be manually set when deploying via Arc. They are only used
+## when deploying the chart directly (e.g., for local development/testing).
 Azure:
   Cluster:
-    Distribution: <cluster_distribution>
-    Region: ""
+    Distribution: <cluster_distribution>  # Cluster type: aks, gke, eks, openshift, rancher_rke
+    Region: ""                            # Azure region — used as the Geneva MDM namespace for metrics routing
   Extension:
-    Name: ""
-    ResourceId: ""
+    Name: ""                              # Extension instance name (shown in Azure Portal)
+    ResourceId: ""                        # Full ARM resource ID of the extension
 
+## ----- OSM Arc Extension Settings -----
+## These control Arc-specific behaviors layered on top of upstream OSM.
 OpenServiceMesh:
+  # Space-separated list of namespaces to label with "openservicemesh.io/ignore: true".
+  # The pre-install hook job (osm-label.yml) reads this and labels each namespace
+  # to prevent Envoy sidecar injection into system components.
   ignoreNamespaces: "kube-system azure-arc arc-osm-system"
+  # Kubernetes distributions that have been validated with this chart.
   testedDistros: "aks gke eks openshift rancher_rke"
 
+## ----- Upstream OSM Chart Value Overrides -----
+## These are passed to the upstream OSM dependency chart (nested under "osm:").
+## The double nesting (osm.osm.*) is because the dependency is named "osm" and
+## the upstream chart's values are also under an "osm:" key.
 osm:
   osm:
-    enableDebugServer: false
-    enablePermissiveTrafficPolicy: true
+    enableDebugServer: false              # Debug server disabled in production
+    enablePermissiveTrafficPolicy: true    # Allow all traffic by default (no SMI policies required)
     image:
-      registry: mcr.microsoft.com/oss/openservicemesh
+      registry: mcr.microsoft.com/oss/openservicemesh  # MCR mirror of OSM images
       tag: v1.1.1
-    enforceSingleMesh: true
-    enableReconciler: true
-    deployPrometheus: false
-    deployJaeger: false
-    webhookConfigNamePrefix: arc-osm-webhook
-    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.19.3
+    enforceSingleMesh: true               # Prevent multiple OSM instances per cluster
+    enableReconciler: true                 # Auto-reconcile OSM resources to prevent drift
+    deployPrometheus: false                # Disabled — metrics handled by Arc metrics pipeline (telegraf + MDM)
+    deployJaeger: false                    # Disabled — tracing not enabled by default
+    webhookConfigNamePrefix: arc-osm-webhook  # Prefix for MutatingWebhookConfiguration name
+    sidecarImage: mcr.microsoft.com/oss/envoyproxy/envoy:v1.19.3  # Envoy proxy sidecar image
     osmController:
       podLabels: {
-        app.kubernetes.io/component: osm-controller
+        app.kubernetes.io/component: osm-controller  # Label used by telegraf to discover scrape targets
       }
     injector:
       podLabels: {
-        app.kubernetes.io/component: osm-controller
+        app.kubernetes.io/component: osm-controller  # Same label for consistent metric discovery
       }
     prometheus:
       image: mcr.microsoft.com/oss/prometheus/prometheus:v2.34.0
@@ -52,6 +70,9 @@ osm:
       registry: mcr.microsoft.com
       repository: oss/envoyproxy/envoy
 
+## ----- Alpine Image (used by pre-install namespace labeling hook) -----
+## This lightweight image runs the osm-label Job that adds "openservicemesh.io/ignore"
+## labels to system namespaces before the main chart installs.
 alpine:
   image:
     name: "mcr.microsoft.com/azure-policy/alpine"

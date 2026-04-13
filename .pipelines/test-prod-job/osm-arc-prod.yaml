@@ -1,3 +1,10 @@
+# osm-arc-prod.yaml — Test job for validating a production extension version.
+#
+# Creates an ephemeral AKS cluster, connects it to Arc, installs a specific
+# production version of the OSM extension, and runs BATS tests.
+# Simpler than the PR pipeline: no chart packaging/publishing since the chart
+# is already registered in production ACR.
+#
 jobs: 
   - job: test_osm_arc_prod
     pool: staging-pool-amd64-mariner-2
@@ -6,9 +13,9 @@ jobs:
     steps:
     - template: ../templates/install-helm3.yaml
     - template: ../templates/install-bats.yaml
-    - template: ../templates/aks-setup.yaml
-    - template: ../templates/enable-arc.yaml
-    - template: ../templates/add-arc-extension.yaml
+    - template: ../templates/aks-setup.yaml        # Create ephemeral AKS cluster
+    - template: ../templates/enable-arc.yaml       # Connect to Arc
+    - template: ../templates/add-arc-extension.yaml  # Install the production version
       parameters: 
         imageTag: $(EXTENSION_VERSION)
         releaseTrain: $(EXTENSION_RELEASE_TRAIN)
@@ -18,4 +25,4 @@ jobs:
       env: 
         EXTENSION_TAG: $(EXTENSION_VERSION)
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-    - template: ../templates/aks-cleanup.yaml
+    - template: ../templates/aks-cleanup.yaml      # Delete resource group

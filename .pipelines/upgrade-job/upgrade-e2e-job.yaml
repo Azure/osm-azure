@@ -1,3 +1,16 @@
+# upgrade-e2e-job.yaml — E2E pipeline for testing extension version upgrades.
+#
+# Triggered when Chart.yaml, add-extension.sh, or update-extension.sh are changed.
+# This ensures that version upgrades work correctly before merging changes that
+# affect the chart version or installation/update scripts.
+#
+# Uses the same e2e-aks-arc.yaml orchestrator but with releaseE2E=true,
+# which triggers the upgrade test flow:
+#   1. Install the PREVIOUS published version
+#   2. Run tests to verify baseline works
+#   3. Upgrade to the NEW version being tested
+#   4. Re-run tests to verify upgrade succeeded
+#
 trigger:
   branches:
     include:
@@ -33,4 +46,4 @@ stages:
   jobs:
     - template: ../pr-job/e2e-aks-arc.yaml
       parameters:
-        releaseE2E: true
+        releaseE2E: true  # Enable upgrade test flow

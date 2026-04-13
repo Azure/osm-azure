@@ -1,3 +1,9 @@
+# conf-test-plugin-job.yaml — Pipeline to build and push the Sonobuoy conformance test plugin.
+#
+# Manually triggered (trigger: none). Builds the conformance test Docker image
+# from conformance/plugins/osm-arc/ and pushes it to the osmazure ACR.
+# The resulting image is used by Sonobuoy to run conformance tests on Arc clusters.
+#
 trigger: none
 
 variables:

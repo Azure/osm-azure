@@ -1,3 +1,24 @@
+# e2e-aks-arc.yaml — Core E2E test orchestrator for Arc extension testing.
+#
+# This is the main test job template used by both PR validation (e2e-job.yaml)
+# and upgrade testing (upgrade-e2e-job.yaml). It executes a full end-to-end cycle:
+#
+#   1. Install tools (Helm, ORAS, BATS)
+#   2. Package and publish the Helm chart to staging ACR
+#   3. Register the chart version with the Arc Registration API
+#   4. Create an ephemeral AKS cluster with a random name
+#   5. Connect the cluster to Azure Arc
+#   6. Install or upgrade the OSM extension (depending on releaseE2E parameter)
+#   7. Run osm-azure BATS tests
+#   8. Run upstream OSM ginkgo e2e tests
+#   9. Collect debug info on failure
+#   10. Clean up staging ACR image and AKS resource group
+#
+# Parameters:
+#   releaseE2E (boolean, default: false)
+#     - false: Normal PR flow — install extension, run tests
+#     - true:  Upgrade flow — install previous version, test, upgrade to new version, re-test
+#
 parameters: 
   - name: releaseE2E #runs update tests specific to cutting new releases
     type: boolean
@@ -5,33 +26,52 @@ parameters:
 
 jobs: 
   - job: test_osm_chart_arc_cluster
-    timeoutInMinutes: 150
-    pool: staging-pool-amd64-mariner-2
+    timeoutInMinutes: 150  # 2.5 hour timeout for the full E2E cycle
+    pool: staging-pool-amd64-mariner-2  # Azure DevOps agent pool (Linux Mariner)
     workspace: 
-      clean: all
+      clean: all  # Start with a clean workspace each run
     steps: 
+    # --- Tool Installation ---
     - template: ../templates/install-helm3.yaml
     - template: ../templates/install-oras.yaml
     - template: ../templates/install-bats.yaml
+
+    # --- Chart Build & Publish ---
     - template: ../templates/package-helm-chart.yaml
     - template: ../templates/publish-helm-chart.yaml
       parameters:
         releaseTag: ${{ parameters.releaseE2E }}
+
+    # --- Arc Registration ---
     - template: ../templates/register-extension.yaml
+
+    # --- Upstream Repo (for e2e tests) ---
     - template: ../templates/checkout-upstream-repo.yaml
-    - template: ../templates/aks-setup.yaml
-    - template: ../templates/enable-arc.yaml
+
+    # --- Infrastructure Setup ---
+    - template: ../templates/aks-setup.yaml      # Create ephemeral AKS cluster
+    - template: ../templates/enable-arc.yaml     # Connect cluster to Azure Arc
+
+    # --- Extension Installation/Upgrade ---
+    # If releaseE2E=true: run upgrade tests (install old version → test → upgrade → test)
+    # If releaseE2E=false: run normal install tests
     - ${{ if eq(parameters.releaseE2E, true) }}:
       - template: ../upgrade-job/upgrade-templates.yaml
     - ${{ if eq(parameters.releaseE2E, false) }}:
       - template: ../templates/add-arc-extension.yaml
+
+    # --- osm-azure BATS Tests ---
     - script: |
         make test-e2e
       displayName: "Run osm-azure e2e tests"
       env: 
         EXTENSION_TAG: $(CHART_VERSION)
         KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
+
+    # --- Upstream OSM E2E Tests ---
     - template: ../templates/run-upstream-e2e.yaml
-    - template: ../templates/debug-resources.yaml
-    - template: ../templates/acr-cleanup.yaml
-    - template: ../templates/aks-cleanup.yaml
+
+    # --- Diagnostics & Cleanup ---
+    - template: ../templates/debug-resources.yaml   # Collect logs/events on failure
+    - template: ../templates/acr-cleanup.yaml       # Delete chart from staging ACR
+    - template: ../templates/aks-cleanup.yaml       # Delete AKS resource group

@@ -1,3 +1,9 @@
+# package-helm-chart.yaml — Package the osm-arc Helm chart.
+#
+# Runs `helm dependency update` to pull the upstream OSM chart dependency,
+# then `helm package` to create the versioned .tgz archive.
+# The packaged chart is written to $(image.dir) for subsequent publishing.
+#
 steps: 
   - bash: | 
       helm dependency update $(chart.path)

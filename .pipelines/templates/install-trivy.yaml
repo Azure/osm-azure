@@ -1,3 +1,6 @@
+# install-trivy.yaml — Install Trivy vulnerability scanner.
+# Delegates to the Makefile target which downloads Trivy v0.18.0.
+#
 steps:
   - bash: |
       make install-trivy

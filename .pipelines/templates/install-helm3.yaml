@@ -1,3 +1,8 @@
+# install-helm3.yaml — Install Helm v3 CLI.
+#
+# Downloads the Helm binary, unzips it, and adds it to PATH.
+# Version is pinned via parameter (default: v3.1.1).
+#
 parameters:
   version: v3.1.1
 

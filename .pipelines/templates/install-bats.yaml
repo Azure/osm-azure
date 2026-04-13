@@ -1,3 +1,8 @@
+# install-bats.yaml — Install BATS (Bash Automated Testing System) from source.
+#
+# BATS runs the osm-azure test suite (test/bats/test.bats) that validates
+# the extension deployment (pod counts, labels, webhooks, etc.).
+#
 parameters:
   batsVersion: 1.2.0
 

@@ -1,15 +1,34 @@
+# publish-helm-chart.yaml — Push the packaged Helm chart to staging ACR.
+#
+# This template:
+#   1. Logs into ACR using managed identity
+#   2. Extracts the chart version from the packaged .tgz filename
+#   3. Creates a unique tag from the git short SHA
+#   4. Tags the chart differently based on context:
+#      - Release builds: "{version}-{sha}-release"
+#      - PR builds: "{version}-pr"
+#   5. Pushes via ORAS as an OCI artifact to the staging registry
+#   6. Generates an SBOM manifest and publishes build artifacts
+#
+# Parameters:
+#   releaseTag (boolean) — true for release builds, false for PR builds
+#
 parameters: 
   - name: releaseTag
     type: boolean
     default: false
 
 steps: 
+  # Authenticate to the staging Azure Container Registry using managed identity
   - bash: |
       az login --identity > /dev/null 2>&1
       az acr login --name $(REGISTRY_NAME) > /dev/null 2>&1
     displayName: Login to acr
     env: 
       REGISTRY_NAME: $(REGISTRY_NAME)
+
+  # Extract the chart version from the packaged file name.
+  # The filename is like "osm-arc-1.1.1-1.tgz" — we extract "1.1.1-1" as CHART_VERSION.
   - script: |
       cp $(image.dir)/$(chart.name)-*.tgz .
       FILENAME=$(ls $(chart.name)-*.tgz)
@@ -17,10 +36,15 @@ steps:
       echo "##vso[task.setvariable variable=CHART_VERSION]${TRIM%%.tgz}"
       echo ${CHART_VERSION}
     displayName: Get osm-arc chart version from packaged chart file
+
+  # Generate a unique tag suffix from the current git commit short SHA
   - script: |
       echo "##vso[task.setvariable variable=UNIQUE_TAG]$(git rev-parse --short HEAD)"
       echo ${UNIQUE_TAG}
     displayName: Create Unique Tag
+
+  # Build the final IMAGE_TAG based on whether this is a release or PR build.
+  # Release builds include the git SHA for traceability; PR builds use a simpler "-pr" suffix.
   - script: |
       echo ${{ lower(parameters.releaseTag) }}
       if [[ ${{ lower(parameters.releaseTag) }} == "true" ]]; then
@@ -36,6 +60,9 @@ steps:
       fi
       echo ${IMAGE_TAG}
     displayName: Create image tag 
+
+  # Push the packaged chart to staging ACR as an OCI artifact via ORAS.
+  # The chart is renamed to include the IMAGE_TAG before pushing.
   - bash: |
       if [[ -n "${IMAGE_TAG}" ]]; then
         echo 'pushing chart'
@@ -48,9 +75,13 @@ steps:
     env:
       HELM_EXPERIMENTAL_OCI: 1
       REPOSITORY_NAME: $(REPOSITORY_NAME)
+
+  # Generate a Software Bill of Materials (SBOM) manifest for the chart artifact
   - task: ManifestGeneratorTask@0
     inputs:
       BuildDropPath: $(image.dir)
+
+  # Publish the packaged chart as a pipeline artifact for downstream stages
   - task: PublishBuildArtifacts@1
     displayName: Publish artifacts
     inputs:

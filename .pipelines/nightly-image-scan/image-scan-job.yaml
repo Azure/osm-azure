@@ -1,3 +1,8 @@
+# image-scan-job.yaml — Build and scan the conformance test image with Trivy.
+#
+# Builds the conformance image with imageScan=true (tagged as test, not pushed),
+# then scans it for vulnerabilities. Fails on MEDIUM+ OS vulnerabilities.
+#
 jobs: 
   - job: nightly_image_scan
     pool: staging-pool-amd64-mariner-2
@@ -6,7 +11,7 @@ jobs:
     steps:
     - template: ../templates/build-conf-test-image.yaml
       parameters:
-        imageScan: true
+        imageScan: true              # Build for scanning only (not pushed to ACR)
     - template: ../templates/install-trivy.yaml
     - template: ../templates/trivy-scan-image.yaml
       parameters:

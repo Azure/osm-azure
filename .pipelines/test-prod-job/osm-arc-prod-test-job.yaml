@@ -1,3 +1,14 @@
+# osm-arc-prod-test-job.yaml — Pipeline to validate a specific production extension version.
+#
+# This pipeline is triggered MANUALLY (trigger: none) and is used to verify
+# that a specific published version + release train combination works on a
+# fresh AKS Arc cluster. Unlike the PR pipeline, it does NOT package or
+# publish a chart — it installs an already-registered production version.
+#
+# Required pipeline variables (set in Azure DevOps UI):
+#   EXTENSION_VERSION      - Chart version to install (e.g., "1.1.1-1")
+#   EXTENSION_RELEASE_TRAIN - Release train to use (e.g., "stable")
+#
 trigger: none
 
 variables:

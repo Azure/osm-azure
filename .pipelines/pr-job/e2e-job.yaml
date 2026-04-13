@@ -1,3 +1,22 @@
+# e2e-job.yaml — Main PR validation and CI pipeline for the OSM Arc extension.
+#
+# Triggered on:
+#   - Pull requests to main and release-v* branches
+#   - Pushes (merges) to main and release-v* branches
+#
+# Excludes changes to docs, conformance tests, tools, GitHub config, and the
+# production registration script (those have their own pipelines).
+#
+# This pipeline orchestrates the full E2E test cycle:
+#   1. Package the Helm chart
+#   2. Push to staging ACR
+#   3. Register with Arc API
+#   4. Create an ephemeral AKS cluster
+#   5. Connect to Arc
+#   6. Install the extension
+#   7. Run BATS + upstream OSM e2e tests
+#   8. Clean up all resources
+#
 trigger:
   branches:
     include:
@@ -25,14 +44,14 @@ pr:
       - scripts/register-extension-prod.sh
 
 variables:
-  chart.name: osm-arc
-  chart.path: $(System.DefaultWorkingDirectory)/charts/$(chart.name)
-  image.dir: $(Build.ArtifactStagingDirectory)
-  image.artifact.name: drop
-  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
-  upstream.repo: https://github.com/openservicemesh/osm
+  chart.name: osm-arc                                         # Helm chart name
+  chart.path: $(System.DefaultWorkingDirectory)/charts/$(chart.name)  # Path to chart source
+  image.dir: $(Build.ArtifactStagingDirectory)                 # Directory for packaged chart artifacts
+  image.artifact.name: drop                                    # Published artifact name
+  KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json  # Kubeconfig for the ephemeral AKS cluster
+  upstream.repo: https://github.com/openservicemesh/osm        # Upstream OSM repo for e2e tests
 
 stages: 
 - stage: run_e2e
   jobs:
-    - template: e2e-aks-arc.yaml
+    - template: e2e-aks-arc.yaml  # Main test job template

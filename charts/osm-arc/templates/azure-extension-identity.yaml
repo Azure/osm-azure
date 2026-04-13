@@ -1,3 +1,16 @@
+# azure-extension-identity.yaml — Azure Arc Extension Identity CRD resource.
+#
+# Creates an AzureExtensionIdentity in the azure-arc namespace that links
+# the extension's Helm release service account to the Arc managed identity system.
+# This allows extension workloads (e.g., the metrics agent's msi-adapter container)
+# to obtain Azure AD tokens for authenticating to Azure services like Geneva/MDM.
+#
+# The Arc identity system works as follows:
+#   1. This CRD tells Arc which service account represents the extension
+#   2. The msi-adapter container requests tokens via the azureclusteridentityrequest API
+#   3. Arc agents in the azure-arc namespace fulfill the token request
+#   4. The token is used to authenticate metrics emission to Geneva
+#
 apiVersion: clusterconfig.azure.com/v1beta1
 kind: AzureExtensionIdentity
 metadata:
