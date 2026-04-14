@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 source .env
 
 RELEASE_NAMESPACE="${RELEASE_NAMESPACE:-arc-osm-system}"
@@ -24,7 +24,8 @@ if [[ -z "$EXTENSION_SETTINGS" ]]; then
       --release-namespace $RELEASE_NAMESPACE \
       --version $EXTENSION_TAG \
       --auto-upgrade-minor-version false \
-      --config Azure.enableMonitoring=true
+      --config Azure.enableMonitoring=true \
+      --verbose
 else
    az k8s-extension create \
       --cluster-name $CLUSTERNAME \
@@ -38,7 +39,8 @@ else
       --version $EXTENSION_TAG \
       --auto-upgrade-minor-version false \
       --config Azure.enableMonitoring=true \
-      --configuration-settings-file $EXTENSION_SETTINGS
+      --configuration-settings-file $EXTENSION_SETTINGS \
+      --verbose
 fi
 
 if [[ $? -ne 0 ]]; then

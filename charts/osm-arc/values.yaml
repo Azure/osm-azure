@@ -23,7 +23,7 @@ osm:
     enablePermissiveTrafficPolicy: true
     image:
       registry: mcr.microsoft.com/oss/v2/openservicemesh
-      tag: v1.2.13
+      tag: v1.2.14
     enforceSingleMesh: true
     enableReconciler: false
     deployPrometheus: false
