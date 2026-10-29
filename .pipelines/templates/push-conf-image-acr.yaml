@@ -1,3 +1,8 @@
+parameters:
+  - name: serviceConnection
+    type: string
+    default: 'WIF - staging - upstream-ado-agent-identity'
+
 steps:
   - bash: |
       # Install Azure CLI if not available
@@ -5,9 +10,11 @@ steps:
         sudo tdnf install -y azure-cli
       fi
     displayName: Install Azure CLI if needed
+  - template: az-login-wif.yaml
+    parameters:
+      serviceConnection: ${{ parameters.serviceConnection }}
   - bash: |
-      az login --identity2>&1
-      az acr login --name $(CONF_REGISTRY_NAME)2>&1
+      az acr login --name $(CONF_REGISTRY_NAME) 2>&1
     displayName: Login to acr
     env:
       REGISTRY_NAME: $(CONF_REGISTRY_NAME)
