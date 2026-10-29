@@ -75,12 +75,12 @@ All of the following must be available for **both amd64 and arm64** architecture
 
 | Image | Source |
 |---|---|
-| `osm-controller` | `mcr.microsoft.com/oss/openservicemesh/osm-controller` |
-| `osm-injector` | `mcr.microsoft.com/oss/openservicemesh/osm-injector` |
-| `osm-bootstrap` | `mcr.microsoft.com/oss/openservicemesh/osm-bootstrap` |
-| `osm-crds` | `mcr.microsoft.com/oss/openservicemesh/osm-crds` |
-| `init` (init container) | `mcr.microsoft.com/oss/openservicemesh/init` |
-| `envoy` | `mcr.microsoft.com/oss/envoyproxy/envoy` |
+| `osm-controller` | `mcr.microsoft.com/oss/v2/openservicemesh/osm-controller` |
+| `osm-injector` | `mcr.microsoft.com/oss/v2/openservicemesh/osm-injector` |
+| `osm-bootstrap` | `mcr.microsoft.com/oss/v2/openservicemesh/osm-bootstrap` |
+| `osm-crds` | `mcr.microsoft.com/oss/v2/openservicemesh/osm-crds` |
+| `init` (init container) | `mcr.microsoft.com/oss/v2/openservicemesh/init` |
+| `envoy` | `mcr.microsoft.com/oss/v2/envoyproxy/envoy` |
 | `prometheus` | `mcr.microsoft.com/oss/prometheus/prometheus` |
 | `grafana` | `mcr.microsoft.com/oss/grafana/grafana` |
 | `grafana-image-renderer` | `mcr.microsoft.com/oss/grafana/grafana-image-renderer` (amd64 only) |
@@ -91,7 +91,7 @@ All of the following must be available for **both amd64 and arm64** architecture
 ```bash
 # Check that a specific image+tag exists in MCR for both architectures
 # Replace <image> and <tag> as needed
-docker manifest inspect mcr.microsoft.com/oss/openservicemesh/osm-controller:<tag>
+docker manifest inspect mcr.microsoft.com/oss/v2/openservicemesh/osm-controller:<tag>
 ```
 
 ### Compare upstream changes
