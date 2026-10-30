@@ -8,5 +8,5 @@ parameters:
 
 steps:
   - checkout: osm
-    path: s/osm
+    path: $(System.DefaultWorkingDirectory)/osm
     displayName: Checkout $(upstream.repo)

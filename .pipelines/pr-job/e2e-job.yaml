@@ -38,6 +38,7 @@ resources:
     endpoint: OpenServiceMesh
     type: github
     name: Azure/osm-azure
+    ref: refs/heads/release-v1.2
   - repository: osm
     endpoint: OpenServiceMesh
     type: github
