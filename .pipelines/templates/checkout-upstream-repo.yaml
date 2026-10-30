@@ -7,8 +7,6 @@ parameters:
     default: "Azure/osm"
 
 steps:
-  - bash: |
-      git clone https://$(AZURE_OSM_TOKEN)@github.com/${{ parameters.osmRepo }}
+  - checkout: osm
+    path: osm
     displayName: Checkout $(upstream.repo)
-    env:
-      AZURE_OSM_TOKEN: $(AZURE_OSM_TOKEN)
