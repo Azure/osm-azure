@@ -1,3 +1,8 @@
+parameters:
+  - name: serviceConnection
+    type: string
+    default: 'WIF - staging - upstream-ado-agent-identity'
+
 steps:
   - bash: |
       # Install Azure CLI if not available
@@ -5,14 +10,19 @@ steps:
         sudo tdnf install -y azure-cli
       fi
     displayName: Install Azure CLI if needed
-  - bash: |
-      if [[ -n "${IMAGE_TAG}" ]]; then
-        az login --identity 2>&1
-        echo ${IMAGE_TAG}
-        az acr repository delete -n $(REGISTRY_NAME) --image oss/openservicemesh/osm-arc:${IMAGE_TAG} --yes 2>&1
-      else
-        echo "Helm chart was not published to staging ACR because $IMAGE_TAG was not set by the pipeline" && exit 1
-      fi
+    condition: always()
+  - task: AzureCLI@3
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        if [[ -n "${IMAGE_TAG}" ]]; then
+          echo ${IMAGE_TAG}
+          az acr repository delete -n $(REGISTRY_NAME) --image oss/openservicemesh/osm-arc:${IMAGE_TAG} --yes
+        else
+          echo "Helm chart was not published to staging ACR because $IMAGE_TAG was not set by the pipeline" && exit 1
+        fi
     displayName: Delete helm chart from staging registry
     condition: always()
     env:

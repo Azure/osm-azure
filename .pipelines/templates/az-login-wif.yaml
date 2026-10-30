@@ -1,0 +1,53 @@
+parameters:
+  - name: serviceConnection
+    type: string
+
+steps:
+  - task: AzureCLI@3
+    displayName: Extract WIF identity
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      addSpnToEnvironment: true
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        set -euo pipefail
+        : "${servicePrincipalId:?Missing service principal ID}"
+        : "${tenantId:?Missing tenant ID}"
+        : "${idToken:?The Azure service connection must use workload identity federation}"
+
+        SUBSCRIPTION_ID=$(az account show --query id --output tsv)
+        : "${SUBSCRIPTION_ID:?Missing service connection subscription}"
+        umask 077
+        TOKEN_FILE=$(mktemp "$(Agent.TempDirectory)/osm-wif-token.XXXXXX")
+        printf '%s' "$idToken" > "$TOKEN_FILE"
+
+        printf '%s\n' "##vso[task.setvariable variable=ARM_CLIENT_ID]$servicePrincipalId"
+        printf '%s\n' "##vso[task.setvariable variable=ARM_TENANT_ID]$tenantId"
+        printf '%s\n' "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$SUBSCRIPTION_ID"
+        printf '%s\n' "##vso[task.setvariable variable=ARM_FEDERATED_TOKEN_FILE]$TOKEN_FILE"
+
+  # AzureCLI clears its own login, so subsequent Bash steps need a separate session.
+  - bash: |
+      set -euo pipefail
+      trap 'rm -f -- "$ARM_FEDERATED_TOKEN_FILE"' EXIT
+      FEDERATED_TOKEN=$(cat "$ARM_FEDERATED_TOKEN_FILE")
+
+      export AZURE_CONFIG_DIR="$(Agent.TempDirectory)/osm-azure-$(System.JobId)"
+      mkdir -p "$AZURE_CONFIG_DIR"
+      chmod 700 "$AZURE_CONFIG_DIR"
+
+      az login \
+        --service-principal \
+        --username "$ARM_CLIENT_ID" \
+        --tenant "$ARM_TENANT_ID" \
+        --federated-token "$FEDERATED_TOKEN" \
+        --output none
+      az account set --subscription "$ARM_SUBSCRIPTION_ID"
+      printf '%s\n' "##vso[task.setvariable variable=AZURE_CONFIG_DIR]$AZURE_CONFIG_DIR"
+    displayName: Persist Azure login for the job
+    env:
+      ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      ARM_TENANT_ID: $(ARM_TENANT_ID)
+      ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      ARM_FEDERATED_TOKEN_FILE: $(ARM_FEDERATED_TOKEN_FILE)
