@@ -34,6 +34,10 @@ variables:
 
 resources:
   repositories:
+  - repository: self
+    endpoint: OpenServiceMesh
+    type: github
+    name: Azure/osm-azure
   - repository: osm
     endpoint: OpenServiceMesh
     type: github

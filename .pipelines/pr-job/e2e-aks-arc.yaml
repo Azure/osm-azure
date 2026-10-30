@@ -10,6 +10,9 @@ jobs:
     workspace:
       clean: all
     steps:
+    - checkout: self
+      path: s
+      ref: refs/heads/release-v1.2
     - template: ../templates/install-helm3.yaml
     - template: ../templates/install-oras.yaml
     - template: ../templates/install-bats.yaml
