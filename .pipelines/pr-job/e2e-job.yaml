@@ -33,7 +33,7 @@ variables:
   upstream.repo: https://github.com/Azure/osm
 
 resources:
-  repositries:
+  repositories:
   - repository: osm
     endpoint: OpenServiceMesh
     type: github
