@@ -1,3 +1,8 @@
+parameters:
+  - name: serviceConnection
+    type: string
+    default: 'WIF - staging - upstream-ado-agent-identity'
+
 steps:
   - bash: |
       # Install Azure CLI if not available
@@ -5,8 +10,13 @@ steps:
         sudo tdnf install -y azure-cli
       fi
     displayName: Install Azure CLI if needed
-  - script: |
-      az login --identity 2>&1
-      az group delete -n ${AZURE_CLUSTER_NAME} --yes --no-wait 2>&1
+    condition: always()
+  - task: AzureCLI@3
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az group delete -n ${AZURE_CLUSTER_NAME} --yes --no-wait
     displayName: Delete cluster and resource group
     condition: always()
