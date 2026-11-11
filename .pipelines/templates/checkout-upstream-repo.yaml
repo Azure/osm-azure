@@ -8,5 +8,5 @@ parameters:
 
 steps:
   - checkout: osm
-    path: osm
+    path: s/osm
     displayName: Checkout $(upstream.repo)

@@ -28,6 +28,18 @@ variables:
   KUBECONFIG: $(System.DefaultWorkingDirectory)/kubeconfig.json
   upstream.repo: https://github.com/Azure/osm
 
+resources:
+  repositories:
+  - repository: self
+    endpoint: OpenServiceMesh
+    type: github
+    name: Azure/osm-azure
+    ref: refs/heads/release-v1.2
+  - repository: osm
+    endpoint: OpenServiceMesh
+    type: github
+    name: Azure/osm
+
 stages: 
 - stage: run_e2e
   jobs:
